@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "FIESTA_Inbound_Console": {
+      "commandName": "Project",
+      "commandLineArgs": "--tablename \"PROFIT_CENTER_HIERARCHY\" --sftpSubPath \"S4\" --extension \".csv\" --getOnlyLatest \"false\""
+    }
+  }
+}

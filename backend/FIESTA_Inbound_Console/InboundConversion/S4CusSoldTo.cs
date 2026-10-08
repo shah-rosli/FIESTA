@@ -1,0 +1,247 @@
+﻿using FIESTA_Inbound_Console.Models.RETIS;
+using FIESTA_Inbound_Console.Models.S4;
+using NPOI.SS.Formula.Functions;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace FIESTA_Inbound_Console.InboundConversion
+{
+    public class S4CusSoldTo
+    {
+        public static DataTable ConvertObjToDT(IEnumerable<object?> records, string? filename) 
+        {
+            DataTable dt = new DataTable("CUS_SOLD_TO");
+            dt.Columns.Add("bpRole", typeof(string));
+            dt.Columns.Add("customerCode", typeof(string));
+            dt.Columns.Add("buGroup", typeof(string));
+            dt.Columns.Add("title", typeof(string));
+            dt.Columns.Add("customerName1", typeof(string));
+            dt.Columns.Add("customerName2", typeof(string));
+            dt.Columns.Add("customerName3", typeof(string));
+            dt.Columns.Add("customerName4", typeof(string));
+            dt.Columns.Add("searchName1", typeof(string));
+            dt.Columns.Add("building", typeof(string));
+            dt.Columns.Add("roomNumber", typeof(string));
+            dt.Columns.Add("floor", typeof(string));
+            dt.Columns.Add("street", typeof(string));
+            dt.Columns.Add("street2", typeof(string));
+            dt.Columns.Add("street3", typeof(string));
+            dt.Columns.Add("houseNumber", typeof(string));
+            dt.Columns.Add("district", typeof(string));
+            dt.Columns.Add("homeCity", typeof(string));
+            dt.Columns.Add("postalCode", typeof(string));
+            dt.Columns.Add("city", typeof(string));
+            dt.Columns.Add("countryCode", typeof(string));
+            dt.Columns.Add("regionCode", typeof(string));
+            dt.Columns.Add("timeZone", typeof(string));
+            dt.Columns.Add("taxJurisdiction", typeof(string));
+            dt.Columns.Add("transportationZone", typeof(string));
+            dt.Columns.Add("poBox", typeof(string));
+            dt.Columns.Add("languageKey", typeof(string));
+            dt.Columns.Add("telNumber", typeof(string));
+            dt.Columns.Add("telExtension", typeof(string));
+            dt.Columns.Add("telNumber2", typeof(string));
+            dt.Columns.Add("faxNumber", typeof(string));
+            dt.Columns.Add("faxExtension", typeof(string));
+            dt.Columns.Add("teletexNumber", typeof(string));
+            dt.Columns.Add("telexNumber", typeof(string));
+            dt.Columns.Add("smtpAddr", typeof(string));
+            dt.Columns.Add("companyIdTradingPartner", typeof(string));
+            dt.Columns.Add("cityCode", typeof(string));
+            dt.Columns.Add("vatNumber", typeof(string));
+            dt.Columns.Add("customerClassification", typeof(string));
+            dt.Columns.Add("fiscalYearVariant", typeof(string));
+            dt.Columns.Add("unloadingPoint", typeof(string));
+            dt.Columns.Add("defaultUnloadingPoint", typeof(string));
+            dt.Columns.Add("customersFactoryCalendar", typeof(string));
+            dt.Columns.Add("goodsReceivingHoursId", typeof(string));
+            dt.Columns.Add("attribute1", typeof(string));
+            dt.Columns.Add("attribute2", typeof(string));
+            dt.Columns.Add("attribute3", typeof(string));
+            dt.Columns.Add("attribute4", typeof(string));
+            dt.Columns.Add("attribute5", typeof(string));
+            dt.Columns.Add("attribute6", typeof(string));
+            dt.Columns.Add("attribute7", typeof(string));
+            dt.Columns.Add("attribute8", typeof(string));
+            dt.Columns.Add("attribute9", typeof(string));
+            dt.Columns.Add("attribute10", typeof(string));
+            dt.Columns.Add("centralDeletionFlag", typeof(string));
+            dt.Columns.Add("businessPartnerCategory", typeof(string));
+            dt.Columns.Add("identificationNumber15", typeof(string));
+            dt.Columns.Add("taxtypeSg1", typeof(string));
+            dt.Columns.Add("taxnumSg1", typeof(string));
+            dt.Columns.Add("taxtypeTw1", typeof(string));
+            dt.Columns.Add("taxnumTw1", typeof(string));
+            dt.Columns.Add("taxtypeTw2", typeof(string));
+            dt.Columns.Add("taxnumTw2", typeof(string));
+            dt.Columns.Add("taxtypeKr1", typeof(string));
+            dt.Columns.Add("taxnumKr1", typeof(string));
+            dt.Columns.Add("taxtypeKr2", typeof(string));
+            dt.Columns.Add("taxnumKr2", typeof(string));
+            dt.Columns.Add("characteristicName1", typeof(string));
+            dt.Columns.Add("characteristicValue1", typeof(string));
+            dt.Columns.Add("salesOrganization", typeof(string));
+            dt.Columns.Add("distributionChannel", typeof(string));
+            dt.Columns.Add("division", typeof(string));
+            dt.Columns.Add("customerGroup", typeof(string));
+            dt.Columns.Add("currency", typeof(string));
+            dt.Columns.Add("pricingProcedureAssigned", typeof(string));
+            dt.Columns.Add("deliveryPriority", typeof(decimal));
+            dt.Columns.Add("shippingConditions", typeof(string));
+            dt.Columns.Add("orderCombinationIndicator", typeof(string));
+            dt.Columns.Add("completeDeliveryDefined", typeof(string));
+            dt.Columns.Add("partialDeliveryAtItemLevel", typeof(string));
+            dt.Columns.Add("maximumDeliveriesAllowed", typeof(decimal));
+            dt.Columns.Add("incotermas1", typeof(string));
+            dt.Columns.Add("incotermas2", typeof(string));
+            dt.Columns.Add("termsOfPaymentKey", typeof(string));
+            dt.Columns.Add("creditControlArea", typeof(string));
+            dt.Columns.Add("accountAssignmentGroup", typeof(string));
+            dt.Columns.Add("partnerFunction", typeof(string));
+            dt.Columns.Add("customerOrderBlock", typeof(string));
+            dt.Columns.Add("customerGroup1", typeof(string));
+            dt.Columns.Add("customerGroup2", typeof(string));
+            dt.Columns.Add("customerGroup3", typeof(string));
+            dt.Columns.Add("customerGroup4", typeof(string));
+            dt.Columns.Add("customerGroup5", typeof(string));
+            dt.Columns.Add("overDeliveryTolerance", typeof(string));
+            dt.Columns.Add("accountAtCustomer", typeof(string));
+            dt.Columns.Add("textId1", typeof(string));
+            dt.Columns.Add("textId2", typeof(string));
+            dt.Columns.Add("textId3", typeof(string));
+            dt.Columns.Add("textId4", typeof(string));
+            dt.Columns.Add("textId5", typeof(string));
+            dt.Columns.Add("parentCustomerAccount", typeof(string));
+            dt.Columns.Add("createDateAndTime", typeof(DateTime));
+            dt.Columns.Add("fileName", typeof(string));
+
+            int dataRowCount = int.Parse(DateTime.UtcNow.ToString("yyyyfff"));
+            foreach (object o in records)
+            {
+                if (o != null)
+                {
+                    //2026-06-21: individual records will have current datetime stamp.
+                    //fix datetime - all records in same batch will have same datetime.
+                    //sample DT: 2023-01-01T00:00:00.000Z
+                    string now = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.fffZ");
+                    DateTimeOffset s = DateTimeOffset.Parse(now);
+
+                    object[] oRowDt = new object[103];
+                    CSV_S4_CUS_SOLD_TO material = (CSV_S4_CUS_SOLD_TO)o;
+                    oRowDt[0] = material.bpRole;
+                    oRowDt[1] = material.customerCode;
+                    oRowDt[2] = material.buGroup;
+                    oRowDt[3] = material.title;
+                    oRowDt[4] = material.customerName1;
+                    oRowDt[5] = material.customerName2;
+                    oRowDt[6] = material.customerName3;
+                    oRowDt[7] = material.customerName4;
+                    oRowDt[8] = material.searchName1;
+                    oRowDt[9] = material.building;
+                    oRowDt[10] = material.roomNumber;
+                    oRowDt[11] = material.floor;
+                    oRowDt[12] = material.street;
+                    oRowDt[13] = material.street2;
+                    oRowDt[14] = material.street3;
+                    oRowDt[15] = material.houseNumber;
+                    oRowDt[16] = material.district;
+                    oRowDt[17] = material.homeCity;
+                    oRowDt[18] = material.postalCode;
+                    oRowDt[19] = material.city;
+                    oRowDt[20] = material.countryCode;
+                    oRowDt[21] = material.regionCode;
+                    oRowDt[22] = material.timeZone;
+                    oRowDt[23] = material.taxJurisdiction;
+                    oRowDt[24] = material.transportationZone;
+                    oRowDt[25] = material.poBox;
+                    oRowDt[26] = material.languageKey;
+                    oRowDt[27] = material.telNumber;
+                    oRowDt[28] = material.telExtension;
+                    oRowDt[29] = material.telNumber2;
+                    oRowDt[30] = material.faxNumber;
+                    oRowDt[31] = material.faxExtension;
+                    oRowDt[32] = material.teletexNumber;
+                    oRowDt[33] = material.telexNumber;
+                    oRowDt[34] = material.smtpAddr;
+                    oRowDt[35] = material.companyIdTradingPartner;
+                    oRowDt[36] = material.cityCode;
+                    oRowDt[37] = material.vatNumber;
+                    oRowDt[38] = material.customerClassification;
+                    oRowDt[39] = material.fiscalYearVariant;
+                    oRowDt[40] = material.unloadingPoint;
+                    oRowDt[41] = material.defaultUnloadingPoint;
+                    oRowDt[42] = material.customersFactoryCalendar;
+                    oRowDt[43] = material.goodsReceivingHoursId;
+                    oRowDt[44] = material.attribute1;
+                    oRowDt[45] = material.attribute2;
+                    oRowDt[46] = material.attribute3;
+                    oRowDt[47] = material.attribute4;
+                    oRowDt[48] = material.attribute5;
+                    oRowDt[49] = material.attribute6;
+                    oRowDt[50] = material.attribute7;
+                    oRowDt[51] = material.attribute8;
+                    oRowDt[52] = material.attribute9;
+                    oRowDt[53] = material.attribute10;
+                    oRowDt[54] = material.centralDeletionFlag;
+                    oRowDt[55] = material.businessPartnerCategory;
+                    oRowDt[56] = material.identificationNumber15;
+                    oRowDt[57] = material.taxtypeSg1;
+                    oRowDt[58] = material.taxnumSg1;
+                    oRowDt[59] = material.taxtypeTw1;
+                    oRowDt[60] = material.taxnumTw1;
+                    oRowDt[61] = material.taxtypeTw2;
+                    oRowDt[62] = material.taxnumTw2;
+                    oRowDt[63] = material.taxtypeKr1;
+                    oRowDt[64] = material.taxnumKr1;
+                    oRowDt[65] = material.taxtypeKr2;
+                    oRowDt[66] = material.taxnumKr2;
+                    oRowDt[67] = material.characteristicName1;
+                    oRowDt[68] = material.characteristicValue1;
+                    oRowDt[69] = material.salesOrganization;
+                    oRowDt[70] = material.distributionChannel;
+                    oRowDt[71] = material.division;
+                    oRowDt[72] = material.customerGroup;
+                    oRowDt[73] = material.currency;
+                    oRowDt[74] = material.pricingProcedureAssigned;
+                    oRowDt[75] = material.deliveryPriority;
+                    oRowDt[76] = material.shippingConditions;
+                    oRowDt[77] = material.orderCombinationIndicator;
+                    oRowDt[78] = material.completeDeliveryDefined;
+                    oRowDt[79] = material.partialDeliveryAtItemLevel;
+                    oRowDt[80] = material.maximumDeliveriesAllowed;
+                    oRowDt[81] = material.incotermas1;
+                    oRowDt[82] = material.incotermas2;
+                    oRowDt[83] = material.termsOfPaymentKey;
+                    oRowDt[84] = material.creditControlArea;
+                    oRowDt[85] = material.accountAssignmentGroup;
+                    oRowDt[86] = material.partnerFunction;
+                    oRowDt[87] = material.customerOrderBlock;
+                    oRowDt[88] = material.customerGroup1;
+                    oRowDt[89] = material.customerGroup2;
+                    oRowDt[90] = material.customerGroup3;
+                    oRowDt[91] = material.customerGroup4;
+                    oRowDt[92] = material.customerGroup5;
+                    oRowDt[93] = material.overDeliveryTolerance;
+                    oRowDt[94] = material.accountAtCustomer;
+                    oRowDt[95] = material.textId1;
+                    oRowDt[96] = material.textId2;
+                    oRowDt[97] = material.textId3;
+                    oRowDt[98] = material.textId4;
+                    oRowDt[99] = material.textId5;
+                    oRowDt[100] = material.parentCustomerAccount;
+                    oRowDt[101] = s.UtcDateTime;
+                    oRowDt[102] = filename + "_" + dataRowCount;
+                    dataRowCount++;
+
+                    dt.Rows.Add(oRowDt);
+                }
+            }
+
+            return dt;
+        }
+    }
+}

@@ -1,0 +1,13 @@
+{
+  "CsvTempPath": "C:\\Users\\kapuen\\source\\repos\\FIESTA_Backend\\FIESTA_Console\\bin\\Debug\\net6.0\\Export\\",
+  "FilesLogPath": "C:\\Users\\kapuen\\source\\repos\\FIESTA_Backend\\FIESTA_Console\\bin\\Debug\\net6.0\\Log\\",
+  "FilesDownloadPath": "C:\\Users\\kapuen\\source\\repos\\FIESTA_Backend\\FIESTA_Backend\\Export\\",
+  "LogRetentionPeriod": "30",
+  "ArcRetentionPeriod": "7",
+  "SftpKeyPath": "C:\\Users\\kapuen\\OneDrive - Renesas Electronics Corporation\\Documents\\Fiesta\\SFTP\\FIESTA_DEV.ppk",
+  "SftpHostname": "sapsftpdev.erp.renesas.com",
+  "SftpUsername": "sftppodev-fiesta",
+  "emailHost": "mail-us.renesas.com",
+  "errorEmailRecipient": "kian-ann.puen.cj@renesas.com",
+  "errorEmailSender": "kian-ann.puen.cj@renesas.com"
+}

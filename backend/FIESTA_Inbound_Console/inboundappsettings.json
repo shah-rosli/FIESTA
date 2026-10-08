@@ -1,0 +1,14 @@
+{
+  "FilesSourcePath": "C:\\inetpub\\sftp\\IN",
+  "FilesDestinationPath": "C:\\inetpub\\sftp\\DEST",
+  "FilesErrorPath": "C:\\inetpub\\sftp\\ERROR",
+  "FilesLogPath": "C:\\Users\\a5132928\\source\\repos\\FIESTA\\BACKEND\\FIESTA_Inbound_Console\\bin\\Debug\\net8.0\\log",
+  "LogRetentionPeriod": "30",
+  "autoArchive": "true",
+  "SftpKeyPath": "C:\\Users\\a5132928\\OneDrive - Renesas Electronics Corporation\\Documents\\Fiesta\\SFTP\\FIESTA_DEV.ppk",
+  "SftpHostname": "sapsftpdev.erp.renesas.com",
+  "SftpUsername": "sftppodev-fiesta",
+  "emailHost": "mail-us.renesas.com",
+  "errorEmailRecipient": "kian-ann.puen.cj@renesas.com",
+  "errorEmailSender": "fiesta-inbound-noreply@renesas.com"
+}

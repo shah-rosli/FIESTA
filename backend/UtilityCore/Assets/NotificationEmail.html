@@ -1,0 +1,193 @@
+﻿<!doctype html>
+<html>
+
+<head>
+  <meta name="viewport" content="width=device-width">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>Email notification</title>
+  <style>
+    /* -------------------------------------
+        RESPONSIVE AND MOBILE FRIENDLY STYLES
+    ------------------------------------- */
+    @media only screen and (max-width: 620px) {
+      table[class=body] h1 {
+        font-size: 24px !important;
+        margin-bottom: 10px !important;
+      }
+
+      table[class=body] p,
+      table[class=body] ul,
+      table[class=body] ol,
+      table[class=body] td,
+      table[class=body] span,
+      table[class=body] a {
+        font-size: 14px !important;
+      }
+
+      table[class=body] .wrapper,
+      table[class=body] .article {
+        padding: 10px !important;
+      }
+
+      table[class=body] .content {
+        padding: 0 !important;
+      }
+
+      table[class=body] .container {
+        padding: 0 !important;
+        width: 100% !important;
+      }
+
+      table[class=body] .main {
+        border-left-width: 0 !important;
+        border-radius: 0 !important;
+        border-right-width: 0 !important;
+      }
+
+      table[class=body] .btn table {
+        width: 100% !important;
+      }
+
+      table[class=body] .btn a {
+        width: 100% !important;
+      }
+
+      table[class=body] .img-responsive {
+        height: auto !important;
+        max-width: 100% !important;
+        width: auto !important;
+      }
+    }
+
+    /* -------------------------------------
+        PRESERVE THESE STYLES IN THE HEAD
+    ------------------------------------- */
+    @media all {
+      .ExternalClass {
+        width: 100%;
+      }
+
+      .ExternalClass,
+      .ExternalClass p,
+      .ExternalClass span,
+      .ExternalClass font,
+      .ExternalClass td,
+      .ExternalClass div {
+        line-height: 100%;
+      }
+
+      .apple-link a {
+        color: inherit !important;
+        font-family: inherit !important;
+        font-size: inherit !important;
+        font-weight: inherit !important;
+        line-height: inherit !important;
+        text-decoration: none !important;
+      }
+
+      #MessageViewBody a {
+        color: inherit;
+        text-decoration: none;
+        font-size: inherit;
+        font-family: inherit;
+        font-weight: inherit;
+        line-height: inherit;
+      }
+    }
+  </style>
+</head>
+
+<body class=""
+  style="background-color: #f6f6f6; font-family: sans-serif; font-size: 14px; line-height: 20px; margin: 0; padding: 0; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%;">
+  <table border="0" cellpadding="0" cellspacing="0" class="body"
+    style="font-family: sans-serif;font-size: 14px;border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; width: 100%; background-color: #f6f6f6;">
+    <tr>
+      <td>&nbsp;</td>
+      <td class="container"
+        style="vertical-align: top; display: block; Margin: 0 auto; max-width: 800px; padding: 10px; width: 800px;">
+        <div class="content"
+          style="box-sizing: border-box; display: block; Margin: 0 auto; max-width: 800px; padding: 10px;">
+
+          <table style="background:#2a289d; font-family: sans-serif;" width="100%">
+            <tr>
+              <td style="padding: 10px;">
+                <img
+                  src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAAAyCAYAAACqNX6+AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAu6SURBVHgB7Zp3WFRXFsAPvXek2ACxoSiKiNHNqrGvDXtcNatxo+Zba2yb1ey3/2Qtq+tmLdHYosYUXTV2o6siauwFVIqIgFSBocPQeXvOGd9jBgZmQPwya97v+943771757377rn3tHuNunTeI4CMwWAMMgaFLBADQxaIgSELxMCQBWJgyAIxMGSBGBimIKMXpqbG4OZmDR06OoGvryP4tHMAV1craNXKDiwsTMDISFWvvLwaFAolvEwvhvT0IoiLy4PHj7Mg46USysqqdL8HZOrFw8MGhgzxgkFD2kK3bm5gba1fd/n4ONS5V15eBc+e5cK1aylw+VISRD5RaP2vkRyp18XJ2RI+/jgAQsZ1ADs7c42yqioBCgrKIDEhH3Jzy6CouALvVQNQL+I0MTUBsLW1ABtbM/D0tOFZRTNInepqAcLCUmDzF/cgNjZXo0wWSC169XKHNev6Q+vWdnxdUlIJjx5lQfjDTIiMVEBEeCZkZ5eAoGev2dubQ8dOLuDv7wIBAW7Q5x1PcHCw4DKlsgL+tekefPdttFRfFogaLmgTjhwN4VFNXLqYBDt2PIToqBwUwOt3E9kZFxcrmDM3ACZO6ghWVqZQWVkNSxZfgtDLyVxH9rLUGD3aVxLG1i0PYPGiSxAVmd0swiDoMQpFCaxdcwvmzTkPFRXV7CyMDekg1ZEFokaLFtbSeXx8frMJQhvJyYXS8x0dLaX7b62X1bOnG0yc3Em6Pn8ugT0ckVmz/aF9eyfp+gvU5eqs/0d/8PKyh++/i4bCwnJoLsjADxrcFpZ8EgTm5ipjb6RW/tYKxMPTFsaPr1EFca9cTpHAQHcYPNhLuj54IErj/2ZmJrB4SS+Yh97WpYsv4NSpeEiIz4XU1OJGzxyyTZ7oQg8d5s22w8nJst66chxSDxTQ+fo6gKWlKYxC20IHGeDU1CKIic6GFy8KIC2tCCrRDihLKvjXBO2BjY0Z2wXypHzbO/IsbNPGro77nJRUgIGldZ3Y5q0RiJmZMfTo4SZdm6B13Lb1oXSdjpFz794e0vXP11OxY3P4nOKCzMxijectWnCRY4lp0/wgqLcnu8HU0aTG6GgK2dmlEBOTzW4uvf/Cfye/vQLp0sUF9h0YKV2fOxsPy5ddka6XrwiGD9FuiCxccAkO/RDT4DPJw/ps9XUWRKdOzhDcxxP8/FxQ5VhwFO+MLqyJiREPBhMcASRYmkUUKCqVVfAiMQ+yskrg5ctiuHUrDZ5gCqWwsIKfzakWo7rvlFWWGjk5JdiJBdzBlVU1doI6mYJCOtShTjU3N+V4ggRDgqB8VWlplU47w8Vaqrw1AqGOuHPnpTToKLpWJzmlAO5iOVGFIzk42AM6d3aWyg8fioH9+57A13uf6G20qVpZWSUfjYUieNtadoX41Ubqm7cO1vCyJo4/wfr9TUMzacDAtvCn+T1Y/RE0UGbNPMvnssrSAXXaQOzA8+cTICGh6cEi2Z1hw31gHLriZO/ILmlDEgjlWGpnJRuCDBgZKwdHzGxam/E9mrrkSZCLZ6dlOjZEBno5VZU1H0sNDkKvqG/fluCM2Vd6X0aGEm7eTONEn9gxpO/VI2x9uX4tFQoLKl59SzUfLVvaSuWZmUq2HdHo4q7fMAAWLOqJ9cvhWVwO2xlyf8lzy80p5f+KLTdCw2Jra47rJLbYLitcN3GEdnh4eFhzmUhubinXo/ZrQCqLjrNn4oXGkJJSIPTovk/4ctsD6R4GX0JXv73CyhVhQmOZPu2UILZl7pyfBGxwvXVxXUEYO/oo150x/bSAHSI0lqlTTkrvozYfPhStUb5zZ7hUvnTJZaEJr9CA/l9aWilERymEv39+Q+gZsE/IyCjmsju306V3GZzKCu7jAZu3DMbZqmoazYw0HI3mOHvFxF97DLi+2jUcpkw6oc1zbDTePvYc+Knz/vudYe/ux7j2UQ4XLiTC3I9+wjjGE+s6gJu7NdijBnBytsI8lLnGyCcoZU/ubiGum2CnQ0pKEa8aPrifwdei1hP09bLCMee/aeNdaIhizOXTKpguiorKYdknodzIhngaowrSFiwIlISBIwdWLL/CGVLi3Xdbw8ZNA1kdUhwwZUpnuIn+/fO4fI1nUbm7h0p4JNAEThRqvq/ylXqkvpwxowsGaCq1S/Xonr29BafJ/4n9QM+4cSOND3VI3Yj5KKpjbGzE/ydVR5lcoQF7Q+8w0jcOKcgvh/sozeaAPjw8PIsFow/ePo7S+fbt4ZIwiOvXU+DkiTiYjh1IdOnqwnVCxh7TeEa/fi1h5+4R/MHUMTP/cIZX97RB+p1WBglaDfzxWCznm2jUj5/QAfZ9/YQXpLRBz6ajKVCKhY7aGJzKIgMpMuODLpzeoCVTkQP7IyEiQhVj5OeXwesy60N/DuyIq2HJsHHDXegd7MnpEUoCUupkC66NNCeUiV75aZ9fRiAWFsY4ov107rg4i6mOTPSibt9Kh9FjVPqc4gT/k67w+JECrl5NZu8qPj4PdXIhNAfuqPbEd5Ga2bPnMafaD34TCatW9+UZNg3b/g1e5+W9nvDt7Mw4/hgxwoeXcUUVWRutAune3RV27R4ODZGLDVz9l6ugCysrM1i0uJfOehERmSyQDThCaYtN166ufN/d3Qbch9rAkKFerJ9JGGRbtmy+z4bzdZiPwZloA66GpcDDByo1feQ/sTD7j915kwLZktkfdZdsajtfR5g+3Y+zvTno8mahe0zCqqio4nyWvYM5uLpYo7G3AC9ve8x3WXLGlxwRSumLKJWVmEk2YbujjlaBOOJU7febVtAQqamFdbyL5kCRpYRpU0/zIs7UqX7QE9ctzM1Vvjq9jlLZdPQf0BqWLQ2F+/eaZusoThBtB82OXbsipDJyVvaj7fh0VR++pqXdQ99Hc+wR/zwPeqDKmfp7Py5T2W2B+0L9vD4o/jh6NBaOHH4KBw6OkjxHEa0CScHlxXs6PrSwsEy1/UUHNHpCxhzjHRYNQRvMRKiDLpxP5INT3jjSyOUcM9ZXSrFTMLhkSRB8MOMMNIUFCwOlaJkcB0rNq6fnLS3NMFBVrXG4o5s7NqQ9bP8ynMt273oMa9f1Zy9L1fcqAaifkzNDyUoKZmkP1iPUAOT6JiUV8vcReru9tJ68epVudaQvlP2kKaoLf39XWLaiN59X4CidO+cCN/45LhbRQenyDRsHwO9GtuM6FD80BW9vBxg1qp10TS700mW9G/zPzFn+cPx4HKTjohSl9ukggTpiSsQZNQqpI2orORokCPUBpo1Gub2/FORNBQZ64IeqWjp8uDfmkBLVaghgpbagQ6mMpjB/YU8e+Y2BYpuZM7vCurW3pXskAAXaMUUTbBl5cuLmhko1TfPGBUKu3ZZtg9nHrxcsWr/+Ns+CqCgFOhUt+Pbna34LA99ri1nYHB5N7w1qC0FBNWrlOq66NZb2HZxg2DAfPqc2/XllmEasU5ugIHdWbwR5ZD+gLUnEXFZTIZsxaXInXqunGUYz6duDNev5b1wgpGeDcTTowhaXSyna/dtff4Zde4bzRmZyDUl3jw2pW5/SEF/tiIDGMm9egDQDQ0OTWPU0BLnaFCh6etpyXDJ+Qkfebagv5MUF9GjBtq9bN1cI7OXJmV+C7MzatbfgCrZDRBIIZVHFWCE+IQ/0JRoDt+M/xvG5KqIVIBH/L97Tl4JX6ic2NgcmjDvOnTAS9TytZZN7SPGisriCNyyfPh0Px44+rTdKpizsiePPgAxsZVWVlCYhtUNqUWwbJkZ1tovc2bVrbsOgQV5sr2nG0+ApKqrgXfBzUcCikWawjjUGmg6ojlq2tGH7pO7uEpRSCQ1Nhs3/vg/P/t/29tKoJIEQxegYFDRDdP460IhXz1OdOTeRnQRd0KB4igtgYZgNOIMDiuIYbbkueW9vI6FAzti4Jjk5YEAbWPXZO2BMcQioYphshZJnKR20nSgK1+LpnDSQoGOBSxaIgSHv7TUwZIEYGLJADAxZIAaGLBADQxaIgSELxMCQBWJg/A9l7Db591CE0gAAAABJRU5ErkJggg=="
+                  width="100" height="50" alt="Logo" />
+              </td>
+              <td style="padding: 10px; color:#F0F0F0;">
+                  Notification Email For {title}
+              </td>
+            </tr>
+          </table>
+          <table class="main"
+            style="font-family: sans-serif;font-size: 14px; border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; width: 100%; background: #ffffff; border-radius: 3px;">
+
+            <!-- START MAIN CONTENT AREA -->
+            <tr>
+              <td class="wrapper">
+                <table border="0" cellpadding="0" cellspacing="0"
+                  style="font-family: sans-serif;font-size: 14px; width: 100%;">
+                  <tr>
+                    <td style="padding: 0px 10px;">
+                      <br />
+                      Hi,<br />
+                      {information}
+                      <br />
+                      <br />
+                      {table}
+                      <br />
+
+                    </td>
+                  </tr>
+                  <tr style="{styleurllnk}">
+                    <td style="padding: 0px 10px;">
+                      <br />
+                      For more details, please click <a href={link}>here</a>
+                      <br />
+                      <br />
+                    </td>
+
+                  </tr>
+
+                </table>
+              </td>
+            </tr>
+
+            <!-- END MAIN CONTENT AREA -->
+          </table>
+
+          <!-- START FOOTER -->
+          <div class="footer" style="clear: both; Margin-top: 10px; text-align: center; width: 100%;">
+            <table border="0" cellpadding="0" cellspacing="0"
+              style="border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; width: 100%;">
+              <tr>
+                <td
+                  style="font-family: sans-serif; vertical-align: top; padding-bottom: 10px; padding-top: 10px; font-size: 12px; color: #999999; text-align: center;">
+                  <span class="apple-link" style="color: #999999; font-size: 12px; text-align: center;">This is an auto
+                    generated email. DO NOT reply this email.</span>
+                </td>
+              </tr>
+              <tr>
+                <td
+                  style="font-family: sans-serif; vertical-align: top; padding-bottom: 10px; padding-top: 5px; font-size: 12px; color: #999999; text-align: center;">
+                  <img
+                    src="data:image/png;base64,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"
+                    width="100" height="17" alt="Renesas Logo" /><br />
+                  Powered by <a href="mailto:IS_IDSD_AD@lm.renesas.com">IDSD Application Development Team</a>
+                </td>
+              </tr>
+            </table>
+          </div>
+          <!-- END FOOTER -->
+
+          <!-- END CENTERED WHITE CONTAINER -->
+        </div>
+      </td>
+      <td style="font-family: sans-serif; font-size: 12px; vertical-align: top;">&nbsp;</td>
+    </tr>
+  </table>
+
+</body>
+
+</html>

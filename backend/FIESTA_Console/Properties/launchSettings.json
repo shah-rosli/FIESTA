@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "FIESTA_Console": {
+      "commandName": "Project",
+      "commandLineArgs": "--tablename \"PRODUCTION_ROUTING\" --zipdestination \"D:\\Fiesta_Export\" --needZipped \"False\" --oldFilesRemain \"true\" --extFolder \"FULL/MODELN\""
+    }
+  }
+}
