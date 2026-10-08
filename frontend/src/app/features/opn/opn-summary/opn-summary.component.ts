@@ -207,6 +207,14 @@ export class OpnSummaryComponent {
         caption: "Failure Reason",
         width: 200,
         alignment: "left"
+      },
+      {
+        dataField: "sentFromSystem",
+        dataType: "string",
+        caption: "Sent from system",
+        width: 70,
+        alignment: "left",
+        headerCellTemplate: (container) => container.innerText = "Sent from\nsystem",
       }
     ]
     this.getDataSource()
@@ -316,5 +324,10 @@ export class OpnSummaryComponent {
     }
 
     this.dataGridFilterExp = finalFilterExp
+  }
+
+  addOpnLink(cell: any): boolean {
+    // Add link to the OPN if the status is "Fiesta Delivered" and the system source is not "SAP"
+    return cell.data.status === 'Fiesta Delivered' && cell.data.sentFromSystem !== 'SAP';
   }
 }

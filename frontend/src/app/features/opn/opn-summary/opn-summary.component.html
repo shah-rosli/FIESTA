@@ -48,8 +48,9 @@
           </dxo-toolbar>
 
           <div *dxTemplate="let cell of 'opnCellTemplate'">
-            <ng-container [ngSwitch]="cell.data.status">
-              <a *ngSwitchCase="'Fiesta Delivered'" class="d-block" [href]="encodeFppLink(cell.data.opn)"
+            <ng-container [ngSwitch]="true">
+              <a *ngSwitchCase="addOpnLink(cell)" class="d-block" [href]="encodeFppLink(cell.data.opn)"
+                target="_blank">{{cell.value}}</a>
               <ng-container *ngSwitchDefault>{{cell.value}}</ng-container>
             </ng-container>
           </div>
