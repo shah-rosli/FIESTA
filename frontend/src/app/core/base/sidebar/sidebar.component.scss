@@ -1,0 +1,21 @@
+// change sidebar backgroud color
+.app-sidebar {
+  background-color: var(--primary-color) !important;
+}
+
+// adminlte compact-mode
+.sidebar-brand {
+  height: 2.75rem;
+}
+
+// fix: wrong position (side effect of compact-mode)
+.sidebar-brand .brand-link .brand-image-xs {
+  max-height: 28px;
+  margin-top: -0.2rem;
+}
+
+// fix: increase sidebar wrapper height (side effect of compact-mode)
+// use dvh to prevent bottom menu hidden by browser toolbar
+.sidebar-wrapper {
+  height: calc(100dvh - (calc(2.5rem + 1px))) !important;
+}

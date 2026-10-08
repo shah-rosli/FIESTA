@@ -1,0 +1,208 @@
+<app-page-title [PageTitle]="PageTitle"></app-page-title>
+
+<section class="content">
+  <div class="container-fluid">
+    <div class="card">
+      <div class="card-body datagrid-font-size">
+        <dx-data-grid class="exclude-compact-datagrid" [dataSource]="dataSource" [showBorders]="true"
+          [showColumnLines]="true" [showRowLines]="true" [rowAlternationEnabled]="true" [allowColumnResizing]="true"
+          [allowColumnReordering]="true" [columnAutoWidth]="true" [hoverStateEnabled]="true" columnResizingMode="widget"
+          (onCellPrepared)="onCellPrepared($event)">
+
+          <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+          <dxo-scrolling [useNative]="true"></dxo-scrolling>
+          <dxo-header-filter [visible]="true">
+            <dxo-search [enabled]="true"></dxo-search>
+          </dxo-header-filter>
+          <dxo-filter-row [visible]="true"></dxo-filter-row>
+          <dxo-paging [pageSize]="1000"></dxo-paging>
+
+          <dxo-toolbar>
+            <dxi-item location="before" locateInMenu="auto">
+              <div *dxTemplate>
+                <div>The status refresh every minute</div>
+              </div>
+            </dxi-item>
+            <dxi-item widget="dxButton" [options]="{
+                        icon: 'refresh',
+                        hint: 'Refresh',
+                        onClick: getDataSource
+                      }">
+            </dxi-item>
+          </dxo-toolbar>
+          <dxi-column dataField="LOG_ID" caption="RunID" cssClass="left-bottom-header"></dxi-column>
+          <dxi-column dataField="JOB_NAME" caption="Job Name" cssClass="left-bottom-header"></dxi-column>
+          <dxi-column dataField="START_DATE" caption="Start Date Time" dataType="datetime" format="yyyy-MM-dd HH:mm"
+            cssClass="left-bottom-header"></dxi-column>
+          <dxi-column dataField="END_DATE" caption="End Date Time" dataType="datetime" format="yyyy-MM-dd HH:mm"
+            cssClass="left-bottom-header"></dxi-column>
+          <dxi-column dataField="DURATION_HOURS" caption="Duration" cssClass="left-bottom-header"></dxi-column>
+          <dxi-column dataField="STATUS" caption="Status" cssClass="left-bottom-header"></dxi-column>
+
+
+          <dxi-column dataField="SP_PLM_PRODUCTION_ST" caption="TRN_PRODUCTION" cssClass="rotated-header-lb"
+            [allowSearch]="false" [allowFiltering]="false" [allowSorting]="false" [width]="25" [minWidth]="25"
+            maxWidth="25px" [allowResizing]="false"></dxi-column>
+          <dxi-column dataField="SP_TRN_PRODUCT_ST" caption="TRN_PRODUCT" cssClass="rotated-header-lb"
+            [allowSearch]="false" [allowFiltering]="false" [allowSorting]="false" [width]="25" [minWidth]="25"
+            maxWidth="25px" [allowResizing]="false"></dxi-column>
+          <dxi-column dataField="SP_PLM_TR4_TO_TRN_ST" caption="TR4_TO_TRN" cssClass="rotated-header-lb"
+            [allowSearch]="false" [allowFiltering]="false" [allowSorting]="false" [width]="25" [minWidth]="25"
+            maxWidth="25px" [allowResizing]="false"></dxi-column>
+          <dxi-column dataField="SP_TRN_PRODUCT_MATRIX_ST" caption="TRN_PRODUCT_MATRIX" cssClass="rotated-header-lb"
+            [allowSearch]="false" [allowFiltering]="false" [allowSorting]="false" [width]="25" [minWidth]="25"
+            maxWidth="25px" [allowResizing]="false"></dxi-column>
+          <dxi-column dataField="SP_TRN_PRODUCT_SALES_ST" caption="TRN_PRODUCT_SALES" cssClass="rotated-header-lb"
+            [allowSearch]="false" [allowFiltering]="false" [allowSorting]="false" [width]="25" [minWidth]="25"
+            maxWidth="25px" [allowResizing]="false"></dxi-column>
+          <dxi-column dataField="SP_TRN_COMPONENTS_ST" caption="TRN_COMPONENTS" cssClass="rotated-header-lb"
+            [allowSearch]="false" [allowFiltering]="false" [allowSorting]="false" [width]="25" [minWidth]="25"
+            maxWidth="25px" [allowResizing]="false"></dxi-column>
+          <dxi-column dataField="SP_TRAN_PRODUCTION_BOM_ST" caption="TRN_PRODUCTION_BOM" cssClass="rotated-header-lb"
+            [allowSearch]="false" [allowFiltering]="false" [allowSorting]="false" [width]="25" [minWidth]="25"
+            maxWidth="25px" [allowResizing]="false"></dxi-column>
+          <dxi-column dataField="SP_TRN_PRODUCTION_LOTSIZE_ST" caption="TRN_PRODUCTION_LOTSIZE"
+            cssClass="rotated-header-lb" [allowSearch]="false" [allowFiltering]="false" [allowSorting]="false"
+            [width]="25" [minWidth]="25" maxWidth="25px" [allowResizing]="false"></dxi-column>
+          <dxi-column dataField="SP_TRAN_PRODUCTION_ALTERNATIVES_MIX_RATIOS_ST" caption="TRN_PRODUCTION_ALT_MIX_RATIOS"
+            cssClass="rotated-header-lb" [allowSearch]="false" [allowFiltering]="false" [allowSorting]="false"
+            [width]="25" [minWidth]="25" maxWidth="25px" [allowResizing]="false"></dxi-column>
+          <dxi-column dataField="SP_TRN_PRODUCT_VENDOR_CHAR_ST" caption="TRN_PRODUCT_VENDOR_CHAR"
+            cssClass="rotated-header-lb" [allowSearch]="false" [allowFiltering]="false" [allowSorting]="false"
+            [width]="25" [minWidth]="25" maxWidth="25px" [allowResizing]="false"></dxi-column>
+          <dxi-column dataField="SP_TRAN_PRODUCTION_ROUTING_ST" caption="TRN_PRODUCTION_ROUTING"
+            cssClass="rotated-header-lb" [allowSearch]="false" [allowFiltering]="false" [allowSorting]="false"
+            [width]="25" [minWidth]="25" maxWidth="25px" [allowResizing]="false"></dxi-column>
+          <dxi-column dataField="SP_TRAN_PRODUCTION_ROUTING_S4_ST" caption="TRN_PRODUCTION_ROUTING_S4"
+            cssClass="rotated-header-lb" [allowSearch]="false" [allowFiltering]="false" [allowSorting]="false"
+            [width]="25" [minWidth]="25" maxWidth="25px" [allowResizing]="false"></dxi-column>
+          <dxi-column dataField="SP_TRAN_PRODUCTION_VERSION_ST" caption="TRN_PRODUCTION_VERSION"
+            cssClass="rotated-header-lb" [allowSearch]="false" [allowFiltering]="false" [allowSorting]="false"
+            [width]="25" [minWidth]="25" maxWidth="25px" [allowResizing]="false"></dxi-column>
+          <dxi-column dataField="SP_TRN_PRODUCTION_YIELD_LEADTIME_ST" caption="TRN_PRODUCTION_YIELD_LEADTIME"
+            cssClass="rotated-header-lb" [allowSearch]="false" [allowFiltering]="false" [allowSorting]="false"
+            [width]="25" [minWidth]="25" maxWidth="25px" [allowResizing]="false"></dxi-column>
+          <dxi-column dataField="SP_TRN_PRODUCTION_CYCLETIME_ST" caption="TRN_PRODUCTION_CYCLETIME"
+            cssClass="rotated-header-lb" [allowSearch]="false" [allowFiltering]="false" [allowSorting]="false"
+            [width]="25" [minWidth]="25" maxWidth="25px" [allowResizing]="false"></dxi-column>
+          <dxi-column dataField="SP_TRN_PRODUCT_PLANT_ST" caption="TRN_PRODUCT_PLANT" cssClass="rotated-header-lb"
+            [allowSearch]="false" [allowFiltering]="false" [allowSorting]="false" [width]="25" [minWidth]="25"
+            maxWidth="25px" [allowResizing]="false"></dxi-column>
+
+
+          <dxi-column dataField="SP_TRN_TO_OUT_PRODUCTION_ST" caption="PRODUCTION" cssClass="rotated-header"
+            [allowSearch]="false" [allowFiltering]="false" [allowSorting]="false" [width]="25" [minWidth]="25"
+            maxWidth="25px" [allowResizing]="false"></dxi-column>
+          <dxi-column dataField="SP_TRN_TO_OUT_PRODUCT_ST" caption="PRODUCT" cssClass="rotated-header"
+            [allowSearch]="false" [allowFiltering]="false" [allowSorting]="false" [width]="25" [minWidth]="25"
+            maxWidth="25px" [allowResizing]="false"></dxi-column>
+          <dxi-column dataField="SP_TRN_TO_OUT_PRODUCT_MATRIX_ST" caption="PRODUCT_MATRIX" cssClass="rotated-header"
+            [allowSearch]="false" [allowFiltering]="false" [allowSorting]="false" [width]="25" [minWidth]="25"
+            maxWidth="25px" [allowResizing]="false"></dxi-column>
+          <dxi-column dataField="SP_TRN_TO_OUT_PRODUCT_SALES_ST" caption="PRODUCT_SALES" cssClass="rotated-header"
+            [allowSearch]="false" [allowFiltering]="false" [allowSorting]="false" [width]="25" [minWidth]="25"
+            maxWidth="25px" [allowResizing]="false"></dxi-column>
+          <dxi-column dataField="SP_TRN_TO_OUT_COMPONENTS_ST" caption="COMPONENTS" cssClass="rotated-header"
+            [allowSearch]="false" [allowFiltering]="false" [allowSorting]="false" [width]="25" [minWidth]="25"
+            maxWidth="25px" [allowResizing]="false"></dxi-column>
+          <dxi-column dataField="SP_TRN_TO_OUT_PRODUCTION_BOM_ST" caption="PRODUCTION_BOM" cssClass="rotated-header"
+            [allowSearch]="false" [allowFiltering]="false" [allowSorting]="false" [width]="25" [minWidth]="25"
+            maxWidth="25px" [allowResizing]="false"></dxi-column>
+          <dxi-column dataField="SP_TRN_TO_OUT_PRODUCTION_LOTSIZE_ST" caption="PRODUCTION_LOTSIZE"
+            cssClass="rotated-header" [allowSearch]="false" [allowFiltering]="false" [allowSorting]="false" [width]="25"
+            [minWidth]="25" maxWidth="25px" [allowResizing]="false"></dxi-column>
+          <dxi-column dataField="SP_TRN_TO_OUT_PRODUCTION_ALT_MIX_RATIOS_ST" caption="PRODUCTION_ALT_MIX_RATIOS"
+            cssClass="rotated-header" [allowSearch]="false" [allowFiltering]="false" [allowSorting]="false" [width]="25"
+            [minWidth]="25" maxWidth="25px" [allowResizing]="false"></dxi-column>
+          <dxi-column dataField="SP_TRN_TO_OUT_PRODUCT_VENDOR_CHAR_ST" caption="PRODUCT_VENDOR_CHAR"
+            cssClass="rotated-header" [allowSearch]="false" [allowFiltering]="false" [allowSorting]="false" [width]="25"
+            [minWidth]="25" maxWidth="25px" [allowResizing]="false"></dxi-column>
+          <dxi-column dataField="SP_TRN_TO_OUT_PRODUCTION_ROUTING_ST" caption="PRODUCTION_ROUTING"
+            cssClass="rotated-header" [allowSearch]="false" [allowFiltering]="false" [allowSorting]="false" [width]="25"
+            [minWidth]="25" maxWidth="25px" [allowResizing]="false"></dxi-column>
+          <dxi-column dataField="SP_TRN_TO_OUT_PRODUCTION_ROUTING_S4_ST" caption="PRODUCTION_ROUTING_S4"
+            cssClass="rotated-header" [allowSearch]="false" [allowFiltering]="false" [allowSorting]="false" [width]="25"
+            [minWidth]="25" maxWidth="25px" [allowResizing]="false"></dxi-column>
+          <dxi-column dataField="SP_TRN_TO_OUT_PRODUCTION_VERSION_ST" caption="PRODUCTION_VERSION"
+            cssClass="rotated-header" [allowSearch]="false" [allowFiltering]="false" [allowSorting]="false" [width]="25"
+            [minWidth]="25" maxWidth="25px" [allowResizing]="false"></dxi-column>
+          <dxi-column dataField="SP_TRN_TO_OUT_PRODUCTION_YIELD_ST" caption="PRODUCTION_YIELD" cssClass="rotated-header"
+            [allowSearch]="false" [allowFiltering]="false" [allowSorting]="false" [width]="25" [minWidth]="25"
+            maxWidth="25px" [allowResizing]="false"></dxi-column>
+          <dxi-column dataField="SP_TRN_TO_OUT_PRODUCTION_LEADTIME_ST" caption="PRODUCTION_LEADTIME"
+            cssClass="rotated-header" [allowSearch]="false" [allowFiltering]="false" [allowSorting]="false" [width]="25"
+            [minWidth]="25" maxWidth="25px" [allowResizing]="false"></dxi-column>
+          <dxi-column dataField="SP_TRN_TO_OUT_PRODUCTION_CYCLETIME_ST" caption="PRODUCTION_CYCLETIME"
+            cssClass="rotated-header" [allowSearch]="false" [allowFiltering]="false" [allowSorting]="false" [width]="25"
+            [minWidth]="25" maxWidth="25px" [allowResizing]="false"></dxi-column>
+          <dxi-column dataField="SP_TRN_TO_OUT_PRODUCT_PLANT_ST" caption="PRODUCT_PLANT" cssClass="rotated-header"
+            [allowSearch]="false" [allowFiltering]="false" [allowSorting]="false" [width]="25" [minWidth]="25"
+            maxWidth="25px" [allowResizing]="false"></dxi-column>
+
+
+
+
+          <dxi-column dataField="SP_TRN_TO_OUT_PRODUCTION_RC" caption="PRODUCTION" cssClass="rotated-header-green"
+            [allowSearch]="false" [allowFiltering]="false" [allowSorting]="false" [width]="50" [minWidth]="50"
+            maxWidth="50px" [allowResizing]="false"></dxi-column>
+          <dxi-column dataField="SP_TRN_TO_OUT_PRODUCT_RC" caption="PRODUCT" cssClass="rotated-header-green"
+            [allowSearch]="false" [allowFiltering]="false" [allowSorting]="false" [width]="50" [minWidth]="50"
+            maxWidth="50px" [allowResizing]="false"></dxi-column>
+          <dxi-column dataField="SP_TRN_TO_OUT_PRODUCT_MATRIX_RC" caption="PRODUCT_MATRIX"
+            cssClass="rotated-header-green" [allowSearch]="false" [allowFiltering]="false" [allowSorting]="false"
+            [width]="50" [minWidth]="50" maxWidth="50px" [allowResizing]="false"></dxi-column>
+          <dxi-column dataField="SP_TRN_TO_OUT_PRODUCT_SALES_RC" caption="PRODUCT_SALES" cssClass="rotated-header-green"
+            [allowSearch]="false" [allowFiltering]="false" [allowSorting]="false" [width]="50" [minWidth]="50"
+            maxWidth="50px" [allowResizing]="false"></dxi-column>
+          <dxi-column dataField="SP_TRN_TO_OUT_COMPONENTS_RC" caption="COMPONENTS" cssClass="rotated-header-green"
+            [allowSearch]="false" [allowFiltering]="false" [allowSorting]="false" [width]="50" [minWidth]="50"
+            maxWidth="50px" [allowResizing]="false"></dxi-column>
+          <dxi-column dataField="SP_TRN_TO_OUT_PRODUCTION_BOM_RC" caption="PRODUCTION_BOM"
+            cssClass="rotated-header-green" [allowSearch]="false" [allowFiltering]="false" [allowSorting]="false"
+            [width]="50" [minWidth]="50" maxWidth="50px" [allowResizing]="false"></dxi-column>
+          <dxi-column dataField="SP_TRN_TO_OUT_PRODUCTION_LOTSIZE_RC" caption="PRODUCTION_LOTSIZE"
+            cssClass="rotated-header-green" [allowSearch]="false" [allowFiltering]="false" [allowSorting]="false"
+            [width]="50" [minWidth]="50" maxWidth="50px" [allowResizing]="false"></dxi-column>
+          <dxi-column dataField="SP_TRN_TO_OUT_PRODUCTION_ALT_MIX_RATIOS_RC" caption="PRODUCTION_ALT_MIX_RATIOS"
+            cssClass="rotated-header-green" [allowSearch]="false" [allowFiltering]="false" [allowSorting]="false"
+            [width]="50" [minWidth]="50" maxWidth="50px" [allowResizing]="false"></dxi-column>
+          <dxi-column dataField="SP_TRN_TO_OUT_PRODUCT_VENDOR_CHAR_RC" caption="PRODUCT_VENDOR_CHAR"
+            cssClass="rotated-header-green" [allowSearch]="false" [allowFiltering]="false" [allowSorting]="false"
+            [width]="50" [minWidth]="50" maxWidth="50px" [allowResizing]="false"></dxi-column>
+          <dxi-column dataField="SP_TRN_TO_OUT_PRODUCTION_ROUTING_RC" caption="PRODUCTION_ROUTING"
+            cssClass="rotated-header-green" [allowSearch]="false" [allowFiltering]="false" [allowSorting]="false"
+            [width]="50" [minWidth]="50" maxWidth="50px" [allowResizing]="false"></dxi-column>
+          <dxi-column dataField="SP_TRN_TO_OUT_PRODUCTION_ROUTING_S4_RC" caption="PRODUCTION_ROUTING_S4"
+            cssClass="rotated-header-green" [allowSearch]="false" [allowFiltering]="false" [allowSorting]="false"
+            [width]="50" [minWidth]="50" maxWidth="50px" [allowResizing]="false"></dxi-column>
+          <dxi-column dataField="SP_TRN_TO_OUT_PRODUCTION_VERSION_RC" caption="PRODUCTION_VERSION"
+            cssClass="rotated-header-green" [allowSearch]="false" [allowFiltering]="false" [allowSorting]="false"
+            [width]="50" [minWidth]="50" maxWidth="50px" [allowResizing]="false"></dxi-column>
+          <dxi-column dataField="SP_TRN_TO_OUT_PRODUCTION_YIELD_RC" caption="PRODUCTION_YIELD"
+            cssClass="rotated-header-green" [allowSearch]="false" [allowFiltering]="false" [allowSorting]="false"
+            [width]="50" [minWidth]="50" maxWidth="50px" [allowResizing]="false"></dxi-column>
+          <dxi-column dataField="SP_TRN_TO_OUT_PRODUCTION_LEADTIME_RC" caption="PRODUCTION_LEADTIME"
+            cssClass="rotated-header-green" [allowSearch]="false" [allowFiltering]="false" [allowSorting]="false"
+            [width]="50" [minWidth]="50" maxWidth="50px" [allowResizing]="false"></dxi-column>
+          <dxi-column dataField="SP_TRN_TO_OUT_PRODUCTION_CYCLETIME_RC" caption="PRODUCTION_CYCLETIME"
+            cssClass="rotated-header-green" [allowSearch]="false" [allowFiltering]="false" [allowSorting]="false"
+            [width]="50" [minWidth]="50" maxWidth="50px" [allowResizing]="false"></dxi-column>
+          <dxi-column dataField="SP_TRN_TO_OUT_PRODUCT_PLANT_RC" caption="PRODUCT_PLANT" cssClass="rotated-header-green"
+            [allowSearch]="false" [allowFiltering]="false" [allowSorting]="false" [width]="50" [minWidth]="50"
+            maxWidth="50px" [allowResizing]="false"></dxi-column>
+
+
+          <ng-template #rotatedHeader let-data>
+            <div class="rotated-header">
+              {{ data.column.caption }}
+            </div>
+          </ng-template>
+
+          <!-- <ng-template #legacyHeader let-container>
+            <div>Duration<br>(Mins)</div>
+          </ng-template> -->
+        </dx-data-grid>
+      </div>
+    </div>
+  </div>
+</section>

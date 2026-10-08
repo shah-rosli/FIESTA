@@ -1,0 +1,75 @@
+<app-page-title [PageTitle]="PageTitle"></app-page-title>
+
+<section class="content">
+  <div class="container-fluid">
+
+    <!-- <div class="d-flex justify-content-end" style="margin-right: 15px;">
+      <div class="d-flex gap-2">
+        <dx-button *ngIf="allowRepush" class="btn-xs" type="success" text="Repush" (onClick)="onRepush()"></dx-button>
+      </div>
+    </div>
+    <br> -->
+
+    <!-- Repush Loading Panel -->
+    <dx-load-panel [visible]="isLoading" [showIndicator]="true" [showPane]="true" [shading]="true"
+      [closeOnOutsideClick]="false" message="Processing repush...">
+    </dx-load-panel>
+
+    <div class="card">
+      <div class="card-body">
+        <dx-data-grid #dataGrid [dataSource]="dataSource" [remoteOperations]="true" [showBorders]="true"
+          [showColumnLines]="true" [showRowLines]="true" [rowAlternationEnabled]="true" [allowColumnResizing]="true"
+          [allowColumnReordering]="true" [columnMinWidth]="50" [columnAutoWidth]="true" [hoverStateEnabled]="true"
+          columnResizingMode="widget" [columns]="columnsConfig" (onExporting)="onExporting($event, PageTitle)"
+          (onRowPrepared)="handleRowPrepared($event)" (onCellPrepared)="onCellPrepared($event)"
+          (onCellClick)="onCellClick($event)">
+
+          <dxo-selection *ngIf="allowRepush" mode="multiple" showCheckBoxesMode="always" [deferred]="true"
+            selectAllMode="allPages">
+          </dxo-selection>
+
+          <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+          <dxo-scrolling [useNative]="true"></dxo-scrolling>
+          <dxo-header-filter [visible]="true">
+            <dxo-search [enabled]="true"></dxo-search>
+          </dxo-header-filter>
+          <dxo-filter-row [visible]="true"></dxo-filter-row>
+          <dxo-paging [enabled]="true" [pageSize]="30"></dxo-paging>
+          <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[20, 30, 40]" [showInfo]="true" [visible]="true">
+          </dxo-pager>
+          <dxo-group-panel [visible]="true"></dxo-group-panel>
+          <dxo-export [enabled]="true"></dxo-export>
+          <dxo-sorting mode="multiple"></dxo-sorting>
+          <dxo-column-chooser [enabled]="true" mode="select">
+            <dxo-selection [allowSelectAll]="true"></dxo-selection>
+            <dxo-search [enabled]="true"></dxo-search>
+            <dxo-position my="right top" at="right bottom" of=".dx-datagrid-column-chooser-button"></dxo-position>
+          </dxo-column-chooser>
+          <dxo-toolbar>
+            <dxi-item *ngIf="allowRepush" location="after" widget="dxButton" [options]="repushButtonOptions">
+            </dxi-item>
+            <dxi-item name="groupPanel"></dxi-item>
+            <ng-container *ngIf="downloadMode === 'api' || downloadMode === 'both'">
+              <dxi-item [visible]="exportBtn.visible" locateInMenu="auto">
+                <div *dxTemplate>
+                  <dx-button id="popoverTarget" icon="download" [focusStateEnabled]="false" [text]="exportBtn.message"
+                    (onClick)="exportBtnClick()">
+                  </dx-button>
+                  <dx-popover target="#popoverTarget" showEvent="mouseenter" hideEvent="mouseleave"
+                    [animation]="{ hide: { type: 'pop', duration: 0 }, show: { type: 'pop', duration: 0 } }">
+                    <div *dxTemplate="let data = model; of: 'content'">
+                      This file is refreshed daily
+                    </div>
+                    <dxo-show [duration]="0"></dxo-show>
+                  </dx-popover>
+                </div>
+              </dxi-item>
+            </ng-container>
+            <dxi-item *ngIf="downloadMode === 'devextreme' || downloadMode === 'both'" name="exportButton"></dxi-item>
+            <dxi-item name="columnChooserButton"></dxi-item>
+          </dxo-toolbar>
+        </dx-data-grid>
+      </div>
+    </div>
+  </div>
+</section>

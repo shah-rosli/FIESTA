@@ -1,0 +1,40 @@
+<app-page-title [PageTitle]="PageTitle"></app-page-title>
+
+<section class="content">
+  <div class="container-fluid">
+    <div class="card">
+      <div class="card-body datagrid-font-size">
+        <dx-data-grid class="exclude-compact-datagrid" [dataSource]="dataSource" [showBorders]="true"
+          [showColumnLines]="true" [showRowLines]="true" [rowAlternationEnabled]="true" [allowColumnResizing]="true"
+          [allowColumnReordering]="true" [columnAutoWidth]="true" [hoverStateEnabled]="true"
+          columnResizingMode="widget">
+
+          <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+          <dxo-scrolling [useNative]="true"></dxo-scrolling>
+          <dxo-header-filter [visible]="true">
+            <dxo-search [enabled]="true"></dxo-search>
+          </dxo-header-filter>
+          <dxo-filter-row [visible]="true"></dxo-filter-row>
+
+          <dxo-toolbar>
+            <dxi-item location="before" locateInMenu="auto">
+              <div *dxTemplate>
+                <div>These files are refreshed every 15 minutes</div>
+              </div>
+            </dxi-item>
+          </dxo-toolbar>
+
+          <dxi-column dataField="CFG_SYS_TABLE_NAME" caption="View Name"></dxi-column>
+          <dxi-column dataField="CFG_SYS_TABLE_EXTRACT_FILENAME" caption="Download Extract" cellTemplate="cellTemplate">
+            <div *dxTemplate="let data of 'cellTemplate'" class="button-text">
+              <dx-button *ngIf="data.value" hint="Download file" icon="download" [text]="data.value"
+                (onClick)="exportBtnClick(data)" [focusStateEnabled]="false">
+              </dx-button>
+            </div>
+          </dxi-column>
+          <dxi-column dataField="CFG_SYS_TABLE_EXTRACT_DATETIME" caption="Extract Datetime(UTC)"></dxi-column>
+        </dx-data-grid>
+      </div>
+    </div>
+  </div>
+</section>

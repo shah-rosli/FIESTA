@@ -1,0 +1,94 @@
+<app-page-title [PageTitle]="PageTitle"></app-page-title>
+
+<section class="content">
+  <div class="container-fluid">
+    <div class="card card-body">
+      <ng-container *ngIf="tab === 'summary'">
+        <dx-data-grid class="summary-datagrid" [dataSource]="summaryDataSource" [remoteOperations]="true"
+          [showBorders]="true" [showColumnLines]="true" [showRowLines]="true" [rowAlternationEnabled]="true"
+          [allowColumnResizing]="true" [allowColumnReordering]="true" [columnMinWidth]="50" [columnAutoWidth]="true"
+          [hoverStateEnabled]="true" columnResizingMode="widget" [columns]="summaryColumnsConfig"
+          (onExporting)="onExporting($event, PageTitle)">
+
+          <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+          <dxo-scrolling [useNative]="true"></dxo-scrolling>
+          <dxo-header-filter [visible]="true">
+            <dxo-search [enabled]="true"></dxo-search>
+          </dxo-header-filter>
+          <dxo-filter-row [visible]="true"></dxo-filter-row>
+          <dxo-paging [enabled]="true" [pageSize]="30"></dxo-paging>
+          <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[20, 30, 40]" [showInfo]="true" [visible]="true">
+          </dxo-pager>
+          <dxo-group-panel [visible]="true" [allowColumnDragging]="false"></dxo-group-panel>
+          <dxo-export [enabled]="true"></dxo-export>
+          <dxo-sorting mode="multiple"></dxo-sorting>
+          <dxo-column-chooser [enabled]="true" mode="select">
+            <dxo-selection [allowSelectAll]="true"></dxo-selection>
+            <dxo-search [enabled]="true"></dxo-search>
+            <dxo-position my="right top" at="right bottom" of=".dx-datagrid-column-chooser-button"></dxo-position>
+          </dxo-column-chooser>
+
+          <div *dxTemplate="let cell of 'statusCellTemplate'">
+            <ng-container [ngSwitch]="cell.data.status">
+              <a *ngSwitchCase="'User Buyoff'" class="d-block" role="button" [routerLink]="[]"
+                [queryParams]="{ opn: cell.data.opn }" [queryParamsHandling]="'replace'">{{cell.value}}</a>
+              <ng-container *ngSwitchDefault>{{cell.value}}</ng-container>
+            </ng-container>
+          </div>
+        </dx-data-grid>
+      </ng-container>
+
+      <ng-container *ngIf="tab === 'buyoff'">
+        <div class="d-flex justify-content-between">
+          <span class="fw-bold" style="font-size: 1.2rem;">OPN: {{buyoffOpn}}</span>
+          <div class="d-flex gap-2">
+            <div>
+              <dx-button text="Export All" icon="xlsxfile" [disabled]="!enableExportAll" [focusStateEnabled]="false"
+                [activeStateEnabled]="false" [hoverStateEnabled]="false" (onClick)="datagridExportAll()">
+              </dx-button>
+            </div>
+            <dx-button class="btn-xs" type="success" text="Sign-off" (onClick)="onBuyoff()"></dx-button>
+          </div>
+        </div>
+        <ng-container *ngFor="let master of masters">
+          <div class="mt-2"></div>
+          <div class="fs-5">{{master.title}}</div>
+          <dx-data-grid [dataSource]="master.dataSource" [remoteOperations]="true" [showBorders]="true"
+            [showColumnLines]="true" [showRowLines]="true" [rowAlternationEnabled]="true" [allowColumnResizing]="true"
+            [allowColumnReordering]="true" [columnMinWidth]="50" [columnAutoWidth]="true" [hoverStateEnabled]="true"
+            columnResizingMode="widget" [columns]="master.columnsConfig" (onExporting)="onExporting($event, PageTitle)">
+
+            <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+            <dxo-scrolling [useNative]="true"></dxo-scrolling>
+            <dxo-header-filter [visible]="true">
+              <dxo-search [enabled]="true"></dxo-search>
+            </dxo-header-filter>
+            <dxo-filter-row [visible]="true"></dxo-filter-row>
+            <dxo-paging [enabled]="true" [pageSize]="10"></dxo-paging>
+            <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[10, 20, 30]" [showInfo]="true"
+              [visible]="true">
+            </dxo-pager>
+            <dxo-group-panel [visible]="true"></dxo-group-panel>
+            <dxo-export [enabled]="true"></dxo-export>
+            <dxo-sorting mode="multiple"></dxo-sorting>
+            <dxo-column-chooser [enabled]="true" mode="select">
+              <dxo-selection [allowSelectAll]="true"></dxo-selection>
+              <dxo-search [enabled]="true"></dxo-search>
+              <dxo-position my="right top" at="right bottom" of=".dx-datagrid-column-chooser-button"></dxo-position>
+            </dxo-column-chooser>
+            <dxo-toolbar>
+              <dxi-item name="groupPanel"></dxi-item>
+              <dxi-item name="exportButton"></dxi-item>
+              <dxi-item name="columnChooserButton"></dxi-item>
+            </dxo-toolbar>
+          </dx-data-grid>
+        </ng-container>
+        <div class="mt-2 d-flex justify-content-end gap-2">
+          <dx-button class="btn-xs" text="Back" [routerLink]="[]" [queryParams]="{ opn: null }"
+            [queryParamsHandling]="'replace'"></dx-button>
+          <dx-button class="btn-xs" type="success" text="Sign-off" (onClick)="onBuyoff()"></dx-button>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</section>

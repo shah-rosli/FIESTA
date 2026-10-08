@@ -1,0 +1,57 @@
+<dx-data-grid [dataSource]="dataSource" [showBorders]="true" [showColumnLines]="true" [showRowLines]="true"
+  [rowAlternationEnabled]="true" [allowColumnResizing]="true" [allowColumnReordering]="true" [hoverStateEnabled]="true"
+  columnResizingMode="widget" [repaintChangesOnly]="true" [columnMinWidth]="50" [columnAutoWidth]="true"
+  (onContentReady)="dataGrid.instance.updateDimensions()" (onExporting)="onExporting($event, 'export')">
+
+  <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+  <dxo-scrolling [useNative]="true"></dxo-scrolling>
+  <dxo-header-filter [visible]="true">
+    <dxo-search [enabled]="true"></dxo-search>
+  </dxo-header-filter>
+  <dxo-filter-row [visible]="true"></dxo-filter-row>
+  <dxo-paging [enabled]="true" [pageSize]="999"></dxo-paging>
+  <dxo-group-panel [visible]="true"></dxo-group-panel>
+  <dxo-export [enabled]="true"></dxo-export>
+  <dxo-sorting mode="multiple"></dxo-sorting>
+  <dxo-row-dragging [allowReordering]="true" [onReorder]="onReorder"></dxo-row-dragging>
+  <dxo-toolbar>
+    <dxi-item name="groupPanel"></dxi-item>
+    <dxi-item locateInMenu="auto">
+      <dx-button hint="Save changes" icon="save" [activeStateEnabled]="false" [disabled]="!orderingChanged"
+        (onClick)="onSaveChanges()">
+      </dx-button>
+    </dxi-item>
+    <dxi-item locateInMenu="auto">
+      <dx-button hint="Discard changes" icon="undo" [activeStateEnabled]="false" [disabled]="!orderingChanged"
+        (onClick)="onDiscardChanges()">
+      </dx-button>
+    </dxi-item>
+    <dxi-item name="exportButton"></dxi-item>
+  </dxo-toolbar>
+
+  <dxi-column dataField="CFG_SYS_COLUMN_CONFIG_ID" caption="Column ID" [allowEditing]="false" [visible]="false">
+  </dxi-column>
+  <dxi-column dataField="CFG_SYS_TABLE_CONFIG_ID" caption="Table ID" [allowEditing]="false" [visible]="false">
+  </dxi-column>
+  <dxi-column dataField="visibleIndex" caption="visibleIndex">
+  </dxi-column>
+  <dxi-column dataField="visible" caption="visible">
+  </dxi-column>
+  <dxi-column dataField="dataField" caption="dataField">
+  </dxi-column>
+  <dxi-column dataField="caption" caption="caption">
+  </dxi-column>
+  <dxi-column dataField="dataType" caption="dataType">
+  </dxi-column>
+  <dxi-column dataField="format" caption="format"></dxi-column>
+  <dxi-column dataField="sortIndex" caption="sortIndex"></dxi-column>
+  <dxi-column dataField="sortOrder" caption="sortOrder"></dxi-column>
+  <dxi-column dataField="width" caption="width"></dxi-column>
+  <dxi-column dataField="ACTIVE" caption="ACTIVE"> </dxi-column>
+  <dxi-column dataField="_fixed" caption="_fixed" [allowEditing]="false" [visible]="false">
+  </dxi-column>
+  <dxi-column dataField="fixedPosition" caption="fixedPosition" [allowEditing]="false" [visible]="false">
+  </dxi-column>
+  <dxi-column dataField="CFG_SYS_TABLE_CONFIG" caption="CFG_SYS_TABLE_CONFIG" [allowEditing]="false" [visible]="false">
+  </dxi-column>
+</dx-data-grid>

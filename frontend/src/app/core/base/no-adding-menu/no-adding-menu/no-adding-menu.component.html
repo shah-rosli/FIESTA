@@ -1,0 +1,15 @@
+<app-page-title [PageTitle]="PageTitle"></app-page-title>
+
+<section class="error-section">
+  <div class="error-page">
+    <h2 class="headline text-info"><i class="fas fa-smile-beam text-info"></i></h2>
+
+    <div class="error-content">
+      <h3>{{this.base.getMessage("Psstt... you don't have any menu please contact system admin")}}</h3>
+      <p>
+        {{this.base.getMessage("Thank you for login. system admin not create any menu for you please check with
+        admin.")}}
+      </p>
+    </div>
+  </div>
+</section>

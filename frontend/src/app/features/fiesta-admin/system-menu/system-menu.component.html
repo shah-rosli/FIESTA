@@ -1,0 +1,201 @@
+<app-page-title [PageTitle]=PageTitle></app-page-title>
+
+<app-page-loader [loader]="pageIsLoading"></app-page-loader>
+<div class="content">
+
+  <app-no-view-permission *ngIf="!pagePermission.view"></app-no-view-permission>
+
+  <dx-popup height="90%" width="90%" [showTitle]="true" [title]="'Audit Trail'" [dragEnabled]="true"
+    [hideOnOutsideClick]="true" [(visible)]="historyPopupVisible">
+    <ng-container *dxTemplate="let data of 'content'">
+      <div class="card card-default h-100">
+        <div class="card-body h-100">
+          <div class="row h-100">
+            <div class="col-md-12 h-100">
+              <div *ngIf="historyLoadingIndicator" class="ParentLodingdiv">
+                <dx-load-indicator class="block center" id="large-indicator" height="40" width="40"></dx-load-indicator>
+              </div>
+
+              <ng-container *ngIf="!historyLoadingIndicator">
+                <dx-data-grid class="h-100" [dataSource]="HistoryData" [showBorders]="true" [showColumnLines]="true"
+                  [showRowLines]="true" [rowAlternationEnabled]="false" [allowColumnResizing]="true"
+                  [allowColumnReordering]="true" [hoverStateEnabled]="true" columnResizingMode="widget"
+                  [columnMinWidth]="50" [columnAutoWidth]="true" (onExporting)="onExporting($event, 'export')">
+
+                  <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+                  <dxo-scrolling [useNative]="true"></dxo-scrolling>
+                  <dxo-header-filter [visible]="true">
+                    <dxo-search [enabled]="true"></dxo-search>
+                  </dxo-header-filter>
+                  <dxo-filter-row [visible]="true"></dxo-filter-row>
+                  <dxo-paging [enabled]="true" [pageSize]="30"></dxo-paging>
+                  <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[20, 30, 40]" [showInfo]="true"
+                    [visible]="true">
+                  </dxo-pager>
+                  <dxo-group-panel [visible]="true"></dxo-group-panel>
+                  <dxo-export [enabled]="true"></dxo-export>
+                  <dxo-sorting mode="multiple"></dxo-sorting>
+
+                  <dxi-column dataField="CFG_SYSTEM_MENU_HIS_ID" [caption]="'History ID'">
+                  </dxi-column>
+                  <dxi-column dataField="CFG_SYSTEM_MENU_HIS_DATE" [caption]="'History Date (UTC)'" dataType="datetime"
+                    sortOrder="desc">
+                  </dxi-column>
+                  <dxi-column dataField="MODIFIED_BY_EMAIL" [caption]="'Modified By'">
+                  </dxi-column>
+                  <dxi-column dataField="MODIFIED_BY_NAME" [caption]="'Modified By Name'">
+                  </dxi-column>
+                  <dxi-column dataField="MODIFIED_BY_DELNAME" [caption]="'Modified By Delegate'">
+                  </dxi-column>
+                  <dxi-column dataField="CFG_SYSTEM_MENU_ID" dataType="number" [caption]="'ID'"
+                    [allowEditing]="false"></dxi-column>
+                  <dxi-column dataField="MENU_NAME" dataType="string" [caption]="'Menu Name'">
+                    <dxi-validation-rule type="required"></dxi-validation-rule>
+                  </dxi-column>
+                  <dxi-column dataField="MENU_PARENT_ID" dataType="string" [caption]="'Parent'">
+                    <dxi-validation-rule type="required"></dxi-validation-rule>
+                    <dxo-lookup [dataSource]="ParentIdDataSource" displayExpr="Value" valueExpr="Key">
+                    </dxo-lookup>
+                  </dxi-column>
+                  <dxi-column dataField="MENU_SEQUENCE" dataType="number" [caption]="'Sequence'">
+                    <dxi-validation-rule type="required"></dxi-validation-rule>
+                  </dxi-column>
+                  <dxi-column dataField="MENU_ICON" dataType="string" [caption]="'Icon'">
+                    <dxi-validation-rule type="required"></dxi-validation-rule>
+                  </dxi-column>
+                  <dxi-column dataField="MENU_LINK" dataType="string" [caption]="'Menu Link'">
+                  </dxi-column>
+                  <dxi-column dataField="saOperationMap" dataType="string" [caption]="'Access Operation'"
+                    editCellTemplate="saOperationSelectionTemplate">
+                    <dxi-validation-rule type="required"></dxi-validation-rule>
+                  </dxi-column>
+                  <div *dxTemplate="let data of 'saOperationSelectionTemplate'">
+                    <dx-tag-box [dataSource]="defaultSaOpertions" displayExpr="OperationsName"
+                      valueExpr="OperationsName" [(value)]="data.data.saOperationMap"
+                      (onValueChanged)="onTagBoxValueChanged($event, data)">
+                    </dx-tag-box>
+                  </div>
+                  <dxi-column dataField="ACTIVE" dataType="string" [caption]="'Active'">
+                    <dxi-validation-rule type="required"></dxi-validation-rule>
+                    <dxo-lookup [dataSource]="booleanDataSource" displayExpr="Value" valueExpr="Key">
+                    </dxo-lookup>
+                  </dxi-column>
+                </dx-data-grid>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </dx-popup>
+
+  <div *ngIf="pagePermission.view" class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="card card-default">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-12">
+                <dx-data-grid id="gridContainer" #dataGrid [dataSource]="dataSource" [showBorders]="true"
+                  [showColumnLines]="true" [showRowLines]="true" [rowAlternationEnabled]="true"
+                  [allowColumnResizing]="true" [allowColumnReordering]="true" [hoverStateEnabled]="true"
+                  columnResizingMode="widget" [repaintChangesOnly]="true" [columnMinWidth]="50" [columnAutoWidth]="true"
+                  (onInitNewRow)="onInitNewRow($event)" (onRowInserting)="postGridRow($event, 'create')"
+                  (onRowUpdating)="postGridRow($event, 'edit')" (onRowRemoving)="postGridRow($event, 'delete')"
+                  (onRowInserted)="postedGridRow($event, 'create')" (onRowUpdated)="postedGridRow($event, 'edit')"
+                  (onRowRemoved)="postedGridRow($event, 'delete')" (onExporting)="onExporting($event, 'export')">
+
+                  <dxo-scrolling [useNative]="true"></dxo-scrolling>
+                  <dxo-header-filter [visible]="true">
+                    <dxo-search [enabled]="true"></dxo-search>
+                  </dxo-header-filter>
+                  <dxo-filter-row [visible]="true"></dxo-filter-row>
+                  <dxo-paging [enabled]="true"></dxo-paging>
+                  <dxo-paging [enabled]="true" [pageSize]="30"></dxo-paging>
+                  <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[20, 30, 40]" [showInfo]="true"
+                    [visible]="true">
+                  </dxo-pager>
+                  <dxo-group-panel [visible]="true"></dxo-group-panel>
+                  <dxo-export [enabled]="true"></dxo-export>
+                  <dxo-editing [mode]="editModeSwitch ? 'batch' : 'popup'" [selectTextOnEditStart]="true"
+                    refreshMode="reshape" [allowAdding]="pagePermission.create" [allowUpdating]="pagePermission.edit"
+                    [allowDeleting]="pagePermission.delete">
+                  </dxo-editing>
+                  <dxo-toolbar>
+                    <dxi-item name="groupPanel"></dxi-item>
+                    <dxi-item>
+                      <div *dxTemplate>
+                        <dx-button text="Reset State" [focusStateEnabled]="false" (onClick)="onStateResetClick()">
+                        </dx-button>
+                      </div>
+                    </dxi-item>
+                    <dxi-item>
+                      <div *dxTemplate>
+                        <span>Batch Editing</span>
+                      </div>
+                    </dxi-item>
+                    <dxi-item>
+                      <div *dxTemplate>
+                        <dx-switch [(value)]="editModeSwitch" (onValueChanged)="onEditingModeChanged()"></dx-switch>
+                      </div>
+                    </dxi-item>
+                    <dxi-item name="addRowButton"></dxi-item>
+                    <dxi-item name="exportButton"></dxi-item>
+                    <dxi-item name="revertButton"></dxi-item>
+                    <dxi-item name="saveButton"></dxi-item>
+                  </dxo-toolbar>
+                  <dxo-keyboard-navigation [editOnKeyPress]="true" enterKeyAction="moveFocus"
+                    enterKeyDirection="column">
+                  </dxo-keyboard-navigation>
+                  <dxo-state-storing [savingTimeout]="100" type="localStorage" [enabled]="true"
+                    storageKey="SYSTEM_MENU_STATE_STORING">
+                  </dxo-state-storing>
+
+                  <dxi-column dataField="CFG_SYSTEM_MENU_ID" dataType="number" [caption]="'ID'" [allowEditing]="false"
+                    sortOrder="asc"></dxi-column>
+                  <dxi-column dataField="MENU_NAME" dataType="string" [caption]="'Menu Name'">
+                    <dxi-validation-rule type="required"></dxi-validation-rule>
+                  </dxi-column>
+                  <dxi-column dataField="MENU_PARENT_ID" dataType="string" [caption]="'Parent'">
+                    <dxi-validation-rule type="required"></dxi-validation-rule>
+                    <dxo-lookup [dataSource]="ParentIdDataSource" [displayExpr]="menuParentDisplayExpr" valueExpr="Key">
+                    </dxo-lookup>
+                  </dxi-column>
+                  <dxi-column dataField="MENU_SEQUENCE" dataType="number" [caption]="'Sequence'">
+                    <dxi-validation-rule type="required"></dxi-validation-rule>
+                  </dxi-column>
+                  <dxi-column dataField="MENU_ICON" dataType="string" [caption]="'Icon'">
+                    <dxi-validation-rule type="required"></dxi-validation-rule>
+                  </dxi-column>
+                  <dxi-column dataField="MENU_LINK" dataType="string" [caption]="'Menu Link'">
+                  </dxi-column>
+                  <dxi-column dataField="saOperationMap" dataType="string" [caption]="'Access Operation'"
+                    editCellTemplate="saOperationSelectionTemplate">
+                    <dxi-validation-rule type="required"></dxi-validation-rule>
+                  </dxi-column>
+                  <div *dxTemplate="let cell of 'saOperationSelectionTemplate'">
+                    <dx-tag-box [dataSource]="defaultSaOpertions" displayExpr="OperationsName"
+                      valueExpr="OperationsName" [value]="cell.data.saOperationMap"
+                      (onValueChanged)="onTagBoxValueChanged($event, cell)">
+                    </dx-tag-box>
+                  </div>
+                  <dxi-column dataField="ACTIVE" dataType="string" [caption]="'Active'">
+                    <dxi-validation-rule type="required"></dxi-validation-rule>
+                    <dxo-lookup [dataSource]="booleanDataSource" displayExpr="Value" valueExpr="Key">
+                    </dxo-lookup>
+                  </dxi-column>
+
+                  <dxi-column type="buttons" fixed="true" fixedPosition="right">
+                    <dxi-button name="edit"></dxi-button>
+                    <dxi-button name="delete"></dxi-button>
+                    <dxi-button hint="Show History" text="History" [onClick]="historyIconClick"></dxi-button>
+                  </dxi-column>
+                </dx-data-grid>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

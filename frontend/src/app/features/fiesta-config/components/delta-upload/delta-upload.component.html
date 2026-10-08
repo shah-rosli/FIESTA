@@ -1,0 +1,94 @@
+<app-page-loader [loader]="pageIsLoading"></app-page-loader>
+
+<dx-popup height="400" width="450" [showTitle]="true" title="Upload" [hideOnOutsideClick]="true"
+  [(visible)]="uploadPopup" (onHidden)="removeSelectedFile()">
+  <ng-container *dxTemplate="let data of 'content'">
+    <div class="d-flex flex-column">
+      <dx-file-uploader dropZone=".dropzone-area" dialogTrigger=".dropzone-area" [visible]="false"
+        [(value)]="selectedFile" [visible]="false" uploadMode="useButtons" [allowedFileExtensions]="['.xlsx']"
+        (onDropZoneEnter)="onUploaderDropZoneEnter()" (onDropZoneLeave)="onUploaderDropZoneLeave()"
+        (onValueChanged)="onSelectedFileChanged($event)">
+      </dx-file-uploader>
+      <div class="dropzone-area" [ngClass]="isDropZoneActive ? ['dropzone-area-active'] : []">
+        <div class="d-flex h-100 justify-content-center align-items-center">
+          <dx-button text="Select file"></dx-button>
+          <span class="px-1">or Drag & Drop file here</span>
+        </div>
+      </div>
+      <div class="dx-fileuploader-file-container" *ngFor="let file of (fileUploader?.value ?? [])">
+        <div class="dx-fileuploader-button-container">
+          <dx-button icon="close" (onClick)="removeSelectedFile()"></dx-button>
+        </div>
+        <div class="dx-fileuploader-file">
+          <div class="dx-fileuploader-file-info">
+            <div class="dx-fileuploader-file-name" style="max-width: 350px;">
+              {{file.name}}
+            </div>
+          </div>
+          <div class="dx-fileuploader-file-status-message" [ngClass]="fileIsValid ? '' : 'text-danger'">
+            {{fileIsValid ? 'Ready to upload' : 'File type is not allowed'}}
+          </div>
+        </div>
+      </div>
+      <span class="note pt-2 pb-3">Supported file extensions: <span>.xlsx</span></span>
+      <div class="card">
+        <div class="p-3 d-flex justify-content-between">
+          <div>
+            <h6>Example File</h6>
+            <span>The example file is an empty Excel file with columns, please fill in your data and upload the edited
+              file.</span>
+          </div>
+          <div class="px-1"></div>
+          <div class="align-self-center">
+            <dx-button text="Download Example" (onClick)="onExportSampleFile()"></dx-button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+  <dxi-toolbar-item widget="dxButton" toolbar="bottom" location="after" [disabled]="fileIsValid ? false : true"
+    [options]="nextButtonOptions">
+  </dxi-toolbar-item>
+</dx-popup>
+
+<dx-popup height="90%" width="90%" [showTitle]="true" title="Review Changes" [dragEnabled]="false"
+  [(visible)]="reviewPopup" (onShown)="reviewDataGrid.instance.refresh()">
+  <div *dxTemplate="let data of 'content'">
+    <dx-data-grid #review id="reviewChange" class="h-100" [dataSource]="reviewDataSource" [columns]="reviewColumnConfig"
+      [showBorders]="true" [showColumnLines]="true" [showRowLines]="true" [rowAlternationEnabled]="true"
+      [allowColumnResizing]="true" [allowColumnReordering]="true" [hoverStateEnabled]="true" columnResizingMode="widget"
+      [repaintChangesOnly]="true" [columnMinWidth]="50" [columnAutoWidth]="true"
+      noDataText="There are no changes to review" (onRowPrepared)="onRowPrepared($event)">
+
+      <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+      <dxo-scrolling [useNative]="true"></dxo-scrolling>
+      <dxo-header-filter [visible]="true">
+        <dxo-search [enabled]="true"></dxo-search>
+      </dxo-header-filter>
+      <dxo-filter-row [visible]="true"></dxo-filter-row>
+      <dxo-paging [enabled]="true" [pageSize]="50"></dxo-paging>
+      <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[25, 50, 100]" [showInfo]="true" [visible]="true">
+      </dxo-pager>
+      <dxo-sorting mode="multiple"></dxo-sorting>
+    </dx-data-grid>
+  </div>
+  <dxi-toolbar-item toolbar="bottom" location="before">
+    <div *dxTemplate>
+      <strong>
+        <span>Insert ({{reviewSummary.insertCount}} records) Update ({{reviewSummary.updateCount}} records) No change
+          ({{reviewSummary.noChangeCount}}
+          records)
+        </span>
+        <span *ngIf="reviewSummary.errorCount > 0" class="text-danger">
+          Error ({{reviewSummary.errorCount}} records)
+        </span>
+      </strong>
+    </div>
+  </dxi-toolbar-item>
+  <dxi-toolbar-item widget="dxButton" toolbar="bottom" location="before" [options]="downloadErrorButtonOptions">
+  </dxi-toolbar-item>
+  <dxi-toolbar-item widget="dxButton" toolbar="bottom" location="after" [options]="closeButtonOptions">
+  </dxi-toolbar-item>
+  <dxi-toolbar-item widget="dxButton" toolbar="bottom" location="after" [options]="saveChangesButtonOptions">
+  </dxi-toolbar-item>
+</dx-popup>

@@ -1,0 +1,157 @@
+<app-page-title [PageTitle]="PageTitle"></app-page-title>
+
+<section class="content">
+  <app-no-view-permission *ngIf="!pagePermission.view"></app-no-view-permission>
+
+  <app-delta-upload [columnConfig]="deltaUploadColumnConfig" [dataGrid]="dataGrid" [PageTitle]="PageTitle"
+    [endpoint]="endpoint"></app-delta-upload>
+
+  <app-config-history-popup [columns]="historyColumnConfig" [endpoint]="endpoint">
+  </app-config-history-popup>
+
+  <dx-load-panel [(visible)]="isLoadPanelVisible">
+    <dxo-position my="center" at="center" of="#gridContainer">
+    </dxo-position>
+  </dx-load-panel>
+
+  <div *ngIf="pagePermission.view" class="container-fluid">
+    <div class="card">
+      <div class="card-body">
+        <div class="overflow-x-auto" style="height: 13rem;">
+          <!-- <img class="mh-100 w-auto" [src]="image"> -->
+          <img [src]="image" style="width: 60%; height: auto;">
+        </div>
+        <dx-data-grid id="gridContainer" [dataSource]="dataSource" [columns]="columnConfig" [remoteOperations]="true"
+          [showBorders]="true" [showColumnLines]="true" [showRowLines]="true" [rowAlternationEnabled]="true"
+          [allowColumnResizing]="true" [allowColumnReordering]="true" [hoverStateEnabled]="true"
+          columnResizingMode="widget" [repaintChangesOnly]="false" [columnMinWidth]="50" [columnAutoWidth]="true"
+          (onEditorPreparing)="onEditorPreparing($event)" (onInitNewRow)="onInitNewRow($event)"
+          (onEditingStart)="onEditingStart($event)" (onRowInserting)="postGridRow($event, 'create')"
+          (onRowUpdating)="postGridRow($event, 'edit')" (onRowInserted)="postedGridRow($event, 'create')"
+          (onRowUpdated)="postedGridRow($event, 'edit')" (onExporting)="onExporting($event, PageTitle)"
+          (onRowPrepared)="handleRowPrepared($event)">
+
+          <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+          <dxo-scrolling [useNative]="true"></dxo-scrolling>
+          <dxo-header-filter [visible]="true">
+            <dxo-search [enabled]="true"></dxo-search>
+          </dxo-header-filter>
+          <dxo-filter-row [visible]="true"></dxo-filter-row>
+          <dxo-paging [enabled]="true" [pageSize]="30"></dxo-paging>
+          <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[20, 30, 40]" [showInfo]="true" [visible]="true">
+          </dxo-pager>
+          <dxo-group-panel [visible]="true"></dxo-group-panel>
+          <dxo-export [enabled]="true"></dxo-export>
+          <dxo-sorting mode="multiple"></dxo-sorting>
+          <dxo-editing mode="popup" [allowAdding]="pagePermission.create" [allowUpdating]="pagePermission.edit"
+            [allowDeleting]="pagePermission.delete">
+            <dxo-form [customizeItem]="customizeItem"></dxo-form>
+            <dxo-popup>
+              <dxi-toolbar-item toolbar="bottom" widget="dxButton" location="after" [options]="saveButtonOptions"
+                [disabled]="saveButtonDisabled()">
+              </dxi-toolbar-item>
+              <dxi-toolbar-item toolbar="bottom" widget="dxButton" location="after" [options]="cancelButtonOptions">
+              </dxi-toolbar-item>
+            </dxo-popup>
+          </dxo-editing>
+          <dxo-toolbar>
+            <dxi-item name="groupPanel" locateInMenu="auto"></dxi-item>
+            <dxi-item locateInMenu="auto" [visible]="pagePermission.edit">
+              <div *dxTemplate>
+                <dx-button hint="Delta Upload" icon="upload" (onClick)="openDeltaUpload()">
+                </dx-button>
+              </div>
+            </dxi-item>
+            <dxi-item name="addRowButton"></dxi-item>
+            <dxi-item name="exportButton"></dxi-item>
+          </dxo-toolbar>
+
+
+          <div *dxTemplate="let cellInfo of 'productHierarchy1Editor'">
+            <dx-select-box [dataSource]="productHierarchy1DropDown" [value]="cellInfo.value" [searchEnabled]="true"
+              [acceptCustomValue]="false" displayExpr="display" valueExpr="phCode"
+              [readOnly]="isFieldReadOnly('productHierarchy1')" (onValueChanged)="cellInfo.setValue($event.value)">
+            </dx-select-box>
+          </div>
+          <div *dxTemplate="let cellInfo of 'productHierarchy2Editor'">
+            <dx-select-box [dataSource]="productHierarchy2DropDown" [value]="cellInfo.value" [searchEnabled]="true"
+              [acceptCustomValue]="false" displayExpr="display" valueExpr="phCode"
+              [readOnly]="isFieldReadOnly('productHierarchy2')" (onValueChanged)="cellInfo.setValue($event.value)">
+            </dx-select-box>
+          </div>
+          <div *dxTemplate="let cellInfo of 'productHierarchy3Editor'">
+            <dx-select-box [dataSource]="productHierarchy3DropDown" [value]="cellInfo.value" [searchEnabled]="true"
+              [acceptCustomValue]="false" displayExpr="display" valueExpr="phCode"
+              [readOnly]="isFieldReadOnly('productHierarchy3')" (onValueChanged)="cellInfo.setValue($event.value)">
+            </dx-select-box>
+          </div>
+          <div *dxTemplate="let cellInfo of 'productHierarchy4Editor'">
+            <dx-select-box [dataSource]="productHierarchy4DropDown" [value]="cellInfo.value" [searchEnabled]="true"
+              [acceptCustomValue]="false" displayExpr="display" valueExpr="phCode"
+              [readOnly]="isFieldReadOnly('productHierarchy4')" (onValueChanged)="cellInfo.setValue($event.value)">
+            </dx-select-box>
+          </div>
+          <div *dxTemplate="let cellInfo of 'productHierarchy5Editor'">
+            <dx-select-box [dataSource]="productHierarchy5DropDown" [value]="cellInfo.value" [searchEnabled]="true"
+              [acceptCustomValue]="false" displayExpr="display" valueExpr="phCode"
+              [readOnly]="isFieldReadOnly('productHierarchy5')" (onValueChanged)="cellInfo.setValue($event.value)">
+            </dx-select-box>
+          </div>
+
+          <div *dxTemplate="let cellInfo of 'partNumberEditor'">
+            <dx-select-box [dataSource]="partNumberDropDown" displayExpr="partNumber" valueExpr="partNumber"
+              [value]="cellInfo.value" [searchEnabled]="true" [showDataBeforeSearch]="true" [minSearchLength]="1"
+              [acceptCustomValue]="false" [readOnly]="isFieldReadOnly('partNumber')"
+              (onValueChanged)="cellInfo.setValue($event.value)">
+            </dx-select-box>
+          </div>
+
+          <div *dxTemplate="let cellInfo of 'applicationCode3DefaultEditor'">
+            <dx-select-box [dataSource]="applicationLevel3CodeDropDown" [value]="cellInfo.value" [searchEnabled]="true"
+              [showDataBeforeSearch]="true" [minSearchLength]="1" [acceptCustomValue]="false"
+              [readOnly]="isFieldReadOnly('applicationCode3Default')"
+              (onValueChanged)="cellInfo.setValue($event.value)">
+            </dx-select-box>
+          </div>
+
+          <!-- <div *dxTemplate="let cellInfo of 'oneZeroEditor'">
+            <dx-select-box [dataSource]="oneZeroDataSource" [value]="cellInfo.value" [showDataBeforeSearch]="true"
+              [acceptCustomValue]="false" (onValueChanged)="cellInfo.setValue($event.value)">
+            </dx-select-box>
+          </div> -->
+
+          <div *dxTemplate="let cellInfo of 'isPartRegisterableEditor'">
+            <dx-select-box [dataSource]="oneZeroDataSource" [value]="cellInfo.value" [showDataBeforeSearch]="true"
+              [acceptCustomValue]="false" [readOnly]="isFieldReadOnly('isPartRegisterable')"
+              (onValueChanged)="cellInfo.setValue($event.value)">
+            </dx-select-box>
+          </div>
+
+          <div *dxTemplate="let cellInfo of 'isPartSoleSourceEditor'">
+            <dx-select-box [dataSource]="oneZeroDataSource" [value]="cellInfo.value" [showDataBeforeSearch]="true"
+              [acceptCustomValue]="false" [readOnly]="isFieldReadOnly('isPartSoleSource')"
+              (onValueChanged)="cellInfo.setValue($event.value)">
+            </dx-select-box>
+          </div>
+
+          <div *dxTemplate="let cellInfo of 'canSampleEditor'">
+            <dx-select-box [dataSource]="oneZeroDataSource" [value]="cellInfo.value" [showDataBeforeSearch]="true"
+              [acceptCustomValue]="false" [readOnly]="isFieldReadOnly('canSample')"
+              (onValueChanged)="cellInfo.setValue($event.value)">
+            </dx-select-box>
+          </div>
+
+          <div *dxTemplate="let cellInfo of 'canQuoteEditor'">
+            <dx-select-box [dataSource]="oneZeroDataSource" [value]="cellInfo.value" [showDataBeforeSearch]="true"
+              [acceptCustomValue]="false" [readOnly]="isFieldReadOnly('canQuote')"
+              (onValueChanged)="cellInfo.setValue($event.value)">
+            </dx-select-box>
+          </div>
+
+
+
+        </dx-data-grid>
+      </div>
+    </div>
+  </div>
+</section>

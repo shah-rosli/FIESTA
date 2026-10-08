@@ -1,0 +1,100 @@
+<app-byo-history-popup #historyPopup_BP [columns]="historyColumn_BYO_PRODUCT_HIS" endpoint="BYO">
+</app-byo-history-popup>
+
+<app-byo-history-popup #historyPopup [columns]="historyColumnBYO" endpoint="BYO">
+</app-byo-history-popup>
+
+<app-byo-version-compare #versionComparePopup></app-byo-version-compare>
+
+<br>
+
+<label style="display: inline-block; min-width: 400px;">
+  <strong>Buyoff Reason: </strong> {{ buyOffReason }}
+</label>
+<label style="display: inline-block; min-width: 300px;">
+  <strong>{{ changeOrderType }} Revision: </strong> {{ prefixChangeOrder }}
+</label>
+<label style="display: inline-block; min-width: 300px;">
+  <strong>Change Date: </strong> {{ updateDateAndTime }}
+</label>
+
+<br>
+<br>
+
+<!-- BYO_PRODUCT -->
+<div>
+  <span class="fw-bold" style="font-size: 1.2rem;">Product</span>
+</div>
+<dx-data-grid class="exclude-compact-datagrid" [dataSource]="dataSource_BYO_PRODUCT"
+  [columns]="columnConfig_BYO_PRODUCT" [showBorders]="true" [showColumnLines]="true" [showRowLines]="true"
+  [allowColumnResizing]="true" [allowColumnReordering]="true" [columnAutoWidth]="true" [hoverStateEnabled]="true"
+  columnResizingMode="widget" (onRowPrepared)="handleRowPrepared_BYO_PRODUCT($event)">
+
+  <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+  <dxo-scrolling [useNative]="true"></dxo-scrolling>
+  <dxo-filter-row [visible]="true"></dxo-filter-row>
+  <dxo-paging [pageSize]="1000"></dxo-paging>
+
+  <dxo-load-panel [enabled]="true" [showIndicator]="true" [showPane]="true" text="Loading...">
+  </dxo-load-panel>
+
+</dx-data-grid>
+<div *ngIf="showHistory_BYO_PRODUCT" class="mt-2">
+  <a href (click)="openHistory_BP(opn); $event.preventDefault()" style="margin-right:10px;">
+    View History
+  </a>
+  <a href (click)="openVersionCompare(opn, 'BYO_PRODUCT'); $event.preventDefault()" style="margin-right:10px;">
+    Compare with previous version
+  </a>
+</div>
+<br>
+
+<!-- <p>{{ columnConfig_BYO_PRODUCTION | json }}</p> -->
+
+<!-- <label style="display: inline-block; min-width: 300px;">
+  <input type="checkbox" [value]="opn" [(ngModel)]="isAccepted" />
+  <strong> OPN: </strong> {{ opn }}
+</label>
+<label style="display: inline-block; min-width: 300px;">
+  <strong>Production Revision: </strong> {{ productionChangeOrder }}
+</label>
+<label style="display: inline-block; min-width: 300px;">
+  <strong>Change Date: </strong> {{ updateDateAndTime }}
+</label> -->
+
+
+
+<!-- BYO_PRODUCTION -->
+<div>
+  <span class="fw-bold" style="font-size: 1.2rem;">Production</span>
+</div>
+<dx-data-grid class="exclude-compact-datagrid" [dataSource]="dataSource_BYO_PRODUCTION"
+  [columns]="columnConfig_BYO_PRODUCTION" [showBorders]="true" [showColumnLines]="true" [showRowLines]="true"
+  [allowColumnResizing]="true" [allowColumnReordering]="true" [columnAutoWidth]="true" [hoverStateEnabled]="true"
+  columnResizingMode="widget" (onRowPrepared)="handleRowPrepared_BYO_PRODUCTION($event)">
+
+  <!-- [rowAlternationEnabled]="true" -->
+  <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+  <dxo-scrolling [useNative]="true"></dxo-scrolling>
+
+  <dxo-filter-row [visible]="true"></dxo-filter-row>
+  <dxo-paging [pageSize]="1000"></dxo-paging>
+
+  <dxo-load-panel [enabled]="true" [showIndicator]="true" [showPane]="true" text="Loading...">
+  </dxo-load-panel>
+
+</dx-data-grid>
+
+<div *ngIf="showHistory_BYO_PRODUCTION" class="mt-2">
+
+  <a href (click)="openHistory(opn); $event.preventDefault()" style="margin-right:10px;">
+    View History
+  </a>
+  <a href (click)="openVersionCompare(opn, 'BYO_PRODUCTION'); $event.preventDefault()" style="margin-right:10px;">
+    Compare with previous version
+  </a>
+  <!-- <a [href]="'./masters/BYOProductionHistory?opn=' + opn" target="_blank" rel="noopener noreferrer">
+    History: OPN {{ opn }}
+  </a> -->
+</div>
+<br>

@@ -1,0 +1,72 @@
+<app-page-title [PageTitle]="PageTitle"></app-page-title>
+
+<section class="content">
+  <div class="container-fluid">
+    <div class="card">
+      <div class="card-body">
+        <app-filter-criteria [show]="showCriteria" [columns]="columnsConfig" [fieldsDropdown]="criteriaFieldsDropdown"
+          [useActiveRecords]="false" (onCriteriaRetrieved)="onCriteriaRetrieved($event)">
+        </app-filter-criteria>
+        <div class="pb-2"></div>
+        <dx-data-grid *ngIf="showDataGrid" [dataSource]="dataSource" [remoteOperations]="true" [showBorders]="true"
+          [showColumnLines]="true" [showRowLines]="true" [rowAlternationEnabled]="true" [allowColumnResizing]="true"
+          [allowColumnReordering]="true" [columnMinWidth]="50" [columnAutoWidth]="true" [hoverStateEnabled]="true"
+          columnResizingMode="widget" [columns]="columnsConfig" [filterSyncEnabled]="true"
+          [(filterValue)]="dataGridFilterExp" (onExporting)="onExporting($event, PageTitle)"
+          (onRowPrepared)="handleRowPrepared($event)">
+
+          <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+          <dxo-scrolling [useNative]="true"></dxo-scrolling>
+          <dxo-header-filter [visible]="true">
+            <dxo-search [enabled]="true"></dxo-search>
+          </dxo-header-filter>
+          <dxo-filter-row [visible]="true"></dxo-filter-row>
+          <dxo-paging [enabled]="true" [pageSize]="30"></dxo-paging>
+          <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[20, 30, 40]" [showInfo]="true" [visible]="true">
+          </dxo-pager>
+          <dxo-group-panel [visible]="true" [allowColumnDragging]="false"></dxo-group-panel>
+          <dxo-export [enabled]="true"></dxo-export>
+          <dxo-sorting mode="multiple"></dxo-sorting>
+          <dxo-column-chooser [enabled]="true" mode="select">
+            <dxo-selection [allowSelectAll]="true"></dxo-selection>
+            <dxo-search [enabled]="true"></dxo-search>
+            <dxo-position my="right top" at="right bottom" of=".dx-datagrid-column-chooser-button"></dxo-position>
+          </dxo-column-chooser>
+          <dxo-filter-panel [visible]="true"></dxo-filter-panel>
+          <dxo-toolbar>
+            <dxi-item locateInMenu="auto" location="left">
+              <dx-button text="Toggle Criteria" type="success" (onClick)="this.showCriteria = !this.showCriteria">
+              </dx-button>
+            </dxi-item>
+            <dxi-item [visible]="true" locateInMenu="auto">
+              <div *dxTemplate>
+                <span class="pe-2">Full View</span>
+                <dx-switch (onValueChanged)="onViewSwitched($event)"></dx-switch>
+              </div>
+            </dxi-item>
+            <dxi-item name="exportButton"></dxi-item>
+            <dxi-item name="columnChooserButton"></dxi-item>
+          </dxo-toolbar>
+
+          <div *dxTemplate="let cell of 'opnCellTemplate'">
+            <ng-container *ngIf="cell.data.isBlacklisted === 1 ; else normalCellDisplay">
+              <span class="d-flex" [attr.id]="'opnCellTemplate_' + cell.data.recordKey">
+                <span class="red-dot"></span>
+                <a class="flex-grow-1" [href]="blacklistedUrl+encodeOPN(cell.data.opn)" target="_blank">
+                  {{cell.value}}
+                </a>
+              </span>
+              <dx-popover [target]="'#opnCellTemplate_' + cell.data.recordKey" showEvent="mouseenter"
+                hideEvent="mouseleave">
+                <div style="white-space: pre-line;" *dxTemplate="let data = model; of: 'content'">
+                  {{ cell.data.reason }}
+                </div>
+              </dx-popover>
+            </ng-container>
+            <ng-template #normalCellDisplay>{{cell.value}}</ng-template>
+          </div>
+        </dx-data-grid>
+      </div>
+    </div>
+  </div>
+</section>

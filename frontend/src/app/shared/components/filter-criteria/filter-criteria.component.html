@@ -1,0 +1,63 @@
+<ng-container *ngIf="show">
+  <div class="card">
+    <div class="card-header px-0 py-0">
+      <div class="px-3 py-2 text-primary">
+        <i class="fa fa-th-list"></i><b> Criteria</b>
+      </div>
+    </div>
+    <div class="mx-2 mt-2 row">
+      <div class="col-lg-4">
+        <div class="col-lg-12">
+          <div class="dx-field">
+            <div>Field</div>
+            <dx-select-box [dataSource]="fieldsDropdown" displayExpr="caption" valueExpr="dataField"
+              [(value)]="fieldCriteria.field">
+            </dx-select-box>
+          </div>
+        </div>
+        <div class="col-lg-12">
+          <div class="dx-field">
+            <div>For Mutiple Records - Enter in New Line</div>
+            <dx-text-area class="uppercase" [height]="80" [(value)]="fieldCriteria.value">
+              <dx-validator #targetValidator>
+                <dxi-validation-rule *ngIf="mustProvideFilter" type="required"></dxi-validation-rule>
+              </dx-validator>
+            </dx-text-area>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="useActiveRecords" class="col-lg-4">
+        <div class="col-lg-12">
+          <div class="dx-field">
+            <div>Active Records</div>
+            <dx-select-box [dataSource]="activeRecordDataSource" displayExpr="caption" valueExpr="dataField"
+              [value]="activeRecordCriteria.value" (onValueChanged)="onActiveRecordsChange($event)">
+            </dx-select-box>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="useViewSwitching" class="col-lg-4">
+        <div class="col-lg-12">
+          <div class="dx-field">
+            <div>Full View</div>
+            <dx-select-box [dataSource]="fullViewDataSource" displayExpr="caption" valueExpr="value"
+              [(value)]="isFullView">
+            </dx-select-box>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="m-2 row">
+      <div class="col-lg-12 mt-2 d-flex justify-content-end">
+        <span *ngIf="mustProvideFilter">*Note: You must specify a filter value before retrieving data.</span>
+        <div class="me-2"></div>
+        <dx-button stylingMode="contained" text="Retrieve" type="success" [disabled]="!columnConfig"
+          (onClick)="onRetrieveClick()">
+        </dx-button>
+        <div class="me-2"></div>
+        <dx-button type="normal" text="Reset Fields" class="btn-default" (onClick)="resetCriteria()">
+        </dx-button>
+      </div>
+    </div>
+  </div>
+</ng-container>

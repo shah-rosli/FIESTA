@@ -1,0 +1,15 @@
+import { Component } from '@angular/core'
+
+@Component({
+  selector: 'app-prev-six-dev-production-routing-s4',
+  templateUrl: './prev-six-dev-production-routing-s4.component.html',
+  styleUrls: ['./prev-six-dev-production-routing-s4.component.scss']
+})
+export class PrevSixDevProductionRoutingS4Component {
+
+  constructor() { }
+
+  ngOnInit(): void {
+  }
+
+}

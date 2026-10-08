@@ -1,0 +1,46 @@
+<app-page-title [PageTitle]="PageTitle"></app-page-title>
+
+<section class="content">
+
+  <div class="container-fluid">
+
+    <div class="card">
+      <div class="card-body">
+        <dx-data-grid id="PendingDelegation_gridContainer" [dataSource]="HistoryDelegationData" [showBorders]="true"
+          [showColumnLines]="true" [showRowLines]="true" [rowAlternationEnabled]="true" [allowColumnResizing]="true"
+          [allowColumnReordering]="true" [columnMinWidth]="50" [columnAutoWidth]="false" [hoverStateEnabled]="true"
+          (onExporting)="onExporting($event, 'export')">
+          <dxo-selection mode="single"></dxo-selection>
+          <dxo-scrolling columnRenderingMode="virtual" [useNative]="false"></dxo-scrolling>
+          <dxo-paging [enabled]="false"></dxo-paging>
+          <dxo-header-filter [visible]="true"></dxo-header-filter>
+          <dxo-filter-row [visible]="true"></dxo-filter-row>
+          <dxo-paging [enabled]="true"></dxo-paging>
+          <dxo-paging [pageSize]="15"></dxo-paging>
+          <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[15, 20, 25]" [showInfo]="true"></dxo-pager>
+          <dxo-group-panel [visible]="false"></dxo-group-panel>
+          <dxo-export [enabled]="false"></dxo-export>
+          <dxo-editing mode="popup" refreshMode="full" [allowAdding]="false" [allowUpdating]="false"
+            [allowDeleting]="false">
+          </dxo-editing>
+          <dxi-column dataField="DELEGATEE_EMAIL" [caption]="this.base.getMessage('Delegatee')"
+            cellTemplate="delegateeTemplate"></dxi-column>
+          <dxi-column dataField="INITIATE_DATE" [caption]=" this.base.getMessage('History Date')"
+            [format]="this.base.getUserInfo('DEFAULT_DISP_DATE_FORMAT')" dataType="date" width="100px"
+            sortOrder="desc"></dxi-column>
+          <dxi-column dataField="ACTIVE" [caption]="this.base.getMessage('Active')"></dxi-column>
+          <dxi-column dataField="START_DATETIME" [caption]=" this.base.getMessage('Date From')"
+            [format]="this.base.getUserInfo('DEFAULT_DISP_DATE_FORMAT')" dataType="date" width="100px"></dxi-column>
+          <dxi-column dataField="END_DATETIME" [caption]=" this.base.getMessage('Date To')"
+            [format]="this.base.getUserInfo('DEFAULT_DISP_DATE_FORMAT')" dataType="date" width="100px"></dxi-column>
+
+          <div *dxTemplate="let data of 'delegateeTemplate'">
+            <div>{{data.data.DELEGATEE_NAME}} ({{data.data.DELEGATEE_EMAIL}})</div>
+          </div>
+
+        </dx-data-grid>
+      </div>
+    </div>
+
+  </div>
+</section>

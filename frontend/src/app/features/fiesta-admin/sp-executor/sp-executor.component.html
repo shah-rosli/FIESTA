@@ -1,0 +1,99 @@
+<app-page-title [PageTitle]="PageTitle"></app-page-title>
+
+<section class="content">
+  <app-no-view-permission *ngIf="!PermissionForView"></app-no-view-permission>
+
+  <div *ngIf="PermissionForView" class="container-fluid">
+    <div class="card">
+      <div class="card-body">
+        <form (submit)="onFormSubmit($event)">
+          <dx-form id="SearchForm" [formData]="parametersFormData" labelLocation="top">
+            <dxi-item itemType="group" caption="Parameters">
+              <dxi-item itemType="group" [colCount]="3">
+                <dxi-item [label]="{text: 'SP Name'}">
+                  <div *dxTemplate>
+                    <dx-select-box [dataSource]="spNameDataSource" valueExpr="name" displayExpr="name"
+                      [searchEnabled]="true" [(value)]="parametersFormData.SPNAME">
+                    </dx-select-box>
+                  </div>
+                </dxi-item>
+                <dxi-item dataField="PAGE_NO" type [label]="{text: 'Page No'}">
+                  <dxi-validation-rule type="numeric"></dxi-validation-rule>
+                </dxi-item>
+                <dxi-item dataField="PAGE_SIZE" [label]="{text: 'Page Size'}">
+                  <dxi-validation-rule type="numeric"></dxi-validation-rule>
+                </dxi-item>
+              </dxi-item>
+              <dxi-item itemType="group" [colCount]="3">
+                <dxi-item dataField="DATEUPDATE" [label]="{text: 'Date Update'}">
+                  <div *dxTemplate>
+                    <dx-date-box type=datetime [acceptCustomValue]=true placeholder="yyyy-MM-ddTHH:mm:ss"
+                      displayFormat="yyyy-MM-ddTHH:mm:ss" [(value)]="parametersFormData.DATEUPDATE">
+                    </dx-date-box>
+                  </div>
+                </dxi-item>
+                <dxi-item dataField="TABLEPATH" [label]="{text: 'Table Path'}"></dxi-item>
+                <dxi-item [label]="{text: 'Table Name'}">
+                  <div *dxTemplate>
+                    <dx-select-box [dataSource]="spTableNameDataSource" valueExpr="TableName" displayExpr="TableName"
+                      [searchEnabled]="true" [(value)]="parametersFormData.TABLENAME">
+                    </dx-select-box>
+                  </div>
+                </dxi-item>
+              </dxi-item>
+            </dxi-item>
+            <dxi-item itemType="group" [colCount]="6">
+              <dxi-item itemType="button" horizontalAlignment="left" [buttonOptions]="executeButtonOptions">
+              </dxi-item>
+            </dxi-item>
+          </dx-form>
+        </form>
+        <dx-form [formData]="apiResponse" class="mt-2" [readOnly]="true">
+          <dxi-item itemType="group" caption="Result">
+            <dxi-item itemType="group" [colCount]="3">
+              <dxi-item dataField="TOTAL_PAGE" [label]="{text: 'Total Page'}"></dxi-item>
+              <dxi-item dataField="MAXDATEUPDATE" [label]="{text: 'Max Date Update'}"></dxi-item>
+            </dxi-item>
+          </dxi-item>
+        </dx-form>
+        <div ngbNav #nav="ngbNav" class="nav-tabs">
+          <ng-container ngbNavItem>
+            <a ngbNavLink>Out Data</a>
+            <ng-template ngbNavContent>
+              <dx-data-grid #outDataDataGrid [dataSource]="apiResponse.OUT_DATA_GRID" [remoteOperations]="true"
+                [showBorders]="true" [showColumnLines]="true" [showRowLines]="true" [rowAlternationEnabled]="true"
+                [allowColumnResizing]="true" [allowColumnReordering]="true" [columnAutoWidth]="true"
+                [hoverStateEnabled]="true" columnResizingMode="widget">
+
+                <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+                <dxo-scrolling [useNative]="true"></dxo-scrolling>
+                <dxo-header-filter [visible]="true">
+                  <dxo-search [enabled]="true"></dxo-search>
+                </dxo-header-filter>
+                <dxo-filter-row [visible]="true"></dxo-filter-row>
+                <dxo-paging [enabled]="true" [pageSize]="30"></dxo-paging>
+                <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[20, 30, 40]" [showInfo]="true"
+                  [visible]="true">
+                </dxo-pager>
+                <dxo-group-panel [visible]="true"></dxo-group-panel>
+                <dxo-sorting mode="multiple"></dxo-sorting>
+              </dx-data-grid>
+            </ng-template>
+          </ng-container>
+          <ng-container ngbNavItem>
+            <a ngbNavLink>Out Data Raw</a>
+            <ng-template ngbNavContent>
+              <dx-check-box [(value)]="autoResizeEnabled" (onValueChanged)="onAutoResizeChanged($event)" text="Expand">
+              </dx-check-box>
+              <dx-text-area class="mt-2" [(height)]="textAreaHeight" readonly [value]="apiResponse.OUT_DATA_RAW"
+                [(autoResizeEnabled)]="autoResizeEnabled" [readOnly]="true">
+              </dx-text-area>
+            </ng-template>
+          </ng-container>
+        </div>
+
+        <div [ngbNavOutlet]="nav" class="mt-2"></div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,30 @@
+<app-page-title [PageTitle]="PageTitle"></app-page-title>
+
+<app-page-loader [loader]="pageIsLoading"></app-page-loader>
+
+<div class="content">
+  <app-no-view-permission *ngIf="!pagePermission.view"></app-no-view-permission>
+
+  <div *ngIf="pagePermission.view" class="container-fluid">
+    <div class="card card-default">
+      <div class="card-body">
+        <dx-splitter (onResize)="onResize()">
+          <dxi-item size="35%">
+            <app-table-config (onTableCfgSelectedRowChange)="onTableCfgSelectedRowChange($event)"></app-table-config>
+          </dxi-item>
+          <dxi-item>
+            <div class="d-flex align-items-baseline" style="max-height: 21px;">
+              <p class="mb-0 pe-2">Row reordering mode</p>
+              <dx-switch (onValueChanged)="toggleRowReorder($event)"></dx-switch>
+            </div>
+            <app-column-config *ngIf="!rowReorderingMode" [tableConfigID]="selectedTableConfigID"
+              [dataSource]="columnConfigDataSource" (onSave)="onColumnConfigSave()"
+              (onReloadClick)="onColumnConfigReloadClick()"></app-column-config>
+            <app-column-config-reorder *ngIf="rowReorderingMode" [tableConfigID]="selectedTableConfigID"
+              [dataSource]="columnConfigReorderDataSource" (onSave)="onReorderSave()"></app-column-config-reorder>
+          </dxi-item>
+        </dx-splitter>
+      </div>
+    </div>
+  </div>
+</div>

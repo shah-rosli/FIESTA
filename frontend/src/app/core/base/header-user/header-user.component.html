@@ -1,0 +1,48 @@
+<li class="nav-item dropdown" ngbDropdown>
+  <a class="nav-link cust-user user-select-none" role="button" *ngIf="deligateeShow" ngbDropdownToggle>
+    <i class="fa fa-user-circle me-2"></i>
+    <small><b>{{UserHeaderName}}</b></small><br />
+    <small>{{DelegateeUserHeaderName}}</small>
+  </a>
+  <a class="nav-link cust-user user-select-none" role="button" *ngIf="!deligateeShow" ngbDropdownToggle>
+    <i class="fa fa-user-circle me-2"></i>
+    <b>{{UserHeaderName}}</b>
+  </a>
+  <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end" ngbDropdownMenu>
+    <span class="dropdown-header">
+      <br />
+      <div class="image">
+        <img src="/base/user-avatar.png" class="rounded-circle elevation-1" alt="User Image"> &nbsp;&nbsp;
+      </div>
+      <br />
+      <p><b>{{UserName}}</b></p>
+      <p>{{UserEmail}} ({{UserId}})</p>
+    </span>
+    <div class="dropdown-divider"></div>
+    <a *ngIf="!deligateeShow" class="dropdown-item" [routerLink]="'/UserDelegation'" placement="bottom">
+      <i class="fa fa-sign-language"></i> {{this.base.getMessage("Delegation")}}
+    </a>
+    <div class="dropdown-divider"></div>
+    <a class="dropdown-item" role="button" (click)="goToLink('https://renesasgroup.sharepoint.com/sites/GPRPortal')"
+      placement="bottom">
+      <i class="fa fa-atlas"></i> {{this.base.getMessage("FIESTA Portal")}}
+    </a>
+    <div class="dropdown-divider"></div>
+    <a class="dropdown-item" role="button" (click)="goToLink('https://globalserviceportal.renesas.com/esc')"
+      placement="bottom">
+      <i class="fa fa-life-ring"></i> {{this.base.getMessage("Raise a Ticket")}}
+      <span class="float-end text-muted">{{this.base.getMessage("Helpdesk")}}</span>
+    </a>
+    <div class="dropdown-divider"></div>
+    <a class="dropdown-item" role="button"
+      (click)="goToLink('https://renesasgroup.sharepoint.com/:o:/r/sites/team_ex_BT_OneERP/Shared%20Documents/General/014_Master/20_Product%20%26%20Production%20data%20flow%20improvement%20(R3)/FIESTA_GUIDE?d=w4c7523cb45d84805bec0b349907e7ed8&csf=1&web=1&e=cAnw0W')"
+      placement="bottom">
+      <i class="fa fa-book"></i> {{this.base.getMessage("Help")}}
+      <span class="float-end text-muted">{{this.base.getMessage("Documentation")}}</span>
+    </a>
+    <div class="dropdown-divider"></div>
+    <a *ngIf="!deligateeShow" class="dropdown-item" role="button" (click)="relogin()" placement="bottom">
+      <i class="fa fa-redo-alt"></i> {{this.base.getMessage("Re-login to FIESTA")}}
+    </a>
+  </div>
+</li>

@@ -1,0 +1,4 @@
+// hide little arrow applied by ng-bootstrap
+.dropdown-toggle::after {
+  display: none;
+}

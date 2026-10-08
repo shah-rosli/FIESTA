@@ -1,0 +1,15 @@
+.dropzone-area {
+  flex-grow: 1;
+  border: 2px dashed #bfbfbf;
+  border-radius: 4px;
+}
+
+.dropzone-area-active {
+  border-color: #007bff;
+  background-color: #eaf4ff;
+}
+
+::ng-deep #reviewChange .dx-datagrid .dx-column-lines {
+  line-height: normal;
+  font-size: 11px;
+}

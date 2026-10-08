@@ -1,0 +1,17 @@
+<app-page-title [PageTitle]="PageTitle"></app-page-title>
+
+<section class="error-section">
+  <div class="error-page">
+    <h2 class="headline text-danger"><i class="fas fa-exclamation-triangle text-danger"></i></h2>
+
+    <div class="error-content">
+      <h3>{{this.base.getMessage("Oops! Something went wrong.")}}</h3>
+      <p>
+        {{this.base.getMessage("We will work on fixing that right away.")}}
+        {{this.base.getMessage("Meanwhile, you may")}}
+        <a routerLink="/">{{this.base.getMessage("return to dashboard")}}</a>
+        {{this.base.getMessage("or retry later")}}
+      </p>
+    </div>
+  </div>
+</section>

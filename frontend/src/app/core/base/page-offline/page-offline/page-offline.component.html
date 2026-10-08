@@ -1,0 +1,16 @@
+<app-page-title [PageTitle]="PageTitle"></app-page-title>
+
+<section class="error-section">
+  <div class="error-page">
+    <h2 class="headline text-danger"><i class="fas fa-power-off text-danger"></i></h2>
+
+    <div class="error-content">
+      <h3>{{this.base.getMessage("Site Offline.")}}</h3>
+      <p>
+        {{this.base.getMessage("Site is now offline. We are doing a fix or update at the moment. Please close this table
+        and retry again.")}}<br />
+        {{DisplayMsg}}
+      </p>
+    </div>
+  </div>
+</section>

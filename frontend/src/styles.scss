@@ -1,0 +1,293 @@
+/* customize css - global */
+
+// adminlte (together with bootstrap5)
+@import "admin-lte/src/scss/adminlte";
+
+// for sidebar
+@import 'overlayscrollbars/styles/overlayscrollbars';
+
+// renesas corporate color #2a289d
+$PrimaryColor: #2a289d; // RenesasColor
+$PrimaryColorDark: #171559; // RenesasColor
+$PrimaryFocusTextColor: #ffffff;
+
+:root {
+  --primary-color: #2a289d;
+  --primary-color-dark: #171559;
+  --primary-focus-text-color: #ffffff;
+}
+
+// override start (override third party styles)
+
+// undo adminlte v4 app-main max-width: 100vw;
+// dx-datagrid with command bar, the columnAutoWidth not working, white space in between data column and command column
+.app-main {
+  max-width: none;
+}
+
+// ngx-toast container
+.overlay-container>.toast-container {
+  // below value overrided by bootstrap 5, restore back ngx-toast z-index value
+  z-index: 999999;
+}
+
+// replacement (removed in adminlte v4)
+.btn-block {
+  display: block;
+  width: 100%;
+}
+
+// replacement (removed in adminlte v4)
+.btn-xs {
+  padding: .125rem .25rem;
+  font-size: .875rem;
+  line-height: 1.5;
+  border-radius: .15rem;
+}
+
+// remove box shadow by adminlte v4
+.btn {
+  box-shadow: none;
+}
+
+// remove card box shadow added by adminlte v4
+.card {
+  box-shadow: none;
+}
+
+// don't indent menu when in sidebar-mini
+.sidebar-collapse .sidebar-menu .nav-treeview {
+  padding-left: 0;
+}
+
+// replicates the "floated" sidebar like adminlte v3.
+// when in sidebar-mini, hover over sidebar will not effect main content size.
+@media (min-width: 992px) {
+
+  // change from sticky to fixed
+  .sidebar-expand-lg.layout-fixed-complete .app-sidebar {
+    position: fixed;
+  }
+
+  // need to fill back the original sidebar occupied space after change sidebar position to fixed.
+  // will fill to app-main-wrappe's margin.
+  // different size needed for "open" sidebar and "collapsed" sidebar.
+  .sidebar-open.sidebar-expand-lg.layout-fixed-complete .app-main-wrapper {
+    transition: margin-left .3s ease-in-out;
+    margin-left: 250px;
+  }
+
+  .sidebar-collapse.sidebar-expand-lg.layout-fixed-complete .app-main-wrapper {
+    transition: margin-left .3s ease-in-out;
+    margin-left: 4.6rem;
+  }
+}
+
+// patch sidebar overlay to cover entire UI
+@media (max-width: 991.98px) {
+  .sidebar-expand-lg.sidebar-open .sidebar-overlay {
+    --header-space: calc(2.5rem + 4px);
+    --header-space-negative: calc(-1 * var(--header-space));
+    --footer-space: calc(2rem);
+    height: calc(100% + var(--header-space) + var(--footer-space));
+    margin-top: var(--header-space-negative)
+  }
+}
+
+// make fa-dot-circle have smaller circle
+.nav-icon-small {
+  font-size: 8px !important;
+}
+
+// height of the pace progress bar
+.pace .pace-progress {
+  height: 4px;
+}
+
+// "info" toaster color
+#toast-container .toast-info {
+  background-color: #6682bb
+}
+
+// nav-link active, have other usage besides sidebar
+a.nav-link.active {
+  background-color: var(--primary-color-dark) !important;
+  color: var(--primary-focus-text-color) !important;
+}
+
+// dx datagrid related
+
+.dx-header-row {
+  background-color: $PrimaryColor !important;
+  color: $PrimaryFocusTextColor;
+  line-height: 15px !important;
+}
+
+// more compact datagrid
+dx-data-grid:not(.exclude-compact-datagrid) .dx-datagrid .dx-column-lines {
+  line-height: 8px;
+  font-size: 11px;
+}
+
+// more compact datagrid, when batch editing, remove jitter when focus in & out cell.
+dx-data-grid:not(.exclude-compact-datagrid) .dx-datagrid-rowsview .dx-texteditor-input {
+  padding: 5px;
+  // min-height: 26px; this is the original min-height value
+  min-height: unset;
+  max-height: 18px;
+  font-size: 11px;
+}
+
+// more compact datagrid, Lookup dropdown's placeholder.
+dx-data-grid:not(.exclude-compact-datagrid) .dx-datagrid-headers .dx-texteditor-input-container .dx-placeholder,
+dx-data-grid:not(.exclude-compact-datagrid) .dx-datagrid-rowsview .dx-texteditor-input-container .dx-placeholder {
+  font-size: 11px;
+  top: -2px;
+}
+
+// more compact datagrid, header sorting up/down icon and ordering number (e.g. ⬆1, ⬇2, ⬇3)
+dx-data-grid:not(.exclude-compact-datagrid) .dx-datagrid .dx-sort-up,
+dx-data-grid:not(.exclude-compact-datagrid) .dx-datagrid .dx-sort-down {
+  font-size: 11px;
+}
+
+// preserve sequences of white space in datagrid cell, prevent "data  data" become "data data"
+.dx-datagrid .dx-column-lines>td {
+  white-space: pre;
+}
+
+.dx-rtl .dx-datagrid-rowsview .dx-selection.dx-row>td:not(.dx-focused).dx-datagrid-group-space,
+.dx-rtl .dx-datagrid-rowsview .dx-selection.dx-row:hover>td:not(.dx-focused).dx-datagrid-group-space {
+  border-left-color: $PrimaryColorDark !important;
+}
+
+.dx-datagrid-rowsview .dx-selection.dx-row:not(.dx-row-lines)>td,
+.dx-datagrid-rowsview .dx-selection.dx-row:hover:not(.dx-row-lines)>td {
+  border-bottom: 1px solid $PrimaryColorDark !important;
+  border-top: 1px solid $PrimaryColorDark !important;
+}
+
+.dx-datagrid-rowsview .dx-selection.dx-row>td.dx-datagrid-group-space,
+.dx-datagrid-rowsview .dx-selection.dx-row:hover>td.dx-datagrid-group-space {
+  border-right-color: $PrimaryColorDark !important;
+}
+
+.dx-datagrid-rowsview .dx-selection.dx-row>td,
+.dx-datagrid-rowsview .dx-selection.dx-row:hover>td {
+  background-color: $PrimaryColorDark !important;
+  color: $PrimaryFocusTextColor !important;
+}
+
+// when editor is readonly, set gray backeground similar to disabled
+.dx-texteditor.dx-state-readonly,
+.dx-texteditor.dx-state-readonly input {
+  color: #999999;
+  background-color: #f5f5f5;
+}
+
+.dx-form-group-caption {
+  color: $PrimaryColor;
+  font-weight: bold;
+}
+
+.dx-form-group-with-caption>.dx-form-group-content {
+  border-top: 1px solid $PrimaryColor;
+}
+
+// override end
+
+// prevent scroll bar from body
+// third party library features typically append elements to <body>
+// which cause overflow (e.g. ngx-toastr, dx-datagrid row reorder)
+body {
+  overflow: hidden;
+}
+
+// datagrid row red highlight (.invalid-row)
+
+.dx-datagrid-table .invalid-row>td,
+.dx-datagrid-table .invalid-row>tr>td {
+  background-color: #B00000;
+  color: white;
+}
+
+// .invalid-row (alternate row)
+.dx-datagrid-table .invalid-row.dx-row-alt>td,
+.dx-datagrid-table .invalid-row.dx-row-alt>tr>td {
+  background-color: #9B0000;
+  color: white;
+}
+
+// .invalid-row (hover row)
+.dx-datagrid-table .dx-data-row.dx-state-hover.invalid-row:not(.dx-selection):not(.dx-row-inserted):not(.dx-row-removed):not(.dx-edit-row):not(.dx-row-focused)>td:not(.dx-focused) {
+  background-color: #9B0000;
+  color: white;
+}
+
+// datagrid row red highlight end
+
+@media print {
+  .doNotPrint {
+    display: none !important;
+  }
+}
+
+// error page (login, no view permission, public pages)
+
+.error-section {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.error-page {
+  max-width: 750px;
+  padding: 20px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.headline {
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  font-size: 100px;
+  font-weight: 300;
+}
+
+.error-content {
+  margin-left: 1rem;
+}
+
+@media (max-width: 576px) {
+  .error-page {
+    flex-direction: column;
+    text-align: center;
+    max-width: 400px;
+  }
+}
+
+// error page end
+
+// page title
+
+.content-header {
+  padding: 10px .5rem;
+}
+
+.content-header h1 {
+  font-size: 1.5rem;
+  margin-bottom: 0;
+  font-weight: 400;
+}
+
+// page title end

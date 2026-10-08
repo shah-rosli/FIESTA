@@ -1,0 +1,60 @@
+<app-page-title [PageTitle]="PageTitle"></app-page-title>
+
+<section class="content">
+  <div class="container-fluid">
+    <div class="card">
+      <div class="card-body">
+        <app-filter-criteria [show]="showCriteria" [columns]="criteriaColumns" [fieldsDropdown]="criteriaFieldsDropdown"
+          [mustProvideFilter]="true" (onCriteriaRetrieved)="onCriteriaRetrieved($event)">
+        </app-filter-criteria>
+        <div class="pb-2"></div>
+        <div class="d-flex justify-content-between">
+          <dx-button text="Toggle Criteria" type="success" [visible]="showDataGrid"
+            (onClick)="this.showCriteria = !this.showCriteria">
+          </dx-button>
+          <dx-button text="Export All" icon="xlsxfile" [visible]="showDataGrid" [disabled]="!enableExportAll"
+            [focusStateEnabled]="false" [activeStateEnabled]="false" [hoverStateEnabled]="false"
+            (onClick)="datagridExportAll()">
+          </dx-button>
+        </div>
+        <ng-container *ngIf="showDataGrid">
+          <ng-container *ngFor="let master of masters">
+            <div class="mt-2"></div>
+            <div class="fs-5">{{master.title}}</div>
+            <dx-data-grid *ngIf="showDataGrid" [dataSource]="master.dataSource" [remoteOperations]="true"
+              [showBorders]="true" [showColumnLines]="true" [showRowLines]="true" [rowAlternationEnabled]="true"
+              [allowColumnResizing]="true" [allowColumnReordering]="true" [columnMinWidth]="50" [columnAutoWidth]="true"
+              [hoverStateEnabled]="true" columnResizingMode="widget" [columns]="master.columnsConfig"
+              (onExporting)="onExporting($event, PageTitle)" (onRowPrepared)="handleRowPrepared($event)">
+
+              <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+              <dxo-scrolling [useNative]="true"></dxo-scrolling>
+              <dxo-header-filter [visible]="true">
+                <dxo-search [enabled]="true"></dxo-search>
+              </dxo-header-filter>
+              <dxo-filter-row [visible]="true"></dxo-filter-row>
+              <dxo-paging [enabled]="true" [pageSize]="10"></dxo-paging>
+              <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[10, 20, 30]" [showInfo]="true"
+                [visible]="true">
+              </dxo-pager>
+              <dxo-group-panel [visible]="true"></dxo-group-panel>
+              <dxo-export [enabled]="true"></dxo-export>
+              <dxo-sorting mode="multiple"></dxo-sorting>
+              <dxo-column-chooser [enabled]="true" mode="select">
+                <dxo-selection [allowSelectAll]="true"></dxo-selection>
+                <dxo-search [enabled]="true"></dxo-search>
+                <dxo-position my="right top" at="right bottom" of=".dx-datagrid-column-chooser-button"></dxo-position>
+              </dxo-column-chooser>
+              <dxo-filter-panel [visible]="true"></dxo-filter-panel>
+              <dxo-toolbar>
+                <dxi-item name="groupPanel"></dxi-item>
+                <dxi-item name="exportButton"></dxi-item>
+                <dxi-item name="columnChooserButton"></dxi-item>
+              </dxo-toolbar>
+            </dx-data-grid>
+          </ng-container>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</section>

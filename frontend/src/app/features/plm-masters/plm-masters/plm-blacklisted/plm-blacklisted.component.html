@@ -1,0 +1,360 @@
+<section class="fill-height-layout d-flex flex-column">
+  <div class="mt-2"></div>
+  <div class="flex-grow-1 container-fluid" style="min-height: 0;">
+    <div class="h-100 card card-body">
+      <nav *ngIf="!showBottomOnly">
+        <div class="nav nav-tabs">
+          <a class="nav-item nav-link" role="button" [ngClass]="{'active': activeTab === 0}" (click)="onTabClick(0)">
+            View by Blacklist Reason
+          </a>
+          <a *ngIf="false" class="nav-item nav-link" role="button" [ngClass]="{'active': activeTab === 1}"
+            (click)="onTabClick(1)">
+            View by OPN (Production)
+          </a>
+          <a *ngIf="false" class="nav-item nav-link" role="button" [ngClass]="{'active': activeTab === 2}"
+            (click)="onTabClick(2)">
+            View by Part
+          </a>
+        </div>
+      </nav>
+      <div *ngIf="!showBottomOnly" class="pt-2 h-100">
+        <div *ngIf="tabLoaded[0]" [hidden]="activeTab !== 0" class="h-100">
+          <dx-splitter class="h-100" orientation="vertical">
+            <dxi-item minSize="5%" size="50%">
+              <div *dxTemplate>
+                <dx-data-grid #upperGrid class="h-100" [dataSource]="upperDataSource" [remoteOperations]="true"
+                  [showBorders]="true" [showColumnLines]="true" [showRowLines]="true" [rowAlternationEnabled]="true"
+                  [allowColumnResizing]="true" [allowColumnReordering]="true" [columnMinWidth]="50"
+                  [columnAutoWidth]="true" [hoverStateEnabled]="true" columnResizingMode="widget"
+                  [columns]="upperColumnsConfig" (onExporting)="onExporting($event, PageTitle)">
+
+                  <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+                  <dxo-scrolling [useNative]="true"></dxo-scrolling>
+                  <dxo-header-filter [visible]="true">
+                    <dxo-search [enabled]="true"></dxo-search>
+                  </dxo-header-filter>
+                  <dxo-filter-row [visible]="true"></dxo-filter-row>
+                  <dxo-paging [enabled]="true" [pageSize]="30"></dxo-paging>
+                  <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[20, 30, 40]" [showInfo]="true"
+                    [visible]="true">
+                  </dxo-pager>
+                  <dxo-group-panel [visible]="true" [allowColumnDragging]="false"></dxo-group-panel>
+                  <dxo-export [enabled]="true"></dxo-export>
+                  <dxo-sorting mode="multiple"></dxo-sorting>
+                  <dxo-column-chooser [enabled]="true" mode="select">
+                    <dxo-selection [allowSelectAll]="true"></dxo-selection>
+                    <dxo-search [enabled]="true"></dxo-search>
+                    <dxo-position my="right top" at="right bottom"
+                      of=".dx-datagrid-column-chooser-button"></dxo-position>
+                  </dxo-column-chooser>
+                  <dxo-toolbar>
+                    <dxi-item locateInMenu="auto" location="left">
+                      <b>Fiesta Blacklisted Summary</b>
+                    </dxi-item>
+                    <dxi-item widget="dxButton" [options]="{
+                        icon: 'refresh',
+                        hint: 'Refresh',
+                        onClick: refreshUpperGrid
+                      }">
+                    </dxi-item>
+                    <dxi-item name="exportButton"></dxi-item>
+                    <dxi-item name="columnChooserButton"></dxi-item>
+                  </dxo-toolbar>
+                </dx-data-grid>
+              </div>
+            </dxi-item>
+            <dxi-item minSize="5%" size="50%">
+              <div *dxTemplate>
+                <dx-data-grid #lowerGrid class="h-100 pt-1" [dataSource]="lowerDataSource" [remoteOperations]="true"
+                  [showBorders]="true" [showColumnLines]="true" [showRowLines]="true" [rowAlternationEnabled]="true"
+                  [allowColumnResizing]="true" [allowColumnReordering]="true" [columnMinWidth]="50"
+                  [columnAutoWidth]="true" [hoverStateEnabled]="true" columnResizingMode="widget"
+                  [columns]="lowerColumnsConfig" [filterSyncEnabled]="true" [(filterValue)]="lowerFilterValue"
+                  (onExporting)="onExporting($event, PageTitle)">
+
+                  <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+                  <dxo-scrolling [useNative]="true"></dxo-scrolling>
+                  <dxo-header-filter [visible]="true">
+                    <dxo-search [enabled]="true"></dxo-search>
+                  </dxo-header-filter>
+                  <dxo-filter-row [visible]="true"></dxo-filter-row>
+                  <dxo-paging [enabled]="true" [pageSize]="30"></dxo-paging>
+                  <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[20, 30, 40]" [showInfo]="true"
+                    [visible]="true">
+                  </dxo-pager>
+                  <dxo-group-panel [visible]="true" [allowColumnDragging]="false"></dxo-group-panel>
+                  <dxo-export [enabled]="true"></dxo-export>
+                  <dxo-sorting mode="multiple"></dxo-sorting>
+                  <dxo-column-chooser [enabled]="true" mode="select">
+                    <dxo-selection [allowSelectAll]="true"></dxo-selection>
+                    <dxo-search [enabled]="true"></dxo-search>
+                    <dxo-position my="right top" at="right bottom"
+                      of=".dx-datagrid-column-chooser-button"></dxo-position>
+                  </dxo-column-chooser>
+                  <dxo-toolbar>
+                    <dxi-item locateInMenu="auto" location="left">
+                      <b>Fiesta Blacklisted Details</b>
+                    </dxi-item>
+                    <dxi-item widget="dxButton" [options]="{
+                        icon: 'refresh',
+                        hint: 'Refresh',
+                        onClick: refreshLowerGrid
+                      }">
+                    </dxi-item>
+                    <dxi-item name="exportButton"></dxi-item>
+                    <dxi-item name="columnChooserButton"></dxi-item>
+                  </dxo-toolbar>
+
+                  <dxo-filter-panel [visible]="true"></dxo-filter-panel>
+                  <dxo-filter-builder-popup [visible]="false" title="Create Filter" [width]="800" [height]="500">
+                  </dxo-filter-builder-popup>
+                </dx-data-grid>
+              </div>
+            </dxi-item>
+          </dx-splitter>
+
+        </div>
+        <div *ngIf="tabLoaded[1]" [hidden]="activeTab !== 1">
+          <dx-data-grid class="h-100 pt-1" [dataSource]="viewByOPNDataSource" [remoteOperations]="true"
+            [showBorders]="true" [showColumnLines]="true" [showRowLines]="true" [rowAlternationEnabled]="true"
+            [allowColumnResizing]="true" [allowColumnReordering]="true" [columnMinWidth]="50" [columnAutoWidth]="true"
+            [hoverStateEnabled]="true" columnResizingMode="widget" [columns]="viewByOPNColumnsConfig"
+            [filterSyncEnabled]="true" (onExporting)="onExporting($event, PageTitle)">
+
+            <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+            <dxo-scrolling [useNative]="true"></dxo-scrolling>
+            <dxo-header-filter [visible]="true">
+              <dxo-search [enabled]="true"></dxo-search>
+            </dxo-header-filter>
+            <dxo-filter-row [visible]="true"></dxo-filter-row>
+            <dxo-paging [enabled]="true" [pageSize]="30"></dxo-paging>
+            <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[20, 30, 40]" [showInfo]="true"
+              [visible]="true">
+            </dxo-pager>
+            <dxo-group-panel [visible]="true" [allowColumnDragging]="false"></dxo-group-panel>
+            <dxo-export [enabled]="true"></dxo-export>
+            <dxo-sorting mode="multiple"></dxo-sorting>
+            <dxo-column-chooser [enabled]="true" mode="select">
+              <dxo-selection [allowSelectAll]="true"></dxo-selection>
+              <dxo-search [enabled]="true"></dxo-search>
+              <dxo-position my="right top" at="right bottom" of=".dx-datagrid-column-chooser-button"></dxo-position>
+            </dxo-column-chooser>
+            <dxo-toolbar>
+              <dxi-item locateInMenu="auto" location="left">
+                <b>Fiesta Blacklisted Details - View by OPN (Production)</b>
+              </dxi-item>
+              <dxi-item widget="dxButton" [options]="{
+                  icon: 'refresh',
+                  hint: 'Refresh',
+                  onClick: refreshGrid
+                }">
+              </dxi-item>
+              <dxi-item name="exportButton"></dxi-item>
+              <dxi-item name="columnChooserButton"></dxi-item>
+            </dxo-toolbar>
+
+            <div *dxTemplate="let cell of 'opnBlackListTemplate'">
+              <a *ngIf="cell.data.blacklistDetails === 'Show Details'" class="d-block" role="button"
+                (click)="onClickBlacklistDetail(cell.data.opn)">{{cell.value}}</a>
+            </div>
+          </dx-data-grid>
+        </div>
+        <div>
+          <dx-data-grid *ngIf="tabLoaded[2]" [hidden]="activeTab !== 2" class="h-100 pt-1"
+            [dataSource]="viewByPartDataSource" [remoteOperations]="true" [showBorders]="true" [showColumnLines]="true"
+            [showRowLines]="true" [rowAlternationEnabled]="true" [allowColumnResizing]="true"
+            [allowColumnReordering]="true" [columnMinWidth]="50" [columnAutoWidth]="true" [hoverStateEnabled]="true"
+            columnResizingMode="widget" [columns]="viewByPartColumnsConfig" [filterSyncEnabled]="true"
+            (onExporting)="onExporting($event, PageTitle)">
+
+            <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+            <dxo-scrolling [useNative]="true"></dxo-scrolling>
+            <dxo-header-filter [visible]="true">
+              <dxo-search [enabled]="true"></dxo-search>
+            </dxo-header-filter>
+            <dxo-filter-row [visible]="true"></dxo-filter-row>
+            <dxo-paging [enabled]="true" [pageSize]="30"></dxo-paging>
+            <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[20, 30, 40]" [showInfo]="true"
+              [visible]="true">
+            </dxo-pager>
+            <dxo-group-panel [visible]="true" [allowColumnDragging]="false"></dxo-group-panel>
+            <dxo-export [enabled]="true"></dxo-export>
+            <dxo-sorting mode="multiple"></dxo-sorting>
+            <dxo-column-chooser [enabled]="true" mode="select">
+              <dxo-selection [allowSelectAll]="true"></dxo-selection>
+              <dxo-search [enabled]="true"></dxo-search>
+              <dxo-position my="right top" at="right bottom" of=".dx-datagrid-column-chooser-button"></dxo-position>
+            </dxo-column-chooser>
+            <dxo-toolbar>
+              <dxi-item locateInMenu="auto" location="left">
+                <b>Fiesta Blacklisted Details - View by Part</b>
+              </dxi-item>
+              <dxi-item widget="dxButton" [options]="{
+                  icon: 'refresh',
+                  hint: 'Refresh',
+                  onClick: refreshGrid
+                }">
+              </dxi-item>
+              <dxi-item name="exportButton"></dxi-item>
+              <dxi-item name="columnChooserButton"></dxi-item>
+            </dxo-toolbar>
+
+            <div *dxTemplate="let cell of 'opnBlackListTemplate'">
+              <a *ngIf="cell.data.blacklistDetails === 'Show Details'" class="d-block" role="button"
+                (click)="onClickBlacklistDetail(cell.data.opn)">{{cell.value}}</a>
+            </div>
+          </dx-data-grid>
+        </div>
+
+      </div>
+
+
+      <!-- <dxi-item minSize="5%" size="50%">
+        <div *dxTemplate>
+          <dx-data-grid class="h-100 pt-1" [dataSource]="lowerDataSource" [remoteOperations]="true" [showBorders]="true"
+            [showColumnLines]="true" [showRowLines]="true" [rowAlternationEnabled]="true" [allowColumnResizing]="true"
+            [allowColumnReordering]="true" [columnMinWidth]="50" [columnAutoWidth]="true" [hoverStateEnabled]="true"
+            columnResizingMode="widget" [columns]="lowerColumnsConfig" [filterSyncEnabled]="true"
+            [(filterValue)]="lowerFilterValue" (onExporting)="onExporting($event, PageTitle)">
+
+            <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+            <dxo-scrolling [useNative]="true"></dxo-scrolling>
+            <dxo-header-filter [visible]="true">
+              <dxo-search [enabled]="true"></dxo-search>
+            </dxo-header-filter>
+            <dxo-filter-row [visible]="true"></dxo-filter-row>
+            <dxo-paging [enabled]="true" [pageSize]="30"></dxo-paging>
+            <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[20, 30, 40]" [showInfo]="true"
+              [visible]="true">
+            </dxo-pager>
+            <dxo-group-panel [visible]="true" [allowColumnDragging]="false"></dxo-group-panel>
+            <dxo-export [enabled]="true"></dxo-export>
+            <dxo-sorting mode="multiple"></dxo-sorting>
+            <dxo-column-chooser [enabled]="true" mode="select">
+              <dxo-selection [allowSelectAll]="true"></dxo-selection>
+              <dxo-search [enabled]="true"></dxo-search>
+              <dxo-position my="right top" at="right bottom" of=".dx-datagrid-column-chooser-button"></dxo-position>
+            </dxo-column-chooser>
+            <dxo-toolbar>
+              <dxi-item locateInMenu="auto" location="left">
+                <b>Fiesta Blacklisted Details - View by part</b>
+              </dxi-item>
+              <dxi-item name="exportButton"></dxi-item>
+              <dxi-item name="columnChooserButton"></dxi-item>
+            </dxo-toolbar>
+          </dx-data-grid>
+        </div>
+      </dxi-item>
+
+
+      <dxi-item minSize="5%" size="50%">
+        <div *dxTemplate>
+          <dx-data-grid class="h-100" [dataSource]="upperDataSource" [remoteOperations]="true" [showBorders]="true"
+            [showColumnLines]="true" [showRowLines]="true" [rowAlternationEnabled]="true" [allowColumnResizing]="true"
+            [allowColumnReordering]="true" [columnMinWidth]="50" [columnAutoWidth]="true" [hoverStateEnabled]="true"
+            columnResizingMode="widget" [columns]="upperColumnsConfig" (onExporting)="onExporting($event, PageTitle)">
+
+            <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+            <dxo-scrolling [useNative]="true"></dxo-scrolling>
+            <dxo-header-filter [visible]="true">
+              <dxo-search [enabled]="true"></dxo-search>
+            </dxo-header-filter>
+            <dxo-filter-row [visible]="true"></dxo-filter-row>
+            <dxo-paging [enabled]="true" [pageSize]="30"></dxo-paging>
+            <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[20, 30, 40]" [showInfo]="true"
+              [visible]="true">
+            </dxo-pager>
+            <dxo-group-panel [visible]="true" [allowColumnDragging]="false"></dxo-group-panel>
+            <dxo-export [enabled]="true"></dxo-export>
+            <dxo-sorting mode="multiple"></dxo-sorting>
+            <dxo-column-chooser [enabled]="true" mode="select">
+              <dxo-selection [allowSelectAll]="true"></dxo-selection>
+              <dxo-search [enabled]="true"></dxo-search>
+              <dxo-position my="right top" at="right bottom" of=".dx-datagrid-column-chooser-button"></dxo-position>
+            </dxo-column-chooser>
+            <dxo-toolbar>
+              <dxi-item locateInMenu="auto" location="left">
+                <b>Fiesta Blacklisted Summary</b>
+              </dxi-item>
+              <dxi-item name="exportButton"></dxi-item>
+              <dxi-item name="columnChooserButton"></dxi-item>
+            </dxo-toolbar>
+          </dx-data-grid>
+        </div>
+      </dxi-item>
+      <dxi-item minSize="5%" size="50%">
+        <div *dxTemplate>
+          <dx-data-grid class="h-100 pt-1" [dataSource]="lowerDataSource" [remoteOperations]="true" [showBorders]="true"
+            [showColumnLines]="true" [showRowLines]="true" [rowAlternationEnabled]="true" [allowColumnResizing]="true"
+            [allowColumnReordering]="true" [columnMinWidth]="50" [columnAutoWidth]="true" [hoverStateEnabled]="true"
+            columnResizingMode="widget" [columns]="lowerColumnsConfig" [filterSyncEnabled]="true"
+            [(filterValue)]="lowerFilterValue" (onExporting)="onExporting($event, PageTitle)">
+
+            <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+            <dxo-scrolling [useNative]="true"></dxo-scrolling>
+            <dxo-header-filter [visible]="true">
+              <dxo-search [enabled]="true"></dxo-search>
+            </dxo-header-filter>
+            <dxo-filter-row [visible]="true"></dxo-filter-row>
+            <dxo-paging [enabled]="true" [pageSize]="30"></dxo-paging>
+            <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[20, 30, 40]" [showInfo]="true"
+              [visible]="true">
+            </dxo-pager>
+            <dxo-group-panel [visible]="true" [allowColumnDragging]="false"></dxo-group-panel>
+            <dxo-export [enabled]="true"></dxo-export>
+            <dxo-sorting mode="multiple"></dxo-sorting>
+            <dxo-column-chooser [enabled]="true" mode="select">
+              <dxo-selection [allowSelectAll]="true"></dxo-selection>
+              <dxo-search [enabled]="true"></dxo-search>
+              <dxo-position my="right top" at="right bottom" of=".dx-datagrid-column-chooser-button"></dxo-position>
+            </dxo-column-chooser>
+            <dxo-toolbar>
+              <dxi-item locateInMenu="auto" location="left">
+                <b>Fiesta Blacklisted Details</b>
+              </dxi-item>
+              <dxi-item name="exportButton"></dxi-item>
+              <dxi-item name="columnChooserButton"></dxi-item>
+            </dxo-toolbar>
+          </dx-data-grid>
+        </div>
+      </dxi-item> -->
+
+      <dx-data-grid *ngIf="showBottomOnly" class="h-100 pt-1" [dataSource]="lowerDataSource" [remoteOperations]="true"
+        [showBorders]="true" [showColumnLines]="true" [showRowLines]="true" [rowAlternationEnabled]="true"
+        [allowColumnResizing]="true" [allowColumnReordering]="true" [columnMinWidth]="50" [columnAutoWidth]="true"
+        [hoverStateEnabled]="true" columnResizingMode="widget" [columns]="lowerColumnsConfig" [filterSyncEnabled]="true"
+        [(filterValue)]="lowerFilterValue" (onExporting)="onExporting($event, PageTitle)">
+
+        <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+        <dxo-scrolling [useNative]="true"></dxo-scrolling>
+        <dxo-header-filter [visible]="true">
+          <dxo-search [enabled]="true"></dxo-search>
+        </dxo-header-filter>
+        <dxo-filter-row [visible]="true"></dxo-filter-row>
+        <dxo-paging [enabled]="true" [pageSize]="30"></dxo-paging>
+        <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[20, 30, 40]" [showInfo]="true" [visible]="true">
+        </dxo-pager>
+        <dxo-group-panel [visible]="true" [allowColumnDragging]="false"></dxo-group-panel>
+        <dxo-export [enabled]="true"></dxo-export>
+        <dxo-sorting mode="multiple"></dxo-sorting>
+        <dxo-column-chooser [enabled]="true" mode="select">
+          <dxo-selection [allowSelectAll]="true"></dxo-selection>
+          <dxo-search [enabled]="true"></dxo-search>
+          <dxo-position my="right top" at="right bottom" of=".dx-datagrid-column-chooser-button"></dxo-position>
+        </dxo-column-chooser>
+        <dxo-toolbar>
+          <dxi-item locateInMenu="auto" location="left">
+            <b>Fiesta Blacklisted Details</b>
+          </dxi-item>
+          <dxi-item name="exportButton"></dxi-item>
+          <dxi-item name="columnChooserButton"></dxi-item>
+        </dxo-toolbar>
+
+        <dxo-filter-panel [visible]="true"></dxo-filter-panel>
+        <dxo-filter-builder-popup [visible]="false" title="Create Filter" [width]="800" [height]="500">
+        </dxo-filter-builder-popup>
+
+      </dx-data-grid>
+    </div>
+  </div>
+</section>

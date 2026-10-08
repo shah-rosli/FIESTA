@@ -1,0 +1,14 @@
+// adminlte compact mode
+.app-header {
+  max-height: 2.75rem;
+}
+
+.header-datetime-info {
+  display: none;
+}
+
+@media (min-width: 576px) {
+  .header-datetime-info {
+    display: block;
+  }
+}

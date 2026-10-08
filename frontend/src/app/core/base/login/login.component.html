@@ -1,0 +1,15 @@
+<app-page-title [PageTitle]="PageTitle"></app-page-title>
+
+<section class="error-section">
+  <div class="error-page">
+    <h2 class="headline"><dx-load-indicator id="large-indicator" height="60" width="60"></dx-load-indicator>Login
+    </h2>
+
+    <div class="error-content">
+      <h3><i class="me-1 fa fa-lock"></i>{{this.base.getMessage("Single Sign On logging in ...")}}</h3>
+      <p>{{this.base.getMessage("Welcome to MDM!")}}</p>
+      <p>{{this.base.getMessage("We are now signing you into the system. Your patience is greatly appreciated. You
+        will be redirected momentarily.")}}</p>
+    </div>
+  </div>
+</section>

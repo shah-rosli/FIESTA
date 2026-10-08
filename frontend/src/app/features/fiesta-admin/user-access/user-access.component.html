@@ -1,0 +1,70 @@
+<app-page-title [PageTitle]=PageTitle></app-page-title>
+
+<!-- Main content -->
+<div class="content">
+  <app-no-view-permission *ngIf="!pagePermission.view"></app-no-view-permission>
+
+  <div *ngIf="pagePermission.view" class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="card card-default">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-12">
+                <dx-form labelLocation="top">
+                  <dxi-item [label]="{text: 'User group'}" [validationRules]="[{ type: 'required' }]">
+                    <div *dxTemplate>
+                      <dx-drop-down-box [value]="selectedUserGroupId" valueExpr="CFG_USER_GROUP_ID"
+                        displayExpr="USER_GROUP_NAME" [dataSource]="userGroupDetails" [showClearButton]="true">
+                        <div *dxTemplate="let data of 'content'">
+                          <dx-data-grid [dataSource]="userGroupDetails" [selection]="{ mode: 'single' }"
+                            [hoverStateEnabled]="true" [paging]="{ enabled: true, pageSize: 10 }"
+                            [filterRow]="{ visible: true }" [scrolling]="{ columnRenderingMode:'virtual' }"
+                            (onSelectionChanged)="onRequestorChange($event)">
+                            <dxi-column dataField="CFG_USER_GROUP_ID" caption="Id" sortOrder="asc"
+                              width="80px"></dxi-column>
+                            <dxi-column dataField="USER_GROUP_NAME" caption="Group Name" width="120px"></dxi-column>
+                            <dxi-column dataField="USER_GROUP_DESCRIPTION" caption="Group Description"></dxi-column>
+                          </dx-data-grid>
+                        </div>
+                      </dx-drop-down-box>
+                    </div>
+                  </dxi-item>
+                </dx-form>
+                <div class="mt-2" *ngIf="selectedUserGroupId">
+                  <dx-tree-list id="MenuList" [dataSource]="menuListDataSource" [rootValue]="0" keyExpr="MenuId"
+                    parentIdExpr="Head_ID" [showBorders]="true" [columnAutoWidth]="true" [expandedRowKeys]="[1]"
+                    [rowAlternationEnabled]="true" [hoverStateEnabled]="true">
+                    <dxi-column dataField="MenuName" caption="Menu"></dxi-column>
+                    <dxi-column dataField="saOperation" [caption]="this.base.getMessage('Access Rights')"
+                      cellTemplate="userRightsSelectionBoxTemplate"></dxi-column>
+                    <div *dxTemplate="let data of 'userRightsSelectionBoxTemplate'">
+                      <div class="d-flex gap-3">
+                        <span *ngFor="let dataItem of data.data.saOperation">
+                          <dx-check-box [disabled]="!pagePermission.edit"
+                            (disabledChange)="pagePermission.edit = $event" [(value)]="dataItem.Value"></dx-check-box>
+                          {{dataItem.Key}}
+                        </span>
+                        <div *ngIf="!data.data.saOperation" style="min-height: 26px; margin: 5px;">
+                          Possible access rights not set
+                        </div>
+                      </div>
+                    </div>
+                  </dx-tree-list>
+                  <br />
+                  <div class="col-lg-2 col-md-3">
+                    <button type="button" class="btn btn-block btn-success btn-xs"
+                      (click)="SaveUserGroupRights()">Submit</button>
+                  </div>
+                  <div class="col-md-4 col-lg-2">
+                    <br />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

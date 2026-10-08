@@ -1,0 +1,64 @@
+<app-page-title [PageTitle]="PageTitle"></app-page-title>
+
+<div class="content">
+  <app-no-view-permission *ngIf="!pagePermission.view"></app-no-view-permission>
+
+  <!-- <app-delta-upload [columnConfig]="deltaUploadColumnConfig" [dataGrid]="dataGrid" [PageTitle]="PageTitle"
+    [endpoint]="endpoint"></app-delta-upload> -->
+
+  <app-config-history-popup [columns]="historyColumnConfig" [endpoint]="endpoint">
+  </app-config-history-popup>
+
+  <div class="d-flex justify-content-end" style="margin-right: 15px;">
+    <div class="d-flex gap-2">
+      <dx-button *ngIf="pagePermission.edit" class="btn-xs" type="success" text="Complete Review"
+        (onClick)="onApp1Review()"></dx-button>
+    </div>
+  </div>
+
+  <br>
+
+  <div *ngIf="pagePermission.view" class="container-fluid">
+    <div class="card">
+      <div class="card-body">
+        <dx-data-grid [dataSource]="dataSource" keyExpr="recordKey" [columns]="columnConfig" [remoteOperations]="true"
+          [showBorders]="true" [showColumnLines]="true" [showRowLines]="true" [rowAlternationEnabled]="true"
+          [allowColumnResizing]="true" [allowColumnReordering]="true" [hoverStateEnabled]="true"
+          columnResizingMode="widget" [repaintChangesOnly]="false" [columnMinWidth]="50" [columnAutoWidth]="true"
+          (onInitNewRow)="onInitNewRow($event)" (onRowInserting)="postGridRow($event, 'create')"
+          (onRowUpdating)="postGridRow($event, 'edit')" (onRowInserted)="postedGridRow($event, 'create')"
+          (onRowUpdated)="postedGridRow($event, 'edit')" (onExporting)="onExporting($event, PageTitle)"
+          (onSelectionChanged)="onSelectionChanged($event)" (onCellPrepared)="onCellPrepared($event)"
+          (onCellClick)="onCellClick($event)">
+
+          <dxo-selection mode="multiple" showCheckBoxesMode="always" selectAllMode="allPages">
+          </dxo-selection>
+
+
+          <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+          <dxo-scrolling [useNative]="true"></dxo-scrolling>
+          <dxo-header-filter [visible]="true">
+            <dxo-search [enabled]="true"></dxo-search>
+          </dxo-header-filter>
+          <dxo-filter-row [visible]="true"></dxo-filter-row>
+          <dxo-paging [enabled]="true" [pageSize]="30"></dxo-paging>
+          <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[20, 30, 40]" [showInfo]="true" [visible]="true">
+          </dxo-pager>
+          <dxo-group-panel [visible]="true"></dxo-group-panel>
+          <dxo-export [enabled]="true"></dxo-export>
+          <dxo-sorting mode="multiple"></dxo-sorting>
+          <dxo-toolbar>
+            <dxi-item name="groupPanel" locateInMenu="auto"></dxi-item>
+            <dxi-item name="exportButton"></dxi-item>
+          </dxo-toolbar>
+        </dx-data-grid>
+        <div class="mt-2">
+          <small class="text-muted">
+            <strong>Note:</strong> Records can only be reviewed if they were modified by another user. The system
+            prevents users from reviewing their own data entries.
+          </small>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

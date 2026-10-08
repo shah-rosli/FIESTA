@@ -1,0 +1,53 @@
+<app-page-title [PageTitle]="PageTitle"></app-page-title>
+
+<section class="content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-8 mx-auto">
+
+        <div class="card" *ngFor="let galleryItem of announcementData">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="row justify-content-md-center">
+                  <div class="col-md-4 lineDiv" style="text-align:left;">
+                    <h5 style="color:#2a289d;">{{galleryItem.title}}</h5>
+                    <p>{{galleryItem.author}} | {{galleryItem.date}}</p>
+                  </div>
+                  <div class="col-sm-6 wrapDiv" style="text-align:left;">
+                    <p [innerHTML]="galleryItem.content">{{galleryItem.content}}</p>
+                    <div class="row">
+                      <div class="col-md-8">
+                        &nbsp;
+                      </div>
+                      <div class="col-md-4">
+                        <button type="button" class="btn btn-block btn-secondary" (click)="goToLink(galleryItem.link)"
+                          *ngIf=galleryItem.title>
+                          &nbsp;&nbsp;{{this.base.getMessage('Read More')}}&nbsp;&nbsp;
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- <div class="col-md-10 lineDiv">
+                                            <h3 style="color:#2a289d;">{{galleryItem.title}}</h3>
+                                            <p [innerHTML]="galleryItem.content">{{galleryItem.content}}</p>
+                                        </div>
+                                        <div class="col-sm-1 wrapDiv" style="text-align:left;">
+                                            <p>Date  : {{galleryItem.date}}</p>
+                                            <p>Author: {{galleryItem.author}}</p>
+                                            <button type="button" class="btn btn-block btn-secondary" (click)="goToLink(galleryItem.link)" *ngIf=galleryItem.title>
+                                                &nbsp;&nbsp;{{this.base.getMessage('Read More')}}&nbsp;&nbsp;
+                                            </button>
+                                        </div> -->
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>

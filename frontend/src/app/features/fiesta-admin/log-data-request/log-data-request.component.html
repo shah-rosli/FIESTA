@@ -1,0 +1,56 @@
+<app-page-title [PageTitle]="PageTitle"></app-page-title>
+
+<section class="content">
+  <div class="container-fluid">
+    <div class="card">
+      <div class="card-body">
+        <dx-data-grid [dataSource]="dataSource" [remoteOperations]="true" [showBorders]="true" [showColumnLines]="true"
+          [showRowLines]="true" [rowAlternationEnabled]="true" [allowColumnResizing]="true"
+          [allowColumnReordering]="true" [columnMinWidth]="100" [columnAutoWidth]="true" [hoverStateEnabled]="true"
+          columnResizingMode="widget" [columns]="columnsConfig" (onExporting)="onExporting($event, 'export')">
+
+          <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+          <dxo-scrolling [useNative]="true"></dxo-scrolling>
+          <dxo-header-filter [visible]="true">
+            <dxo-search [enabled]="true"></dxo-search>
+          </dxo-header-filter>
+          <dxo-filter-row [visible]="true"></dxo-filter-row>
+          <dxo-paging [enabled]="true" [pageSize]="30"></dxo-paging>
+          <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[20, 30, 40]" [showInfo]="true" [visible]="true">
+          </dxo-pager>
+          <dxo-group-panel [visible]="true"></dxo-group-panel>
+          <dxo-export [enabled]="true"></dxo-export>
+          <dxo-sorting mode="multiple"></dxo-sorting>
+
+          <div *dxTemplate="let cellInfo of 'cellTemplate'">
+            <span><a class="dx-link" (click)="onRowClickView(cellInfo.data)"><u>View</u></a></span>
+          </div>
+
+        </dx-data-grid>
+
+        <dx-popup [(visible)]="popupVisible" height="90%" width="90%" [dragEnabled]="true" [hideOnOutsideClick]="true"
+          contentTemplate="content">
+
+          <div *dxTemplate="let data of 'content'">
+            <dx-scroll-view width="100%" height="100%" [useNative]="true">
+              <div class="row mb-3" *ngFor="let item of popupData">
+                <ng-container [ngSwitch]="true">
+                  <ng-container *ngSwitchCase="item.key === 'PAYLOAD' || item.key === 'MESSAGE'">
+                    <div class="col-1"><b>{{item.key}}</b></div>
+                    <div class="col-11">
+                      <dx-text-area [value]="item.value" [autoResizeEnabled]="true" [readOnly]="true"></dx-text-area>
+                    </div>
+                  </ng-container>
+                  <ng-container *ngSwitchDefault>
+                    <div class="col-1"><b>{{item.key}}</b></div>
+                    <div class="col-11">{{item.value}}</div>
+                  </ng-container>
+                </ng-container>
+              </div>
+            </dx-scroll-view>
+          </div>
+        </dx-popup>
+      </div>
+    </div>
+  </div>
+</section>

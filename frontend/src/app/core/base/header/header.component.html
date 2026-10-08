@@ -1,0 +1,24 @@
+<nav class="app-header navbar navbar-expand bg-body">
+  <div class="container-fluid">
+    <div class="d-flex align-items-center">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" role="button" (click)="toggle()">
+            <i class="fas fa-bars"></i>
+          </a>
+        </li>
+      </ul>
+
+      <div class="lh-1 header-datetime-info">
+        <small>{{this.currentDateTime}} <br />({{this.currentTimeZone}})</small>
+      </div>
+      <span class="ps-2" style="color: red;" *ngIf="siteModeDisplay">
+        <b>{{this.siteModeDisplay}}</b>
+      </span>
+    </div>
+
+    <ul class="navbar-nav me-2">
+      <app-header-user></app-header-user>
+    </ul>
+  </div>
+</nav>

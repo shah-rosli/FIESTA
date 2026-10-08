@@ -1,0 +1,152 @@
+<!-- Content Header (Page header) -->
+<app-page-title [PageTitle]=PageTitle></app-page-title>
+
+<!-- Main content -->
+<div class="content">
+
+  <app-no-view-permission *ngIf="!PermissionForView"></app-no-view-permission>
+
+  <!--History-->
+  <dx-popup height="90%" width="90%" [showTitle]="true" [title]="this.base.getMessage('Audit Trail')"
+    [dragEnabled]="true" [hideOnOutsideClick]="true" [(visible)]="popupVisible">
+    <div *dxTemplate="let data of 'content'">
+
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="card card-default">
+            <div class="ParentLodingdiv"><dx-load-indicator class="block center" *ngIf="HistoryLoading"
+                id="large-indicator" height="50" width="50"></dx-load-indicator></div>
+
+            <div *ngIf="!HistoryLoading" class="card-body">
+              <div class="row">
+                <div class="col-md-12">
+                  <div *ngIf="loading_indicator" class="ParentLodingdiv"><dx-load-indicator class="block center"
+                      id="large-indicator" height="40" width="40"></dx-load-indicator></div>
+
+                  <div *ngIf="!loading_indicator">
+                    <dx-data-grid id="gridContainer" [dataSource]="HistoryData" [showBorders]="true"
+                      [showColumnLines]="true" [showRowLines]="true" [rowAlternationEnabled]="false"
+                      [hoverStateEnabled]="true" [allowColumnResizing]="true" [allowColumnReordering]="true"
+                      columnResizingMode="widget" [columnMinWidth]="50" [columnAutoWidth]="false"
+                      (onExporting)="onExporting($event, 'export')">
+
+                      <dxo-scrolling [useNative]="true"></dxo-scrolling>
+                      <dxo-header-filter [visible]="true"></dxo-header-filter>
+                      <dxo-filter-row [visible]="true" applyFilter="currentFilter"></dxo-filter-row>
+                      <dxo-paging [enabled]="true"></dxo-paging>
+                      <dxo-paging [pageSize]="15"></dxo-paging>
+                      <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[10, 15, 20]"
+                        [showInfo]="true"></dxo-pager>
+                      <dxo-group-panel [visible]="true"></dxo-group-panel>
+                      <dxo-export [enabled]="true"></dxo-export>
+
+                      <dxi-column dataField="CFG_SYSTEM_LANG_HIS_ID" dataType="number"
+                        [caption]="this.base.getMessage('History ID')" [allowEditing]="false" width="50px">
+                      </dxi-column>
+                      <dxi-column dataField="CFG_SYSTEM_LANG_HIS_DATE" dataType="datetime" [sortIndex]="0"
+                        sortOrder="desc" [caption]="this.base.getMessage('History Date')"
+                        [format]="this.base.getUserInfo('DEFAULT_DISP_DATETIME_FORMAT')"
+                        dateSerializationFormat="yyyy-MM-ddTHH:mm:ss"
+                        [editorOptions]="{ placeholder: this.base.getUserInfo('DEFAULT_DISP_DATETIME_FORMAT') + ' (' + this.base.getUserInfo('DEFAULT_TIMEZONE') + ')' }"
+                        width="120px"> </dxi-column>
+                      <dxi-column dataField="CFG_SYSTEM_LANG_HIS_USER_ID" dataType="string"
+                        [caption]="this.base.getMessage('History Modify By')" width="100px">
+                        <dxo-lookup [dataSource]="userDataSource" displayExpr="USER_FULL_NAME" valueExpr="USER_ID">
+                        </dxo-lookup>
+                      </dxi-column>
+                      <dxi-column dataField="CFG_SYSTEM_LANG_HIS_DELEGATE" dataType="string"
+                        [caption]="this.base.getMessage('History Modify Delegatee')" width="100px">
+                        <dxo-lookup [dataSource]="userDataSource" displayExpr="USER_FULL_NAME" valueExpr="USER_ID">
+                        </dxo-lookup>
+                      </dxi-column>
+                      <dxi-column dataField="CFG_SYSTEM_LANGUAGE_ID" dataType="number"
+                        [caption]="this.base.getMessage('ID')" [allowEditing]="false" width="50px"> </dxi-column>
+                      <dxi-column dataField="LABEL_NAME" dataType="string"
+                        [caption]="this.base.getMessage('Label Name')"> </dxi-column>
+                      <dxi-column dataField="EN" dataType="string" [caption]="this.base.getMessage('English')">
+                      </dxi-column>
+                      <dxi-column dataField="JA" dataType="string" [caption]="this.base.getMessage('Japanese')">
+                      </dxi-column>
+                      <dxi-column dataField="ZH" dataType="string" [caption]="this.base.getMessage('Chinese')">
+                      </dxi-column>
+
+                    </dx-data-grid>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </dx-popup>
+
+  <!--System Language-->
+  <div *ngIf="PermissionForView" class="container-fluid">
+
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="card card-default">
+
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-12">
+
+                <dx-data-grid id="gridContainer" [dataSource]="dataSource" [showBorders]="true" [showColumnLines]="true"
+                  [showRowLines]="true" [rowAlternationEnabled]="true" [repaintChangesOnly]="true"
+                  [hoverStateEnabled]="true" [allowColumnResizing]="true" [allowColumnReordering]="true"
+                  columnResizingMode="widget" [columnAutoWidth]="false" (onRowInserting)="postGridRow($event, 'create')"
+                  (onRowUpdating)="postGridRow($event, 'edit')" (onRowRemoving)="postGridRow($event, 'delete')"
+                  (onRowInserted)="postedGridRow($event, 'create')" (onRowUpdated)="postedGridRow($event, 'edit')"
+                  (onRowRemoved)="postedGridRow($event, 'delete')" (onExporting)="onExporting($event, 'export')">
+
+                  <dxo-scrolling [useNative]="true"></dxo-scrolling>
+                  <dxo-header-filter [visible]="true"></dxo-header-filter>
+                  <dxo-filter-row [visible]="true" applyFilter="currentFilter"></dxo-filter-row>
+                  <dxo-paging [enabled]="true"></dxo-paging>
+                  <dxo-paging [pageSize]="15"></dxo-paging>
+                  <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[10, 15, 20]"
+                    [showInfo]="true"></dxo-pager>
+                  <dxo-group-panel [visible]="true"></dxo-group-panel>
+                  <dxo-export [enabled]="true"></dxo-export>
+                  <dxo-editing mode="popup" refreshMode="reshape" [allowAdding]="PermissionForCreate"
+                    [allowUpdating]="PermissionForEdit" [allowDeleting]="PermissionForDelete">
+                  </dxo-editing>
+
+                  <dxi-column dataField="CFG_SYSTEM_LANGUAGE_ID" dataType="number" [allowEditing]="false"
+                    [caption]="this.base.getMessage('ID')" width="100px" sortOrder="asc"></dxi-column>
+
+                  <dxi-column dataField="LABEL_NAME" dataType="string" [caption]="this.base.getMessage('Label')"
+                    [editorOptions]="{ maxLength: 1000 }">
+                    <dxi-validation-rule type="required"></dxi-validation-rule>
+                  </dxi-column>
+                  <dxi-column dataField="EN" dataType="string" [caption]="this.base.getMessage('English')"
+                    [editorOptions]="{ maxLength: 1000 }">
+                    <dxi-validation-rule type="required"></dxi-validation-rule>
+                  </dxi-column>
+                  <dxi-column dataField="JA" dataType="string" [caption]="this.base.getMessage('Japanese')"
+                    [editorOptions]="{ maxLength: 1000 }">
+                    <dxi-validation-rule type="required"></dxi-validation-rule>
+                  </dxi-column>
+                  <dxi-column dataField="ZH" dataType="string" [caption]="this.base.getMessage('Chinese')"
+                    [editorOptions]="{ maxLength: 1000 }">
+                    <dxi-validation-rule type="required"></dxi-validation-rule>
+                  </dxi-column>
+                  <dxi-column type="buttons">
+                    <dxi-button name="edit"></dxi-button>
+                    <dxi-button name="delete"></dxi-button>
+                    <dxi-button hint="Show History" text="History" [visible]="historyVisible"
+                      [onClick]="historyIconClick"></dxi-button>
+                  </dxi-column>
+                </dx-data-grid>
+
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

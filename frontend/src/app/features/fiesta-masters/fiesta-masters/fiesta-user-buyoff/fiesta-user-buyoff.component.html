@@ -1,0 +1,231 @@
+<app-page-title [PageTitle]="PageTitle"></app-page-title>
+
+<section class="content">
+  <div class="container-fluid">
+    <div class="card">
+      <div class="card-body datagrid-font-size">
+
+        <!-- 5 -->
+        <div *ngIf="showBYOSummary" class="pt-2 h-100">
+          <dx-data-grid class="exclude-compact-datagrid" [dataSource]="dataSource_BYO_SUMMARY" [showBorders]="true"
+            [showColumnLines]="true" [showRowLines]="true" [rowAlternationEnabled]="true" [allowColumnResizing]="true"
+            [allowColumnReordering]="true" [columnAutoWidth]="true" [hoverStateEnabled]="true"
+            columnResizingMode="widget">
+            <!-- (onSelectionChanged)="onSelectionChanged_PRODUCT($event)" -->
+
+            <!-- <dxo-selection mode="multiple" showCheckBoxesMode="always" visible="false">
+          </dxo-selection> -->
+
+            <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+            <dxo-scrolling [useNative]="true"></dxo-scrolling>
+            <dxo-header-filter [visible]="true">
+              <dxo-search [enabled]="true"></dxo-search>
+            </dxo-header-filter>
+            <dxo-filter-row [visible]="true"></dxo-filter-row>
+            <dxo-paging [pageSize]="20"></dxo-paging>
+            <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[20, 30, 40]" [showInfo]="true"
+              [visible]="true"></dxo-pager>
+
+            <dxi-column dataField="partNumber" caption="Part Number" width="180" [sortIndex]="0"></dxi-column>
+            <dxi-column dataField="buyOffReason" caption="Buyoff Reason" width="200"></dxi-column>
+            <dxi-column dataField="prefixChangeOrder" caption="Revision" width="80"></dxi-column>
+            <dxi-column dataField="materialType" caption="Material Type" width="100"></dxi-column>
+            <dxi-column dataField="materialTypeDetail" caption="Material Type Detail" width="220"></dxi-column>
+            <dxi-column dataField="materialGroup" caption="Material Group" width="115"></dxi-column>
+            <dxi-column dataField="companyCode" caption="Company Code" width="110"></dxi-column>
+            <dxi-column dataField="legacyOrganization" caption="Legacy Org" width="90"></dxi-column>
+            <dxi-column dataField="TT" caption="OPN Group Stage"></dxi-column>
+
+            <dxi-column dataField="updateDateAndTime" caption="Change Date (UTC)" dataType="datetime"
+              format="yyyy-MM-dd HH:mm:ss" width="150" sortOrder="asc"></dxi-column>
+
+            <dxi-column caption="Action" width="60" cellTemplate="actionTemplate" [fixed]="true"
+              fixedPosition="right"></dxi-column>
+
+            <div *dxTemplate="let data of 'actionTemplate'">
+              <!-- <dx-button text="Buyoff" type="default" fixed=true fixedPosition="right" stylingMode="contained"
+              (onClick)="onBYOSummary(data.data)">
+            </dx-button> -->
+              <a href="javascript:void(0)" class="d-block" (click)="onBYOSummary(data.data)" width="80">Buyoff</a>
+            </div>
+
+          </dx-data-grid>
+        </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <nav *ngIf="showMain">
+          <div class="nav nav-tabs">
+            <a class="nav-item nav-link" role="button" [ngClass]="{'active': activeTab === 1}" (click)="onTabClick(1)">
+              Production
+            </a>
+            <a class="nav-item nav-link" role="button" [ngClass]="{'active': activeTab === 0}" (click)="onTabClick(0)">
+              Product
+            </a>
+          </div>
+        </nav>
+        <div *ngIf="showMain" class="pt-2 h-100">
+          <div *ngIf="tabLoaded[0]" [hidden]="activeTab !== 0" class="h-100">
+            <div class="d-flex justify-content-between">
+              <span class="fw-bold" style="font-size: 1.2rem;"></span>
+              <div class="d-flex gap-2">
+                <dx-button class="btn-xs" type="success" text="Next" (onClick)="onProductBuyoff()"></dx-button>
+              </div>
+            </div>
+            <!-- 1 -->
+            <dx-data-grid class="exclude-compact-datagrid" [dataSource]="dataSource" [showBorders]="true"
+              [showColumnLines]="true" [showRowLines]="true" [rowAlternationEnabled]="true" [allowColumnResizing]="true"
+              [allowColumnReordering]="true" [columnAutoWidth]="true" [hoverStateEnabled]="true"
+              columnResizingMode="widget" (onSelectionChanged)="onSelectionChanged_PRODUCT($event)">
+
+              <dxo-selection mode="multiple" showCheckBoxesMode="always">
+              </dxo-selection>
+
+              <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+              <dxo-scrolling [useNative]="true"></dxo-scrolling>
+              <dxo-header-filter [visible]="true">
+                <dxo-search [enabled]="true"></dxo-search>
+              </dxo-header-filter>
+              <dxo-filter-row [visible]="true"></dxo-filter-row>
+              <dxo-paging [pageSize]="1000"></dxo-paging>
+
+              <dxi-column dataField="partNumber" caption="Part Number" width="180" sortOrder="asc"
+                [sortIndex]="0"></dxi-column>
+              <dxi-column dataField="productChangeOrder" caption="Product Revision" width="120"></dxi-column>
+              <dxi-column dataField="materialType" caption="Material Type" width="100"></dxi-column>
+              <dxi-column dataField="materialTypeDetail" caption="Material Type Detail" width="140"></dxi-column>
+              <dxi-column dataField="materialGroup" caption="Material Group" width="120"></dxi-column>
+              <dxi-column dataField="companyCode" caption="Company Code" width="110"></dxi-column>
+              <dxi-column dataField="legacyOrganization" caption="Legacy Org" width="90"></dxi-column>
+
+
+              <dxi-column dataField="updateDateAndTime" caption="Change Date (UTC)" dataType="datetime"
+                format="yyyy-MM-dd HH:mm:ss"></dxi-column>
+
+            </dx-data-grid>
+          </div>
+          <div *ngIf="tabLoaded[1]" [hidden]="activeTab !== 1" class="h-100">
+            <div class="d-flex justify-content-between">
+              <span class="fw-bold" style="font-size: 1.2rem;"></span>
+              <div class="d-flex gap-2">
+                <dx-button class="btn-xs" type="success" text="Next" (onClick)="onProductionBuyoff()"></dx-button>
+              </div>
+            </div>
+            <div>
+              <span>
+                <strong style="color: rgba(175, 175, 175, 0.782);">*First version of production OPN buyoff will also
+                  buyoff the product related at a same time.</strong>
+              </span>
+            </div>
+            <!-- 2 -->
+
+            <dx-data-grid class="exclude-compact-datagrid" [dataSource]="dataSource_ProductionBuyoff"
+              [showBorders]="true" [showColumnLines]="true" [showRowLines]="true" [rowAlternationEnabled]="true"
+              [allowColumnResizing]="true" [allowColumnReordering]="true" [columnAutoWidth]="true"
+              [hoverStateEnabled]="true" columnResizingMode="widget"
+              (onSelectionChanged)="onSelectionChanged_PRODUCTION($event)">
+
+              <dxo-selection mode="multiple" showCheckBoxesMode="always">
+              </dxo-selection>
+
+              <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+              <dxo-scrolling [useNative]="true"></dxo-scrolling>
+              <dxo-header-filter [visible]="true">
+                <dxo-search [enabled]="true"></dxo-search>
+              </dxo-header-filter>
+              <dxo-filter-row [visible]="true"></dxo-filter-row>
+              <dxo-paging [pageSize]="1000"></dxo-paging>
+
+              <dxi-column dataField="opn" caption="OPN" width="180" sortOrder="asc" [sortIndex]="0"></dxi-column>
+              <dxi-column dataField="productionChangeOrder" caption="Production Revision" width="150"></dxi-column>
+
+              <dxi-column dataField="companyCode" caption="Company Code" width="110"></dxi-column>
+              <dxi-column dataField="legacyOrganization" caption="Legacy Org" width="90"></dxi-column>
+              <dxi-column dataField="plmStatus" caption="Lifecycle Phase" width="110"></dxi-column>
+              <dxi-column dataField="TT" caption="OPN Group Stage"></dxi-column>
+
+              <dxi-column dataField="updateDateAndTime" caption="Change Date (UTC)" dataType="datetime"
+                format="yyyy-MM-dd HH:mm:ss" width="130"></dxi-column>
+
+            </dx-data-grid>
+          </div>
+        </div>
+
+        <div *ngIf="showBuyoffProduct" class="pt-2 h-100">
+          <div class="d-flex justify-content-between">
+            <span class="fw-bold" style="font-size: 1.2rem;">Buyoff Product</span>
+            <div class="d-flex gap-2">
+              <dx-button class="btn-xs" type="success" text="Buyoff Product"
+                (onClick)="onBuyoff_BYO_Product()"></dx-button>
+              <dx-button icon="chevronleft" text="Back" (onClick)="onBack_BYO_PRODUCT()"></dx-button>
+            </div>
+          </div>
+          <!-- 3 -->
+          <!-- <app-byo-history-popup #historyPopup [columns]="historyColumn_BYO_PRODUCT_HIS" endpoint="BYO">
+          </app-byo-history-popup> -->
+
+          <dx-data-grid class="exclude-compact-datagrid" [dataSource]="dataSource_BYO_Product"
+            [columns]="columnConfig_BYO_PRODUCT" [showBorders]="true" [showColumnLines]="true" [showRowLines]="true"
+            [rowAlternationEnabled]="true" [allowColumnResizing]="true" [allowColumnReordering]="true"
+            [columnAutoWidth]="true" [hoverStateEnabled]="true" columnResizingMode="widget" keyExpr="partNumber"
+            [selectedRowKeys]="selectedPartNumbers_BYO_Product"
+            (onSelectionChanged)="onSelectionChanged_BYO_Product($event)">
+
+            <dxo-selection mode="multiple" showCheckBoxesMode="always">
+            </dxo-selection>
+
+            <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+            <dxo-scrolling [useNative]="true"></dxo-scrolling>
+            <dxo-header-filter [visible]="true">
+              <dxo-search [enabled]="true"></dxo-search>
+            </dxo-header-filter>
+            <dxo-filter-row [visible]="true"></dxo-filter-row>
+            <dxo-paging [pageSize]="1000"></dxo-paging>
+
+          </dx-data-grid>
+        </div>
+
+        <div *ngIf="showBuyoffProduction" class="pt-2 h-100">
+          <div class="d-flex justify-content-end">
+            <div class="d-flex gap-2">
+              <dx-button *ngIf="showBuyoffProductButton" class="btn-xs" type="success" text="Buyoff Product"
+                (onClick)="onBuyoff_BYO_Product()"></dx-button>
+              <dx-button *ngIf="showBuyoffProductionButton" class="btn-xs" type="success" text="Buyoff Production"
+                (onClick)="onBuyoff_BYO_Production()"></dx-button>
+              <dx-button icon="chevronleft" text="Back" (onClick)="onBack_BYO_PRODUCTION()"></dx-button>
+            </div>
+          </div>
+          <!-- 4 -->
+          <div id="div_BYO_PRODUCTION">
+            <ng-container #productionContainer></ng-container>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>

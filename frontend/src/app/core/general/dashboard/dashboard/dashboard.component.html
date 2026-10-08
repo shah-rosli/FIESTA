@@ -1,0 +1,691 @@
+<app-page-title [PageTitle]="PageTitle"></app-page-title>
+
+<div *ngIf="!dataLoaded" style="height: 40vh; display: grid; place-content: end center;">
+  <dx-load-indicator height="40" width="40">
+  </dx-load-indicator>
+</div>
+<section *ngIf="dataLoaded" #dashboardContainer class="container-fluid overflow-hidden">
+  <div class="d-flex justify-content-end">
+    <span class="text-secondary text-truncate" [ngClass]="{'invisible': !lastRefreshDate}">
+      Dashboard data as per {{ lastRefreshDate | date:'yyyy-MM-dd HH:mm:ss' }}
+    </span>
+  </div>
+  <div class="delivered-opn" style="width:600px;">
+    <div class="box blue-box min-width-0 flex-grow-1 align-content-center">
+      <div class="d-flex align-items-center justify-content-center">
+        <div class="pe-3">
+          <div class="delivered-opn-count">{{ this.dataSource['Delivered OPNs'].readableCount }}</div>
+          <h5 class="delivered-opn-label text-nowrap">Delivered OPNs</h5>
+        </div>
+        <div class="overflow-hidden">
+          <div class="text-nowrap text-truncate">
+            REN CORE - {{ this.dataSource['REN CORE'].readableCount }}
+            ({{ this.dataSource['REN CORE'].percent || 0 }}%)
+          </div>
+          <div class="text-nowrap text-truncate">
+            REN P&amp;C - {{ this.dataSource['REN P&C'].readableCount }}
+            ({{ this.dataSource['REN P&C'].percent || 0 }}%)
+          </div>
+          <div class="text-nowrap text-truncate">
+            REN PWR - {{ this.dataSource['REN PWR'].readableCount }}
+            ({{ this.dataSource['REN PWR'].percent || 0 }}%)
+          </div>
+          <div class="text-nowrap text-truncate">
+            REN ANA - {{ this.dataSource['REN ANA'].readableCount }}
+            ({{ this.dataSource['REN ANA'].percent || 0 }}%)
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Announcement -->
+    <!-- <div class="card blue-box-neighbour ">
+      <div class="card-header">
+        <h3 class="card-title"><i class="fa fa-bullhorn"></i> Announcement</h3>
+        &nbsp;
+        <a [routerLink]="'/AnnouncementList'"> (More announcements) </a>
+        <div class="card-tools">
+          <button class="btn btn-tool" data-card-widget="collapse" data-toggle="tooltip" title="Collapse" type="button">
+            <i class="fas fa-minus"></i>
+          </button>
+        </div>
+      </div>
+      <div class="card-body">
+        <dx-gallery width="90%" [dataSource]="announcementData" [height]="100" [loop]="true" [showIndicator]="true"
+          [slideshowDelay]="6000">
+          <div *dxTemplate="let galleryItem of 'item'">
+            <div class="row justify-content-md-center">
+              <div class="col-md-4 lineDiv" style="text-align: left">
+                <h5 style="color: #2a289d">{{ galleryItem.title }}</h5>
+                <p>{{ galleryItem.author }} | {{ galleryItem.date }}</p>
+              </div>
+              <div class="col-sm-6 wrapDiv" style="text-align: left">
+                <p [innerHTML]="galleryItem.content">{{ galleryItem.content }}</p>
+                <div class="row">
+                  <div class="col-md-8">&nbsp;</div>
+                  <div class="col-md-4">
+                    @if (galleryItem.title) {
+                    <button class="btn btn-block btn-secondary" type="button" (click)="goToLink(galleryItem.link)">
+                      &nbsp;&nbsp;Read More&nbsp;&nbsp;
+                    </button>
+                    }
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </dx-gallery>
+      </div>
+    </div> -->
+
+    <!-- <div class="box blue-box-neighbour pt-3 px-3 pb-1 d-flex flex-column overflow-hidden">
+      <div class="d-flex flex-wrap justify-content-between align-items-center pb-2 w-100">
+        <h5 class="fw-bold text-nowrap text-truncate pe-2 mb-0">Delivered OPN Analysis (Draft)</h5>
+        <div class="fw-normal d-flex gap-2" style="font-family: Roboto; font-size: 12px; color: rgba(0, 0, 0, 0.54)">
+          <div class="d-flex align-items-center">
+            <div class="me-2">
+              <div style="width: 12px; height: 12px; background-color: #71a6d6;"></div>
+            </div>
+            <span>Amount in JPY</span>
+          </div>
+          <div class="d-flex align-items-center">
+            <div class="me-2">
+              <div style="width: 12px; height: 12px; background-color: #6682bb;"></div>
+            </div>
+            <span>Delivered OPN Count</span>
+          </div>
+        </div>
+        <span class="text-secondary text-nowrap text-truncate">
+          Benchmark source as per {{ this.dataSource['BENCHMARK DATE'].LASTUPDATE | date:'yyyy-MM-dd' }}
+        </span>
+      </div>
+      <div class="d-flex flex-grow-1 min-height-0 gap-3"
+        style="overflow-x: auto; overflow-y: hidden; scrollbar-width: thin; scrollbar-color: #e4e4e7 transparent;">
+        <dx-pie-chart style="min-width: 8rem;" class="w-100" type="doughnut" sizeGroup="sizeGroup"
+          [redrawOnResize]="false" [innerRadius]="0.4" [startAngle]="90" [minDiameter]="1"
+          [customizePoint]="pieChartCustomizePoint"
+          [dataSource]="this.dataSource['Top 95 Percent Sales Forecast'].pieChartDataSource">
+          <dxo-animation [enabled]="false"></dxo-animation>
+          <dxo-legend [visible]="false"></dxo-legend>
+          <dxo-title text="Critical OPN" verticalAlignment="bottom">
+            <dxo-margin [left]="0" [right]="0"></dxo-margin>
+            <dxo-font [size]="14"></dxo-font>
+          </dxo-title>
+          <dxi-series name="OPN" argumentField="argument" valueField="opnValue">
+            <dxo-label [visible]="true" position="outside" textOverflow="none"
+              [customizeText]="customizeSeriesLabelText">
+              <dxo-connector [visible]="true"></dxo-connector>
+              <dxo-border [visible]="true"></dxo-border>
+            </dxo-label>
+          </dxi-series>
+        </dx-pie-chart>
+        <dx-pie-chart style="min-width: 8rem;" class="w-100" type="doughnut" centerTemplate="centerTemplate"
+          sizeGroup="sizeGroup" [redrawOnResize]="false" [innerRadius]="0.4" [startAngle]="90" [minDiameter]="1"
+          [customizePoint]="pieChartCustomizePoint" [dataSource]="this.dataSource['Revenue'].pieChartDataSource">
+          <dxo-animation [enabled]="false"></dxo-animation>
+          <dxo-legend [visible]="false"></dxo-legend>
+          <dxo-title text="Revenue" verticalAlignment="bottom">
+            <dxo-margin [left]="0" [right]="0"></dxo-margin>
+            <dxo-font [size]="14"></dxo-font>
+            <dxo-subtitle [text]="specialTexts.doaRevenue">
+              <dxo-font [size]="14"></dxo-font>
+            </dxo-subtitle>
+          </dxo-title>
+          <dxi-series name="JPY" argumentField="argument" valueField="jpyValue"></dxi-series>
+          <dxi-series name="OPN" argumentField="argument" valueField="opnValue">
+            <dxo-label [visible]="true" position="outside" textOverflow="none"
+              [customizeText]="customizeSeriesLabelText">
+              <dxo-connector [visible]="true"></dxo-connector>
+              <dxo-border [visible]="true"></dxo-border>
+            </dxo-label>
+          </dxi-series>
+          <svg *dxTemplate="let pieChart of 'centerTemplate'">
+            <text text-anchor="middle" style="font-size: 15px; font-weight: 600" x="100" y="120">
+              <tspan x="80">{{ this.dataSource['Revenue JPY'].COUNT }}%</tspan>
+            </text>
+          </svg>
+        </dx-pie-chart>
+        <dx-pie-chart style="min-width: 8rem;" class="w-100" type="doughnut" centerTemplate="centerTemplate"
+          sizeGroup="sizeGroup" [redrawOnResize]="false" [innerRadius]="0.4" [startAngle]="90" [minDiameter]="1"
+          [customizePoint]="pieChartCustomizePoint" [dataSource]="this.dataSource['Inventory'].pieChartDataSource">
+          <dxo-animation [enabled]="false"></dxo-animation>
+          <dxo-legend [visible]="false"></dxo-legend>
+          <dxo-title text="Inventory" verticalAlignment="bottom">
+            <dxo-margin [left]="0" [right]="0"></dxo-margin>
+            <dxo-font [size]="14"></dxo-font>
+            <dxo-subtitle [text]="specialTexts.doaInventory">
+              <dxo-font [size]="14"></dxo-font>
+            </dxo-subtitle>
+          </dxo-title>
+          <dxi-series name="JPY" argumentField="argument" valueField="jpyValue"></dxi-series>
+          <dxi-series name="OPN" argumentField="argument" valueField="opnValue">
+            <dxo-label [visible]="true" position="outside" textOverflow="none"
+              [customizeText]="customizeSeriesLabelText">
+              <dxo-connector [visible]="true"></dxo-connector>
+              <dxo-border [visible]="true"></dxo-border>
+            </dxo-label>
+          </dxi-series>
+          <svg *dxTemplate="let pieChart of 'centerTemplate'">
+            <text text-anchor="middle" style="font-size: 15px; font-weight: 600" x="100" y="120">
+              <tspan x="80">{{ this.dataSource['Inventory JPY'].COUNT }}%</tspan>
+            </text>
+          </svg>
+        </dx-pie-chart>
+        <dx-pie-chart style="min-width: 8rem;" class="w-100" type="doughnut" centerTemplate="centerTemplate"
+          sizeGroup="sizeGroup" [redrawOnResize]="false" [innerRadius]="0.4" [startAngle]="90" [minDiameter]="1"
+          [customizePoint]="pieChartCustomizePoint" [dataSource]="this.dataSource['Backlog'].pieChartDataSource">
+          <dxo-animation [enabled]="false"></dxo-animation>
+          <dxo-legend [visible]="false"></dxo-legend>
+          <dxo-title text="Backlog" verticalAlignment="bottom">
+            <dxo-margin [left]="0" [right]="0"></dxo-margin>
+            <dxo-font [size]="14"></dxo-font>
+            <dxo-subtitle [text]="specialTexts.doaBacklog">
+              <dxo-font [size]="14"></dxo-font>
+            </dxo-subtitle>
+          </dxo-title>
+          <dxi-series name="JPY" argumentField="argument" valueField="jpyValue"></dxi-series>
+          <dxi-series name="OPN" argumentField="argument" valueField="opnValue">
+            <dxo-label [visible]="true" position="outside" textOverflow="none"
+              [customizeText]="customizeSeriesLabelText">
+              <dxo-connector [visible]="true"></dxo-connector>
+              <dxo-border [visible]="true"></dxo-border>
+            </dxo-label>
+          </dxi-series>
+          <svg *dxTemplate="let pieChart of 'centerTemplate'">
+            <text text-anchor="middle" style="font-size: 15px; font-weight: 600" x="100" y="120">
+              <tspan x="80">{{ this.dataSource['Backlog JPY'].COUNT }}%</tspan>
+            </text>
+          </svg>
+        </dx-pie-chart>
+      </div>
+    </div> -->
+  </div>
+  <div style="height: 0.75rem;"></div>
+  <h5 class="fw-bold ps-2">Overall OPN Analysis</h5>
+  <div class="overall-opn">
+    <div class="box p-3">
+      <h6 class="fw-bold">PLM Inbound OPN</h6>
+      <h1 class="text-center text-truncate">
+        {{ this.dataSource['PLM Overall'].readableCount }}
+      </h1>
+    </div>
+    <div class="box p-3">
+      <h6 class="fw-bold">FIESTA Blacklisted OPN</h6>
+      <h1 class="text-center text-truncate">
+        {{ this.dataSource['FIESTA Blacklist'].readableCount }}
+      </h1>
+    </div>
+    <div class="box p-3">
+      <h6 class="fw-bold">FIESTA Success Transformation OPN</h6>
+      <h1 class="text-center text-truncate">
+        {{ this.dataSource['FIESTA Sign Off'].readableCount }}
+      </h1>
+      <div class="text-center">
+        Success PLM OPN Rate {{ this.dataSource['Success PLM OPN Rate'].COUNT }}%
+      </div>
+    </div>
+    <div class="box p-3">
+      <h6 class="fw-bold">Pending Business Sign Off</h6>
+      <h1 class="text-center text-truncate">
+        {{ this.dataSource['Pending Business Sign Off'].readableCount }}
+      </h1>
+      <div class="text-center">
+        REN CORE - {{ this.dataSource['Pending Business Sign Off REN CORE'].readableCount }} ({{
+        this.dataSource['Pending Business Sign Off REN CORE'].percent || 0 }}%)
+      </div>
+      <div class="text-center">
+        REN P&C - {{ this.dataSource['Pending Business Sign Off REN P&C'].readableCount }} ({{
+        this.dataSource['Pending Business Sign Off REN P&C'].percent || 0 }}%)
+      </div>
+      <div class="text-center">
+        REN PWR - {{ this.dataSource['Pending Business Sign Off REN PWR'].readableCount }} ({{
+        this.dataSource['Pending Business Sign Off REN PWR'].percent || 0 }}%)
+      </div>
+      <div class="text-center">
+        REN ANA - {{ this.dataSource['Pending Business Sign Off REN ANA'].readableCount }} ({{
+        this.dataSource['Pending Business Sign Off REN ANA'].percent || 0 }}%)
+      </div>
+    </div>
+  </div>
+  <div style="height: 0.75rem;"></div>
+  <div class="box p-3">
+    <h5 class="fw-bold">Blacklist Statistics</h5>
+    <dx-chart #blacklistChart [dataSource]="blacklist" [rotated]="true" [customizePoint]="barChartCustomizePoint">
+      <dxo-size [height]="blacklistChartHeight"></dxo-size>
+      <dxo-legend [visible]="false"></dxo-legend>
+      <dxo-tooltip [enabled]="true" [customizeTooltip]="customizeTooltip" [zIndex]="1100">
+      </dxo-tooltip>
+      <dxo-argument-axis>
+        <dxo-label overlappingBehavior="none" [customizeHint]="customizeHint"></dxo-label>
+      </dxo-argument-axis>
+      <dxi-value-axis [visualRange]="[0, 100]">
+        <dxo-label format="#0'%'"></dxo-label>
+      </dxi-value-axis>
+      <dxi-series argumentField="TITLE" valueField="CNT" type="bar" color="#71a6d6">
+      </dxi-series>
+    </dx-chart>
+    <div class="mt-1 fw-normal d-flex gap-2" style="font-family: Roboto; font-size: 12px; color: rgba(0, 0, 0, 0.54)">
+      <div class="d-flex align-items-center">
+        <div class="me-2">
+          <div style="width: 12px; height: 12px; background-color: #71a6d6;"></div>
+        </div>
+        <span>Informational</span>
+      </div>
+      <div class="d-flex align-items-center">
+        <div class="me-2">
+          <div style="width: 12px; height: 12px; background-color: #bb6666;"></div>
+        </div>
+        <span>To take action</span>
+      </div>
+    </div>
+  </div>
+  <div style="height: 0.75rem;"></div>
+  <div class="object-stats-grid small-screen">
+    <div class="box p-3">
+      <h6 class="text-truncate">PLM Inbound (records)</h6>
+      <dx-data-grid style="max-height: 450px;" [dataSource]="dataSource['PLM']" [hoverStateEnabled]="true"
+        [allowColumnResizing]="true" columnResizingMode="widget" [showBorders]="true">
+        <dxo-sorting mode="none"></dxo-sorting>
+
+        <dxo-paging [pageSize]="22"></dxo-paging>
+
+        <dxi-column dataField="OBJECT" caption="Object" cellTemplate="objectCellTemplate"></dxi-column>
+        <dxi-column dataField="COUNT" caption="Count" dataType="number" [format]="{type: 'fixedPoint', precision: 0}"
+          width="auto">
+        </dxi-column>
+        <dxi-column dataField="LASTUPDATE" caption="Last Update" width="auto"
+          cellTemplate="lastUpdateCellTemplate"></dxi-column>
+        <div *dxTemplate="let cell of 'objectCellTemplate'">
+          <div style="overflow-x: clip; text-overflow: ellipsis;" [title]="cell.value">{{cell.value}}</div>
+        </div>
+        <div *dxTemplate="let cell of 'lastUpdateCellTemplate'">
+          <div [title]="cell.data.extendedLastUpdate">{{cell.value ? (cell.value | date:'yyyy-MM-dd') : '-'}}</div>
+        </div>
+      </dx-data-grid>
+      <div class="mt-2">
+        * FIESTA Relevant (excluded P7 not exists in PROSTER)
+      </div>
+
+
+      <!-- <nav>
+        <div class="nav nav-tabs">
+          <a class="nav-item nav-link" role="button" [ngClass]="{'active': activeTab01 === 0}"
+            (click)="onTabClick01(0)">
+            PLM
+          </a>
+          <a class="nav-item nav-link" role="button" [ngClass]="{'active': activeTab01 === 1}"
+            (click)="onTabClick01(1)">
+            S4
+          </a>
+          <a class="nav-item nav-link" role="button" [ngClass]="{'active': activeTab01 === 2}"
+            (click)="onTabClick01(2)">
+            Impact ECS
+          </a>
+        </div>
+      </nav>
+      <div *ngIf="tabLoaded01[0]" [hidden]="activeTab01 !== 0">
+        <h6 class="text-truncate">PLM Inbound (records)</h6>
+        <dx-data-grid style="max-height: 450px;" [dataSource]="dataSource['PLM']" [hoverStateEnabled]="true"
+          [allowColumnResizing]="true" columnResizingMode="widget" [showBorders]="true">
+          <dxo-sorting mode="none"></dxo-sorting>
+
+          <dxi-column dataField="OBJECT" caption="Object" cellTemplate="objectCellTemplate"></dxi-column>
+          <dxi-column dataField="COUNT" caption="Count" dataType="number" [format]="{type: 'fixedPoint', precision: 0}"
+            width="auto">
+          </dxi-column>
+          <dxi-column dataField="LASTUPDATE" caption="Last Update" width="auto"
+            cellTemplate="lastUpdateCellTemplate"></dxi-column>
+          <div *dxTemplate="let cell of 'objectCellTemplate'">
+            <div style="overflow-x: clip; text-overflow: ellipsis;" [title]="cell.value">{{cell.value}}</div>
+          </div>
+          <div *dxTemplate="let cell of 'lastUpdateCellTemplate'">
+            <div [title]="cell.data.extendedLastUpdate">{{cell.value ? (cell.value | date:'yyyy-MM-dd') : '-'}}</div>
+          </div>
+        </dx-data-grid>
+        <div class="mt-2">
+          * FIESTA Relevant (excluded P7 not exists in PROSTER)
+        </div>
+      </div>
+      <div *ngIf="tabLoaded01[1]" [hidden]="activeTab01 !== 0">
+
+      </div>
+      <div *ngIf="tabLoaded01[2]" [hidden]="activeTab01 !== 0">
+
+      </div> -->
+
+    </div>
+
+
+
+
+
+    <div class="box p-3">
+      <h6 class="text-truncate">Production (By OPN)</h6>
+      <dx-data-grid style="max-height: 400px;" [dataSource]="dataSource['OPN']" [hoverStateEnabled]="true"
+        [allowColumnResizing]="true" columnResizingMode="widget" [showBorders]="true">
+        <dxo-sorting mode="none"></dxo-sorting>
+
+        <dxi-column dataField="OBJECT" caption="Object" cellTemplate="objectCellTemplate"></dxi-column>
+        <dxi-column dataField="COUNT" caption="Count" dataType="number" [format]="{type: 'fixedPoint', precision: 0}"
+          width="auto">
+        </dxi-column>
+        <dxi-column dataField="LASTUPDATE" caption="Last Update" width="auto"
+          cellTemplate="lastUpdateCellTemplate"></dxi-column>
+        <div *dxTemplate="let cell of 'objectCellTemplate'">
+          <div style="overflow-x: clip; text-overflow: ellipsis;" [title]="cell.value">{{cell.value}}</div>
+        </div>
+        <div *dxTemplate="let cell of 'lastUpdateCellTemplate'">
+          <div [title]="cell.data.extendedLastUpdate">{{cell.value ? (cell.value | date:'yyyy-MM-dd') : '-'}}</div>
+        </div>
+      </dx-data-grid>
+    </div>
+
+
+
+    <div class="box p-3">
+      <nav>
+        <div class="nav nav-tabs">
+          <a class="nav-item nav-link" role="button" [ngClass]="{'active': activeTab03 === 0}"
+            (click)="onTabClick03(0)">
+            Product
+          </a>
+          <a class="nav-item nav-link" role="button" [ngClass]="{'active': activeTab03 === 1}"
+            (click)="onTabClick03(1)">
+            Production
+          </a>
+          <a class="nav-item nav-link" role="button" [ngClass]="{'active': activeTab03 === 2}"
+            (click)="onTabClick03(2)">
+            APP
+          </a>
+          <a class="nav-item nav-link" role="button" [ngClass]="{'active': activeTab03 === 3}"
+            (click)="onTabClick03(3)">
+            Customer
+          </a>
+          <a class="nav-item nav-link" role="button" [ngClass]="{'active': activeTab03 === 4}"
+            (click)="onTabClick03(4)">
+            FI
+          </a>
+          <a class="nav-item nav-link" role="button" [ngClass]="{'active': activeTab03 === 5}"
+            (click)="onTabClick03(5)">
+            IP
+          </a>
+          <a class="nav-item nav-link" role="button" [ngClass]="{'active': activeTab03 === 6}"
+            (click)="onTabClick03(6)">
+            LG
+          </a>
+          <a class="nav-item nav-link" role="button" [ngClass]="{'active': activeTab03 === 7}"
+            (click)="onTabClick03(7)">
+            ORG
+          </a>
+          <a class="nav-item nav-link" role="button" [ngClass]="{'active': activeTab03 === 8}"
+            (click)="onTabClick03(8)">
+            Vendor
+          </a>
+        </div>
+      </nav>
+      <div *ngIf="tabLoaded03[0]" [hidden]="activeTab03 !== 0">
+        <h6 class="text-truncate">Outbound Product (records)</h6>
+        <dx-data-grid style="max-height: 480px;" [dataSource]="dataSource['OUT_PROD']" [hoverStateEnabled]="true"
+          [allowColumnResizing]="true" columnResizingMode="widget" [showBorders]="true">
+          <dxo-sorting mode="none"></dxo-sorting>
+
+          <dxo-paging [pageSize]="23"></dxo-paging>
+
+          <dxi-column dataField="OBJECT" caption="Object" cellTemplate="objectCellTemplate"></dxi-column>
+          <dxi-column dataField="COUNT" caption="Count" dataType="number" [format]="{type: 'fixedPoint', precision: 0}"
+            width="auto">
+          </dxi-column>
+          <dxi-column dataField="LASTUPDATE" caption="Last Update" width="auto"
+            cellTemplate="lastUpdateCellTemplate"></dxi-column>
+          <div *dxTemplate="let cell of 'objectCellTemplate'">
+            <div style="overflow-x: clip; text-overflow: ellipsis;" [title]="cell.value">{{cell.value}}</div>
+          </div>
+          <div *dxTemplate="let cell of 'lastUpdateCellTemplate'">
+            <div [title]="cell.data.extendedLastUpdate">{{cell.value ? (cell.value | date:'yyyy-MM-dd') : '-'}}</div>
+          </div>
+        </dx-data-grid>
+        <!-- <h6 class="text-truncate">FIESTA Outbound (records)</h6>
+        <dx-data-grid style="max-height: 400px;" [dataSource]="dataSource['OUT']" [hoverStateEnabled]="true"
+          [allowColumnResizing]="true" columnResizingMode="widget" [showBorders]="true">
+          <dxo-sorting mode="none"></dxo-sorting>
+
+          <dxi-column dataField="OBJECT" caption="Object" cellTemplate="objectCellTemplate"></dxi-column>
+          <dxi-column dataField="COUNT" caption="Count" dataType="number" [format]="{type: 'fixedPoint', precision: 0}"
+            width="auto">
+          </dxi-column>
+          <dxi-column dataField="LASTUPDATE" caption="Last Update" width="auto"
+            cellTemplate="lastUpdateCellTemplate"></dxi-column>
+          <div *dxTemplate="let cell of 'objectCellTemplate'">
+            <div style="overflow-x: clip; text-overflow: ellipsis;" [title]="cell.value">{{cell.value}}</div>
+          </div>
+          <div *dxTemplate="let cell of 'lastUpdateCellTemplate'">
+            <div [title]="cell.data.extendedLastUpdate">{{cell.value ? (cell.value | date:'yyyy-MM-dd') : '-'}}</div>
+          </div>
+        </dx-data-grid> -->
+      </div>
+      <div *ngIf="tabLoaded03[1]" [hidden]="activeTab03 !== 1">
+        <h6 class="text-truncate">Outbound Production (records)</h6>
+        <dx-data-grid style="max-height: 450px;" [dataSource]="dataSource['OUT_PRODN']" [hoverStateEnabled]="true"
+          [allowColumnResizing]="true" columnResizingMode="widget" [showBorders]="true">
+          <dxo-sorting mode="none"></dxo-sorting>
+
+          <dxi-column dataField="OBJECT" caption="Object" cellTemplate="objectCellTemplate"></dxi-column>
+          <dxi-column dataField="COUNT" caption="Count" dataType="number" [format]="{type: 'fixedPoint', precision: 0}"
+            width="auto">
+          </dxi-column>
+          <dxi-column dataField="LASTUPDATE" caption="Last Update" width="auto"
+            cellTemplate="lastUpdateCellTemplate"></dxi-column>
+          <div *dxTemplate="let cell of 'objectCellTemplate'">
+            <div style="overflow-x: clip; text-overflow: ellipsis;" [title]="cell.value">{{cell.value}}</div>
+          </div>
+          <div *dxTemplate="let cell of 'lastUpdateCellTemplate'">
+            <div [title]="cell.data.extendedLastUpdate">{{cell.value ? (cell.value | date:'yyyy-MM-dd') : '-'}}</div>
+          </div>
+        </dx-data-grid>
+      </div>
+      <div *ngIf="tabLoaded03[2]" [hidden]="activeTab03 !== 2">
+        <h6 class="text-truncate">Application (records)</h6>
+        <dx-data-grid style="max-height: 450px;" [dataSource]="dataSource['APP']" [hoverStateEnabled]="true"
+          [allowColumnResizing]="true" columnResizingMode="widget" [showBorders]="true">
+          <dxo-sorting mode="none"></dxo-sorting>
+
+          <dxi-column dataField="OBJECT" caption="Object" cellTemplate="objectCellTemplate"></dxi-column>
+          <dxi-column dataField="COUNT" caption="Count" dataType="number" [format]="{type: 'fixedPoint', precision: 0}"
+            width="auto">
+          </dxi-column>
+          <dxi-column dataField="LASTUPDATE" caption="Last Update" width="auto"
+            cellTemplate="lastUpdateCellTemplate"></dxi-column>
+          <div *dxTemplate="let cell of 'objectCellTemplate'">
+            <div style="overflow-x: clip; text-overflow: ellipsis;" [title]="cell.value">{{cell.value}}</div>
+          </div>
+          <div *dxTemplate="let cell of 'lastUpdateCellTemplate'">
+            <div [title]="cell.data.extendedLastUpdate">{{cell.value ? (cell.value | date:'yyyy-MM-dd') : '-'}}</div>
+          </div>
+        </dx-data-grid>
+      </div>
+      <div *ngIf="tabLoaded03[3]" [hidden]="activeTab03 !== 3">
+        <h6 class="text-truncate">Customer (records)</h6>
+        <dx-data-grid style="max-height: 450px;" [dataSource]="dataSource['CUSTOMER']" [hoverStateEnabled]="true"
+          [allowColumnResizing]="true" columnResizingMode="widget" [showBorders]="true">
+          <dxo-sorting mode="none"></dxo-sorting>
+
+          <dxi-column dataField="OBJECT" caption="Object" cellTemplate="objectCellTemplate"></dxi-column>
+          <dxi-column dataField="COUNT" caption="Count" dataType="number" [format]="{type: 'fixedPoint', precision: 0}"
+            width="auto">
+          </dxi-column>
+          <dxi-column dataField="LASTUPDATE" caption="Last Update" width="auto"
+            cellTemplate="lastUpdateCellTemplate"></dxi-column>
+          <div *dxTemplate="let cell of 'objectCellTemplate'">
+            <div style="overflow-x: clip; text-overflow: ellipsis;" [title]="cell.value">{{cell.value}}</div>
+          </div>
+          <div *dxTemplate="let cell of 'lastUpdateCellTemplate'">
+            <div [title]="cell.data.extendedLastUpdate">{{cell.value ? (cell.value | date:'yyyy-MM-dd') : '-'}}</div>
+          </div>
+        </dx-data-grid>
+      </div>
+      <div *ngIf="tabLoaded03[4]" [hidden]="activeTab03 !== 4">
+        <h6 class="text-truncate">Finance (records)</h6>
+        <dx-data-grid style="max-height: 450px;" [dataSource]="dataSource['FI']" [hoverStateEnabled]="true"
+          [allowColumnResizing]="true" columnResizingMode="widget" [showBorders]="true">
+          <dxo-sorting mode="none"></dxo-sorting>
+
+          <dxi-column dataField="OBJECT" caption="Object" cellTemplate="objectCellTemplate"></dxi-column>
+          <dxi-column dataField="COUNT" caption="Count" dataType="number" [format]="{type: 'fixedPoint', precision: 0}"
+            width="auto">
+          </dxi-column>
+          <dxi-column dataField="LASTUPDATE" caption="Last Update" width="auto"
+            cellTemplate="lastUpdateCellTemplate"></dxi-column>
+          <div *dxTemplate="let cell of 'objectCellTemplate'">
+            <div style="overflow-x: clip; text-overflow: ellipsis;" [title]="cell.value">{{cell.value}}</div>
+          </div>
+          <div *dxTemplate="let cell of 'lastUpdateCellTemplate'">
+            <div [title]="cell.data.extendedLastUpdate">{{cell.value ? (cell.value | date:'yyyy-MM-dd') : '-'}}</div>
+          </div>
+        </dx-data-grid>
+      </div>
+      <div *ngIf="tabLoaded03[5]" [hidden]="activeTab03 !== 5">
+        <h6 class="text-truncate">Intellectual Property (records)</h6>
+        <dx-data-grid style="max-height: 450px;" [dataSource]="dataSource['IP']" [hoverStateEnabled]="true"
+          [allowColumnResizing]="true" columnResizingMode="widget" [showBorders]="true">
+          <dxo-sorting mode="none"></dxo-sorting>
+
+          <dxi-column dataField="OBJECT" caption="Object" cellTemplate="objectCellTemplate"></dxi-column>
+          <dxi-column dataField="COUNT" caption="Count" dataType="number" [format]="{type: 'fixedPoint', precision: 0}"
+            width="auto">
+          </dxi-column>
+          <dxi-column dataField="LASTUPDATE" caption="Last Update" width="auto"
+            cellTemplate="lastUpdateCellTemplate"></dxi-column>
+          <div *dxTemplate="let cell of 'objectCellTemplate'">
+            <div style="overflow-x: clip; text-overflow: ellipsis;" [title]="cell.value">{{cell.value}}</div>
+          </div>
+          <div *dxTemplate="let cell of 'lastUpdateCellTemplate'">
+            <div [title]="cell.data.extendedLastUpdate">{{cell.value ? (cell.value | date:'yyyy-MM-dd') : '-'}}</div>
+          </div>
+        </dx-data-grid>
+      </div>
+      <div *ngIf="tabLoaded03[6]" [hidden]="activeTab03 !== 6">
+        <h6 class="text-truncate">Logistics (records)</h6>
+        <dx-data-grid style="max-height: 450px;" [dataSource]="dataSource['LG']" [hoverStateEnabled]="true"
+          [allowColumnResizing]="true" columnResizingMode="widget" [showBorders]="true">
+          <dxo-sorting mode="none"></dxo-sorting>
+
+          <dxi-column dataField="OBJECT" caption="Object" cellTemplate="objectCellTemplate"></dxi-column>
+          <dxi-column dataField="COUNT" caption="Count" dataType="number" [format]="{type: 'fixedPoint', precision: 0}"
+            width="auto">
+          </dxi-column>
+          <dxi-column dataField="LASTUPDATE" caption="Last Update" width="auto"
+            cellTemplate="lastUpdateCellTemplate"></dxi-column>
+          <div *dxTemplate="let cell of 'objectCellTemplate'">
+            <div style="overflow-x: clip; text-overflow: ellipsis;" [title]="cell.value">{{cell.value}}</div>
+          </div>
+          <div *dxTemplate="let cell of 'lastUpdateCellTemplate'">
+            <div [title]="cell.data.extendedLastUpdate">{{cell.value ? (cell.value | date:'yyyy-MM-dd') : '-'}}</div>
+          </div>
+        </dx-data-grid>
+      </div>
+      <div *ngIf="tabLoaded03[7]" [hidden]="activeTab03 !== 7">
+        <h6 class="text-truncate">Organization (records)</h6>
+        <dx-data-grid style="max-height: 450px;" [dataSource]="dataSource['ORG']" [hoverStateEnabled]="true"
+          [allowColumnResizing]="true" columnResizingMode="widget" [showBorders]="true">
+          <dxo-sorting mode="none"></dxo-sorting>
+
+          <dxi-column dataField="OBJECT" caption="Object" cellTemplate="objectCellTemplate"></dxi-column>
+          <dxi-column dataField="COUNT" caption="Count" dataType="number" [format]="{type: 'fixedPoint', precision: 0}"
+            width="auto">
+          </dxi-column>
+          <dxi-column dataField="LASTUPDATE" caption="Last Update" width="auto"
+            cellTemplate="lastUpdateCellTemplate"></dxi-column>
+          <div *dxTemplate="let cell of 'objectCellTemplate'">
+            <div style="overflow-x: clip; text-overflow: ellipsis;" [title]="cell.value">{{cell.value}}</div>
+          </div>
+          <div *dxTemplate="let cell of 'lastUpdateCellTemplate'">
+            <div [title]="cell.data.extendedLastUpdate">{{cell.value ? (cell.value | date:'yyyy-MM-dd') : '-'}}</div>
+          </div>
+        </dx-data-grid>
+      </div>
+      <div *ngIf="tabLoaded03[8]" [hidden]="activeTab03 !== 8">
+        <h6 class="text-truncate">Vendor (records)</h6>
+        <dx-data-grid style="max-height: 450px;" [dataSource]="dataSource['VENDOR']" [hoverStateEnabled]="true"
+          [allowColumnResizing]="true" columnResizingMode="widget" [showBorders]="true">
+          <dxo-sorting mode="none"></dxo-sorting>
+
+          <dxi-column dataField="OBJECT" caption="Object" cellTemplate="objectCellTemplate"></dxi-column>
+          <dxi-column dataField="COUNT" caption="Count" dataType="number" [format]="{type: 'fixedPoint', precision: 0}"
+            width="auto">
+          </dxi-column>
+          <dxi-column dataField="LASTUPDATE" caption="Last Update" width="auto"
+            cellTemplate="lastUpdateCellTemplate"></dxi-column>
+          <div *dxTemplate="let cell of 'objectCellTemplate'">
+            <div style="overflow-x: clip; text-overflow: ellipsis;" [title]="cell.value">{{cell.value}}</div>
+          </div>
+          <div *dxTemplate="let cell of 'lastUpdateCellTemplate'">
+            <div [title]="cell.data.extendedLastUpdate">{{cell.value ? (cell.value | date:'yyyy-MM-dd') : '-'}}</div>
+          </div>
+        </dx-data-grid>
+      </div>
+    </div>
+
+
+
+    <div class="box p-3">
+      <h6 class="text-truncate">MDM Inbound (records)</h6>
+      <dx-data-grid style="max-height: 400px;" [dataSource]="dataSource['MDM']" [hoverStateEnabled]="true"
+        [allowColumnResizing]="true" columnResizingMode="widget" [showBorders]="true">
+        <dxo-sorting mode="none"></dxo-sorting>
+
+        <dxi-column dataField="OBJECT" caption="Object" cellTemplate="objectCellTemplate"></dxi-column>
+        <dxi-column dataField="COUNT" caption="Count" dataType="number" [format]="{type: 'fixedPoint', precision: 0}"
+          width="auto">
+        </dxi-column>
+        <dxi-column dataField="LASTUPDATE" caption="Last Update" width="auto"
+          cellTemplate="lastUpdateCellTemplate"></dxi-column>
+        <div *dxTemplate="let cell of 'objectCellTemplate'">
+          <div style="overflow-x: clip; text-overflow: ellipsis;" [title]="cell.value">{{cell.value}}</div>
+        </div>
+        <div *dxTemplate="let cell of 'lastUpdateCellTemplate'">
+          <div [title]="cell.data.extendedLastUpdate">{{cell.value ? (cell.value | date:'yyyy-MM-dd') : '-'}}</div>
+        </div>
+      </dx-data-grid>
+    </div>
+    <div class="box p-3">
+      <h6 class="text-truncate">FIESTA Blacklist (records)</h6>
+      <dx-data-grid style="max-height: 400px;" [dataSource]="dataSource['BLK']" [hoverStateEnabled]="true"
+        [allowColumnResizing]="true" columnResizingMode="widget" [showBorders]="true">
+        <dxo-sorting mode="none"></dxo-sorting>
+
+        <dxi-column dataField="OBJECT" caption="Object" cellTemplate="objectCellTemplate"></dxi-column>
+        <dxi-column dataField="COUNT" caption="Count" dataType="number" [format]="{type: 'fixedPoint', precision: 0}"
+          width="auto">
+        </dxi-column>
+        <dxi-column dataField="LASTUPDATE" caption="Last Update" width="auto"
+          cellTemplate="lastUpdateCellTemplate"></dxi-column>
+        <div *dxTemplate="let cell of 'objectCellTemplate'">
+          <div style="overflow-x: clip; text-overflow: ellipsis;" [title]="cell.value">{{cell.value}}</div>
+        </div>
+        <div *dxTemplate="let cell of 'lastUpdateCellTemplate'">
+          <div [title]="cell.data.extendedLastUpdate">{{cell.value ? (cell.value | date:'yyyy-MM-dd') : '-'}}</div>
+        </div>
+      </dx-data-grid>
+    </div>
+    <div class="box p-3">
+      <h6 class="text-truncate">FIESTA S4 Initial Load Views (records)</h6>
+      <dx-data-grid style="max-height: 400px;" [dataSource]="dataSource['S4']" [hoverStateEnabled]="true"
+        [allowColumnResizing]="true" columnResizingMode="widget" [showBorders]="true">
+        <dxo-sorting mode="none"></dxo-sorting>
+
+        <dxi-column dataField="OBJECT" caption="Object" cellTemplate="objectCellTemplate"></dxi-column>
+        <dxi-column dataField="COUNT" caption="Count" dataType="number" [format]="{type: 'fixedPoint', precision: 0}"
+          width="auto">
+        </dxi-column>
+        <dxi-column dataField="LASTUPDATE" caption="Last Update" width="auto"
+          cellTemplate="lastUpdateCellTemplate"></dxi-column>
+        <div *dxTemplate="let cell of 'objectCellTemplate'">
+          <div style="overflow-x: clip; text-overflow: ellipsis;" [title]="cell.value">{{cell.value}}</div>
+        </div>
+        <div *dxTemplate="let cell of 'lastUpdateCellTemplate'">
+          <div [title]="cell.data.extendedLastUpdate">{{cell.value ? (cell.value | date:'yyyy-MM-dd') : '-'}}</div>
+        </div>
+      </dx-data-grid>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,67 @@
+<app-page-title [PageTitle]="PageTitle"></app-page-title>
+
+<div class="content">
+  <app-no-view-permission *ngIf="!pagePermission.view"></app-no-view-permission>
+
+  <app-delta-upload [columnConfig]="deltaUploadColumnConfig" [dataGrid]="dataGrid" [PageTitle]="PageTitle"
+    [endpoint]="endpoint"></app-delta-upload>
+
+  <app-config-history-popup [columns]="historyColumnConfig" [endpoint]="endpoint">
+  </app-config-history-popup>
+
+  <div *ngIf="pagePermission.view" class="container-fluid">
+    <div class="card">
+      <div class="card-body">
+        <dx-data-grid [dataSource]="dataSource" [columns]="columnConfig" [remoteOperations]="true" [showBorders]="true"
+          [showColumnLines]="true" [showRowLines]="true" [rowAlternationEnabled]="true" [allowColumnResizing]="true"
+          [allowColumnReordering]="true" [hoverStateEnabled]="true" columnResizingMode="widget"
+          [repaintChangesOnly]="true" [columnMinWidth]="50" [columnAutoWidth]="true"
+          (onEditorPreparing)="onEditorPreparing($event)" (onInitNewRow)="onInitNewRow($event)"
+          (onRowInserting)="postGridRow($event, 'create')" (onRowUpdating)="postGridRow($event, 'edit')"
+          (onRowInserted)="postedGridRow($event, 'create')" (onRowUpdated)="postedGridRow($event, 'edit')"
+          (onExporting)="onExporting($event, PageTitle)" (onEditingStart)="onEditingStart($event)">
+
+          <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+          <dxo-scrolling [useNative]="true"></dxo-scrolling>
+          <dxo-header-filter [visible]="true">
+            <dxo-search [enabled]="true"></dxo-search>
+          </dxo-header-filter>
+          <dxo-filter-row [visible]="true"></dxo-filter-row>
+          <dxo-paging [enabled]="true" [pageSize]="30"></dxo-paging>
+          <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[20, 30, 40]" [showInfo]="true" [visible]="true">
+          </dxo-pager>
+          <dxo-group-panel [visible]="true"></dxo-group-panel>
+          <dxo-export [enabled]="true"></dxo-export>
+          <dxo-sorting mode="multiple"></dxo-sorting>
+          <dxo-editing mode="popup" [allowAdding]="pagePermission.create" [allowUpdating]="pagePermission.edit"
+            [allowDeleting]="pagePermission.delete">
+            <dxo-popup>
+              <dxi-toolbar-item toolbar="bottom" widget="dxButton" location="after" [options]="approveButtonOptions"
+                [visible]="showApprovalButton">
+              </dxi-toolbar-item>
+              <dxi-toolbar-item toolbar="bottom" widget="dxButton" location="after" [options]="rejectButtonOptions"
+                [visible]="showApprovalButton">
+              </dxi-toolbar-item>
+              <dxi-toolbar-item toolbar="bottom" widget="dxButton" location="after" [options]="saveButtonOptions"
+                [visible]="!showApprovalButton" [disabled]="saveButtonDisabled()">
+              </dxi-toolbar-item>
+              <dxi-toolbar-item toolbar="bottom" widget="dxButton" location="after" [options]="cancelButtonOptions">
+              </dxi-toolbar-item>
+            </dxo-popup>
+          </dxo-editing>
+          <dxo-toolbar>
+            <dxi-item name="groupPanel" locateInMenu="auto"></dxi-item>
+            <dxi-item locateInMenu="auto" [visible]="pagePermission.edit">
+              <div *dxTemplate>
+                <dx-button hint="Delta Upload" icon="upload" (onClick)="openDeltaUpload()">
+                </dx-button>
+              </div>
+            </dxi-item>
+            <dxi-item name="addRowButton"></dxi-item>
+            <dxi-item name="exportButton"></dxi-item>
+          </dxo-toolbar>
+        </dx-data-grid>
+      </div>
+    </div>
+  </div>
+</div>

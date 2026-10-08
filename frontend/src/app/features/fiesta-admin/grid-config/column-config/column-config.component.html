@@ -1,0 +1,86 @@
+<dx-data-grid #columnCfgDataGrid [dataSource]="dataSource" [showBorders]="true" [showColumnLines]="true"
+  [showRowLines]="true" [rowAlternationEnabled]="true" [allowColumnResizing]="true" [allowColumnReordering]="true"
+  [hoverStateEnabled]="true" columnResizingMode="widget" [repaintChangesOnly]="true" [columnMinWidth]="50"
+  [columnAutoWidth]="true" (onSaved)="updateColumnCfg()" (onInitNewRow)="onColumnCfgInitNewRow($event)"
+  (onContentReady)="dataGrid.instance.updateDimensions()" (onExporting)="onExporting($event, 'export')">
+
+  <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+  <dxo-scrolling [useNative]="true"></dxo-scrolling>
+  <dxo-header-filter [visible]="true">
+    <dxo-search [enabled]="true"></dxo-search>
+  </dxo-header-filter>
+  <dxo-filter-row [visible]="true"></dxo-filter-row>
+  <dxo-paging [enabled]="true" [pageSize]="999"></dxo-paging>
+  <dxo-group-panel [visible]="true"></dxo-group-panel>
+  <dxo-export [enabled]="true"></dxo-export>
+  <dxo-sorting mode="multiple"></dxo-sorting>
+  <dxo-editing mode="batch" [selectTextOnEditStart]="true" newRowPosition="last" [(changes)]="columnCfgChanges"
+    [allowAdding]="pagePermission.create" [allowUpdating]="pagePermission.edit" [allowDeleting]="true">
+  </dxo-editing>
+  <dxo-keyboard-navigation [editOnKeyPress]="true" enterKeyAction="moveFocus" enterKeyDirection="column">
+  </dxo-keyboard-navigation>
+  <dxo-toolbar>
+    <dxi-item name="groupPanel"></dxi-item>
+    <dxi-item locateInMenu="auto">
+      <div *dxTemplate>
+        <dx-button icon="refresh" [focusStateEnabled]="false" (onClick)="onReloadClick.emit()">
+        </dx-button>
+      </div>
+    </dxi-item>
+    <dxi-item locateInMenu="auto">
+      <div *dxTemplate>
+        <dx-button text="Mark All Delete" [focusStateEnabled]="false" (onClick)="onMarkAllDeleteClick()">
+        </dx-button>
+      </div>
+    </dxi-item>
+    <dxi-item name="addRowButton"></dxi-item>
+    <dxi-item name="saveButton"></dxi-item>
+    <dxi-item name="revertButton"></dxi-item>
+    <dxi-item name="exportButton"></dxi-item>
+  </dxo-toolbar>
+
+  <dxi-column dataField="CFG_SYS_COLUMN_CONFIG_ID" caption="Column ID" [allowEditing]="false"
+    [visible]="false"></dxi-column>
+  <dxi-column dataField="CFG_SYS_TABLE_CONFIG_ID" caption="Table ID" [allowEditing]="false"
+    [visible]="false"></dxi-column>
+  <dxi-column dataField="visibleIndex" caption="visibleIndex">
+    <dxi-validation-rule type="required"></dxi-validation-rule>
+  </dxi-column>
+  <dxi-column dataField="visible" caption="visible" [editorOptions]='{searchEnabled: false}'>
+    <dxi-validation-rule type="required"></dxi-validation-rule>
+    <dxo-lookup [dataSource]="['true', 'false']">
+    </dxo-lookup>
+  </dxi-column>
+  <dxi-column dataField="dataField" caption="dataField">
+    <dxi-validation-rule type="required"></dxi-validation-rule>
+    <dxi-validation-rule type="custom" message="Field has to be unique" [reevaluate]="true"
+      [validationCallback]="validateFieldIsUnique"></dxi-validation-rule>
+  </dxi-column>
+  <dxi-column dataField="caption" caption="caption">
+    <dxi-validation-rule type="required"></dxi-validation-rule>
+  </dxi-column>
+  <dxi-column dataField="dataType" caption="dataType" [editorOptions]='{searchEnabled: false}'>
+    <dxi-validation-rule type="required"></dxi-validation-rule>
+    <dxo-lookup [dataSource]="['date', 'datetime', 'number', 'string', 'boolean']">
+    </dxo-lookup>
+  </dxi-column>
+  <dxi-column dataField="format" caption="format"></dxi-column>
+  <dxi-column dataField="sortIndex" caption="sortIndex"></dxi-column>
+  <dxi-column dataField="sortOrder" caption="sortOrder" [editorOptions]='{searchEnabled: false, showClearButton: true}'>
+    <dxo-lookup [dataSource]="['asc', 'desc']">
+    </dxo-lookup>
+  </dxi-column>
+  <dxi-column dataField="width" caption="width" dataType="number"></dxi-column>
+  <dxi-column dataField="ACTIVE" caption="ACTIVE" [editorOptions]='{searchEnabled: false}'>
+    <dxo-lookup [dataSource]="booleanDataSource" displayExpr="Value" valueExpr="Key">
+    </dxo-lookup>
+  </dxi-column>
+  <dxi-column dataField="_fixed" caption="_fixed" [allowEditing]="false" [visible]="false"></dxi-column>
+  <dxi-column dataField="fixedPosition" caption="fixedPosition" [allowEditing]="false" [visible]="false"></dxi-column>
+  <dxi-column dataField="CFG_SYS_TABLE_CONFIG" caption="CFG_SYS_TABLE_CONFIG" [allowEditing]="false"
+    [visible]="false"></dxi-column>
+
+  <dxi-column type="buttons" fixed="true" fixedPosition="right">
+    <dxi-button name="delete"></dxi-button>
+  </dxi-column>
+</dx-data-grid>

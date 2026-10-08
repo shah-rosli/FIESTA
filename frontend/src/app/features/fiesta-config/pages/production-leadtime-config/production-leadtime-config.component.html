@@ -1,0 +1,30 @@
+<app-page-title [PageTitle]="PageTitle"></app-page-title>
+
+<div class="content">
+  <app-no-view-permission *ngIf="!pagePermission.view"></app-no-view-permission>
+
+  <div *ngIf="pagePermission.view" class="container-fluid">
+    <div class="card">
+      <div class="card-body">
+        <nav>
+          <div class="nav nav-tabs">
+            <a class="nav-item nav-link" role="button" [ngClass]="{'active': activeTab === 0}" (click)="onTabClick(0)">
+              By Group Stage
+            </a>
+            <a class="nav-item nav-link" role="button" [ngClass]="{'active': activeTab === 1}" (click)="onTabClick(1)">
+              By GLM Stage
+            </a>
+          </div>
+        </nav>
+        <div class="pt-2">
+          <div *ngIf="activeTab === 0">
+            <app-production-leadtime-by-gs></app-production-leadtime-by-gs>
+          </div>
+          <div *ngIf="activeTab === 1">
+            <app-production-leadtime-by-glm></app-production-leadtime-by-glm>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

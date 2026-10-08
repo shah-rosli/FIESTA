@@ -1,0 +1,20 @@
+<app-page-title [PageTitle]="PageTitle"></app-page-title>
+
+<section class="error-section">
+  <div class="error-page">
+    <h2 class="headline text-danger"><i class="fas fa-exclamation-triangle text-danger"></i></h2>
+
+    <div class="error-content">
+      <h3>{{this.base.getMessage("Not authorized!")}}</h3>
+      <p>
+        {{this.base.getMessage("You are trying to login via ")}} <b>{{msToken}}</b><br />
+        {{this.base.getMessage("We are sorry but you don't have authorization to access this site.")}}<br />
+        {{this.base.getMessage("This site is using Single Sign On login. You may check with System Admin for more
+        details.")}}
+      </p>
+      <button type="button" class="btn btn-block btn-secondary customButtonWidth" (click)="onClickLogin()">
+        {{this.base.getMessage('Re-login')}}
+      </button>
+    </div>
+  </div>
+</section>

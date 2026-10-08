@@ -1,0 +1,35 @@
+:host ::ng-deep .dx-datagrid-headers .dx-header-row td.rotated-header-lb {
+  writing-mode: sideways-lr;
+  vertical-align: middle !important;
+  background-color: #2589c7;
+}
+
+:host ::ng-deep .dx-datagrid-headers .dx-header-row td.rotated-header {
+  writing-mode: sideways-lr;
+  vertical-align: middle !important;
+}
+
+:host ::ng-deep .dx-datagrid-headers .dx-header-row td.rotated-header-green {
+  writing-mode: sideways-lr;
+  vertical-align: middle !important;
+  background-color: #42a845;
+}
+
+:host ::ng-deep td.left-bottom-header[role="columnheader"] {
+  vertical-align: bottom !important;
+}
+
+:host ::ng-deep td.rotated-header[role="gridcell"] {
+  text-align: center !important;
+}
+
+:host ::ng-deep td.rotated-header-green[role="gridcell"] {
+  text-align: right !important;
+}
+
+
+.multi-line-header {
+  white-space: normal;
+  text-align: center;
+  line-height: 1.2;
+}

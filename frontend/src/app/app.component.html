@@ -1,0 +1,38 @@
+<app-page-loader [loader]="routerPageLoader.loading"></app-page-loader>
+
+<ng-container *ngIf="loginDisplay && readyToPopulateRouterURL">
+  <ng-container *ngIf="isTemplate()" [ngTemplateOutlet]="AuthTemplate"></ng-container>
+  <ng-container *ngIf="!isTemplate()" [ngTemplateOutlet]="NoAuthTemplate"></ng-container>
+</ng-container>
+
+<ng-template #AuthTemplate>
+
+  <app-login *ngIf="ssoInProgress"></app-login>
+
+  <div class="app-wrapper" *ngIf="!ssoInProgress">
+    <app-sidebar></app-sidebar>
+    <div class="app-main-wrapper">
+      <app-header></app-header>
+      <main class="app-main">
+        <router-outlet></router-outlet>
+        <div class="sidebar-overlay" (click)="sidebarOverlayClicked()"></div>
+      </main>
+      <app-footer></app-footer>
+    </div>
+  </div>
+
+</ng-template>
+
+<!-- NoAuthTemplate is a variant of the UI layout with router-outlet only -->
+<!--open incognito, it will use this template, after login success, it go this template (msalguard already set redirectpage)
+     so need to put loader. loader will getting sidemenubar too-->
+<ng-template #NoAuthTemplate>
+
+  <app-login *ngIf="ssoInProgress"></app-login>
+
+  <div *ngIf="!ssoInProgress">
+    <!--This is to avoid reload during acquireTokenSilent() because of hidden iframe -->
+    <router-outlet *ngIf="!isIframe"></router-outlet>
+  </div>
+
+</ng-template>

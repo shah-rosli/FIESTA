@@ -1,0 +1,4 @@
+.fill-height-layout {
+  // total viewport height - header - <main>'s padding-bottom - footer
+  height: calc(100vh - 2.75rem - 0.75rem - 2rem);
+}

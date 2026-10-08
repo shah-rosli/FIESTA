@@ -1,0 +1,8 @@
+:host ::ng-deep .dx-datagrid .dx-column-lines {
+  line-height: normal !important;
+  font-size: 11px !important;
+}
+
+:host ::ng-deep .custom-grid-header>.dx-header-filter-indicator {
+  white-space: normal !important;
+}

@@ -1,0 +1,55 @@
+<nav class="mt-2 overflow-x-hidden">
+  <ul class="nav sidebar-menu flex-column" role="menu">
+
+    <li class="nav-header mb-2">
+      <dx-text-box placeholder="{{'Search menu'}} ..." [showClearButton]="true" valueChangeEvent="keyup"
+        (onValueChanged)="MenuFitler($event)">
+      </dx-text-box>
+    </li>
+
+    <ng-container *ngFor="let menuLevel1 of SideMenuData">
+      <li *ngIf="!menuLevel1.SideMenu" class="nav-item">
+        <a role="button" class="nav-link" [class.active]="menuLevel1.active" [routerLink]="getLink(menuLevel1.Link)">
+          <i class="nav-icon {{menuLevel1.Icon}}"></i>
+          <p>{{ menuLevel1.Desc }}</p>
+        </a>
+      </li>
+      <li *ngIf="menuLevel1.SideMenu" class="nav-item" [class.menu-open]="menuLevel1.extend">
+        <a role="button" class="nav-link" [class.active]="menuLevel1.active" (click)="toggleMenuExtend(menuLevel1)"
+          [title]="menuLevel1.Desc">
+          <i class="nav-icon {{menuLevel1.Icon}}"></i>
+          <p>{{ menuLevel1.Desc }}<i class="nav-arrow fa fa-angle-right"></i></p>
+        </a>
+        <ul class="nav nav-treeview">
+          <ng-container *ngFor="let menuLevel2 of menuLevel1.SideMenu">
+            <li *ngIf="!menuLevel2.SideMenu" class="nav-item">
+              <a role="button" class="nav-link" [class.active]="menuLevel2.active"
+                [routerLink]="getLink(menuLevel2.Link)" [title]="menuLevel2.Desc">
+                <i class="nav-icon {{menuLevel2.Icon}}"></i>
+                <p>{{ menuLevel2.Desc }}</p>
+              </a>
+            </li>
+            <li *ngIf="menuLevel2.SideMenu" class="nav-item" [class.menu-open]="menuLevel2.extend">
+              <a role="button" class="nav-link" [class.active]="menuLevel2.active"
+                (click)="toggleMenuExtend(menuLevel2)" [title]="menuLevel2.Desc">
+                <i class="nav-icon {{menuLevel2.Icon}}"></i>
+                <p>{{ menuLevel2.Desc }}<i class="nav-arrow fa fa-angle-right"></i></p>
+              </a>
+              <ul class="nav nav-treeview">
+                <ng-container *ngFor="let menuLevel3 of menuLevel2.SideMenu">
+                  <li *ngIf="!menuLevel3.SideMenu" class="nav-item">
+                    <a role="button" class="nav-link" [class.active]="menuLevel3.active"
+                      [routerLink]="getLink(menuLevel3.Link)" [title]="menuLevel3.Desc">
+                      <i class="nav-icon {{menuLevel3.Icon}}"></i>
+                      <p>{{ menuLevel3.Desc }}</p>
+                    </a>
+                  </li>
+                </ng-container>
+              </ul>
+            </li>
+          </ng-container>
+        </ul>
+      </li>
+    </ng-container>
+  </ul>
+</nav>

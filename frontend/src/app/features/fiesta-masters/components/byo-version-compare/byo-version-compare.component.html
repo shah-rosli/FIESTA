@@ -1,0 +1,96 @@
+<dx-popup height="90%" width="90%" [showTitle]="true" [title]="title" [dragEnabled]="true" [hideOnOutsideClick]="true"
+  [(visible)]="visible" (onHidden)="onHidden()">
+  <ng-container *dxTemplate="let data of 'content'">
+    <div class="card">
+      <div class="card-body">
+        <div *ngIf="loading">
+          <dx-load-indicator class="block center" id="large-indicator" height="40" width="40"></dx-load-indicator>
+        </div>
+
+        <ng-container *ngIf="!loading">
+
+          <!-- <dx-button class="btn-xs" type="success" text="testing" (onClick)="onPurgeBackGroundColor()"></dx-button> -->
+
+          <div style="display: flex; flex-direction: column; height: 100%; gap: 10px;">
+            <!-- grid 1 -->
+            <div style="flex: 0 0 45%; overflow: hidden;">
+
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                <div>
+                  <span style="font-weight: 600;">{{ revisionLabel_1 }}</span>{{ revision_1 }}
+                </div>
+
+                <dx-select-box class="hidden-select" [dataSource]="dataSource_ddl_1" displayExpr="prefixChangeOrder"
+                  valueExpr="prefixChangeOrder" placeholder="Select version" width="200"
+                  [(value)]="selectedUpperVersion" (onValueChanged)="onUpperDDLChanged($event)">
+                </dx-select-box>
+              </div>
+
+              <dx-data-grid #upperDataGrid class="h-100" height="100%" [dataSource]="upperDataSource"
+                [showBorders]="true" [showColumnLines]="true" [showRowLines]="true" [rowAlternationEnabled]="false"
+                [allowColumnResizing]="true" [allowColumnReordering]="true" [hoverStateEnabled]="true"
+                columnResizingMode="widget" [columnMinWidth]="50" [columnAutoWidth]="true" [columns]="columnsConfig"
+                (onContentReady)="onContentReady()">
+
+                <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+                <dxo-scrolling [useNative]="true"></dxo-scrolling>
+                <dxo-header-filter [visible]="true">
+                  <dxo-search [enabled]="true"></dxo-search>
+                </dxo-header-filter>
+                <dxo-filter-row [visible]="true"></dxo-filter-row>
+                <dxo-paging [enabled]="true" [pageSize]="30"></dxo-paging>
+                <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[20, 30, 40]" [showInfo]="true"
+                  [visible]="true">
+                </dxo-pager>
+                <!-- <dxo-group-panel [visible]="true"></dxo-group-panel> -->
+                <!-- <dxo-export [enabled]="true"></dxo-export> -->
+                <dxo-sorting mode="multiple"></dxo-sorting>
+              </dx-data-grid>
+            </div>
+
+            <br>
+
+            <!-- grid 2 -->
+            <div style="flex: 0 0 45%; overflow: hidden;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                <div>
+                  <span style="font-weight: 600;">{{ revisionLabel_2 }}</span>{{ revision_2 }}
+                </div>
+
+                <dx-select-box class="hidden-select" [dataSource]="dataSource_ddl_2" displayExpr="prefixChangeOrder"
+                  valueExpr="prefixChangeOrder" placeholder="Select version" width="200"
+                  [(value)]="selectedLowerVersion" (onValueChanged)="onLowerDDLChanged($event)">
+                </dx-select-box>
+              </div>
+              <dx-data-grid #lowerDataGrid class="h-100" height="100%" [dataSource]="lowerDataSource"
+                [showBorders]="true" [showColumnLines]="true" [showRowLines]="true" [rowAlternationEnabled]="false"
+                [allowColumnResizing]="true" [allowColumnReordering]="true" [hoverStateEnabled]="true"
+                columnResizingMode="widget" [columnMinWidth]="50" [columnAutoWidth]="true" [columns]="columnsConfig"
+                (onContentReady)="onContentReady()">
+
+                <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+                <dxo-scrolling [useNative]="true"></dxo-scrolling>
+                <dxo-header-filter [visible]="true">
+                  <dxo-search [enabled]="true"></dxo-search>
+                </dxo-header-filter>
+                <dxo-filter-row [visible]="true"></dxo-filter-row>
+                <dxo-paging [enabled]="true" [pageSize]="30"></dxo-paging>
+                <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[20, 30, 40]" [showInfo]="true"
+                  [visible]="true">
+                </dxo-pager>
+                <!-- <dxo-group-panel [visible]="true"></dxo-group-panel> -->
+                <!-- <dxo-export [enabled]="true"></dxo-export> -->
+                <dxo-sorting mode="multiple"></dxo-sorting>
+              </dx-data-grid>
+            </div>
+          </div>
+
+
+
+        </ng-container>
+      </div>
+    </div>
+  </ng-container>
+
+
+</dx-popup>

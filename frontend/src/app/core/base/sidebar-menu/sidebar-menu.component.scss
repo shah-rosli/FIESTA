@@ -1,0 +1,24 @@
+// prevent select when repeatedly click quickly
+:host {
+  user-select: none;
+}
+
+// reduce space between menu icon and menu text
+.sidebar-menu .nav-link p {
+  padding-left: 0.25rem;
+}
+
+// increase icon size
+.nav-link i {
+  font-size: 1.1rem;
+}
+
+// remove animation for nav-arrow
+.sidebar-menu .nav-item>.nav-link .nav-arrow {
+  animation: none;
+}
+
+// hide nav-item with "hidden-menu"
+li.nav-item:has(.nav-icon.hidden-menu) {
+  display: none;
+}

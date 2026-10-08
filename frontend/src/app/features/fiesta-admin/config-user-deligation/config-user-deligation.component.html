@@ -1,0 +1,140 @@
+<!-- <app-page-title [PageTitle]=PageTitle></app-page-title> -->
+<section class="content-header">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-10">
+        <h1>{{PageTitle}}</h1>
+      </div>
+      <div class="col-sm-2 text-right">
+        <!-- <button type="button" class="btn btn-block btn-default btn-xs" (click)="openDelegationHisotry()"><i class="fas fa-copy"></i>   {{this.base.getMessage("Delegation History")}}</button> -->
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="content">
+  <div class="error-page" *ngIf="!PermissionForView">
+    <br /><br /><br /><br /><br /><br /><br />
+    <h2 class="headline text-info"><i class="fas fa-frown-open text-info"></i></h2>
+
+    <div class="error-content">
+      <h3>{{this.base.getMessage("Psstt... you don't have 'create' Permission on this page ")}}</h3>
+      <p>
+        {{this.base.getMessage(" Please check with System Admin.")}}
+
+      </p>
+
+    </div>
+  </div>
+
+  <div class="container-fluid" *ngIf="PermissionForView">
+
+    <!-- <div class="container-fluid"  > -->
+
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="card card-default">
+
+          <div class="card-body">
+            <app-page-loader [loader]="pageIsLoading"></app-page-loader>
+            <div class="row">
+              <div class="col-md-12">
+
+                <dx-form labelLocation="top">
+                  <dxi-item itemType="group" [colCount]="2">
+                    <dxi-item [label]="{text: this.base.getMessage('Delegator')}"
+                      [validationRules]="[{ type: 'required' }]">
+                      <div *dxTemplate>
+                        <dx-drop-down-box [(value)]="SelectedDeligator" valueExpr="USER_ID"
+                          [displayExpr]="getUserDisplayExpr" [showClearButton]="true" [dataSource]="userListStore"
+                          [(opened)]="requestorOpened1">
+                          <div *dxTemplate="let data of 'content'">
+                            <dx-data-grid [dataSource]="userListStore" [selection]="{ mode: 'single' }"
+                              [hoverStateEnabled]="true" [paging]="{ enabled: true, pageSize: 10 }"
+                              [filterRow]="{ visible: true }" [scrolling]="{ columnRenderingMode:'virtual' }"
+                              [height]="265" [(selectedRowKeys)]="SelectedDeligator"
+                              (onSelectionChanged)="onRequestorChangeDeligator($event)">
+                              <dxi-column dataField="USER_DS_NUMBER" [caption]="this.base.getMessage('DS Number')"
+                                width="100px"></dxi-column>
+                              <dxi-column dataField="USER_FULL_NAME" [caption]="this.base.getMessage('User Full Name')"
+                                sortOrder="asc"></dxi-column>
+                              <dxi-column dataField="USER_EMAIL" [caption]="this.base.getMessage('Email')"></dxi-column>
+                            </dx-data-grid>
+                          </div>
+                        </dx-drop-down-box>
+                      </div>
+                    </dxi-item>
+                    <dxi-item [label]="{text: this.base.getMessage('Delegatee')}"
+                      [validationRules]="[{ type: 'required' }]">
+                      <div *dxTemplate>
+                        <dx-drop-down-box [(value)]="SelectedRequestor" valueExpr="USER_ID"
+                          [displayExpr]="getUserDisplayExpr" [showClearButton]="true" [dataSource]="userListStore"
+                          [(opened)]="requestorOpened">
+                          <div *dxTemplate="let data of 'content'">
+                            <dx-data-grid [dataSource]="userListStore" [selection]="{ mode: 'single' }"
+                              [hoverStateEnabled]="true" [paging]="{ enabled: true, pageSize: 10 }"
+                              [filterRow]="{ visible: true }" [scrolling]="{ columnRenderingMode:'virtual' }"
+                              [height]="265" [(selectedRowKeys)]="SelectedRequestor"
+                              (onSelectionChanged)="onRequestorChange($event)">
+                              <dxi-column dataField="USER_DS_NUMBER" [caption]="this.base.getMessage('DS Number')"
+                                width="100px"></dxi-column>
+                              <dxi-column dataField="USER_FULL_NAME" [caption]="this.base.getMessage('User Full Name')"
+                                sortOrder="asc"></dxi-column>
+                              <dxi-column dataField="USER_EMAIL" [caption]="this.base.getMessage('Email')"></dxi-column>
+                            </dx-data-grid>
+                          </div>
+                        </dx-drop-down-box>
+                      </div>
+                    </dxi-item>
+                  </dxi-item>
+                  <dxi-item itemType="group" [colCount]="2">
+                    <dxi-item [label]="{text: this.base.getMessage('Date From')}"
+                      [validationRules]="[{ type: 'required' }]">
+                      <div *dxTemplate>
+                        <dx-date-box type=date [acceptCustomValue]=false
+                          [placeholder]="this.base.getUserInfo('DEFAULT_DISP_DATE_FORMAT') + ' (' + this.base.getUserInfo('DEFAULT_TIMEZONE') + ')'"
+                          [displayFormat]="this.base.getUserInfo('DEFAULT_DISP_DATE_FORMAT')" [showClearButton]="true"
+                          dateSerializationFormat="yyyy-MM-ddTHH:mm:ss" [(value)]="DATE_FROM">
+                        </dx-date-box>
+                      </div>
+                    </dxi-item>
+
+                    <dxi-item [label]="{text: this.base.getMessage('Date To')}" dataType="Date"
+                      [validationRules]="[{ type: 'required' }]">
+                      <div *dxTemplate>
+                        <dx-date-box type=date [acceptCustomValue]=false
+                          [placeholder]="this.base.getUserInfo('DEFAULT_DISP_DATE_FORMAT') + ' (' + this.base.getUserInfo('DEFAULT_TIMEZONE') + ')'"
+                          [displayFormat]="this.base.getUserInfo('DEFAULT_DISP_DATE_FORMAT')" [showClearButton]="true"
+                          dateSerializationFormat="yyyy-MM-ddTHH:mm:ss" [(value)]="DATE_TO">
+                        </dx-date-box>
+                      </div>
+                    </dxi-item>
+                  </dxi-item>
+                  <dxi-item itemType="group" [colCount]="2">
+                    <dxi-item dataField="Remark" [validationRules]="[{ type: 'required' }]"
+                      [label]="{text: this.base.getMessage('Narration')}">
+                      <dx-text-box [(value)]="Remark"></dx-text-box>
+                    </dxi-item>
+                    <dxi-item dataField="EPR_CATEGORY" [label]="{text: this.base.getMessage('Active')}"
+                      [validationRules]="[{ type: 'required' }]">
+                      <div *dxTemplate>
+                        <dx-select-box [dataSource]="booleanDataSource" displayExpr="Value" valueExpr="Key"
+                          [(value)]="Active">
+                        </dx-select-box>
+                      </div>
+                    </dxi-item>
+                  </dxi-item>
+                  <dxi-item itemType="group" [colCount]="5">
+                    <dxi-item itemType="button" horizontalAlignment="left" [buttonOptions]="buttonOptions">
+                    </dxi-item>
+                  </dxi-item>
+                </dx-form>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

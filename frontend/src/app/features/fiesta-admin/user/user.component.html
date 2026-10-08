@@ -1,0 +1,277 @@
+<app-page-title [PageTitle]="PageTitle"></app-page-title>
+
+<app-page-loader [loader]="loading"></app-page-loader>
+
+<dx-popup height="90%" width="90%" [showTitle]="true" title="Audit Trail" [dragEnabled]="true"
+  [hideOnOutsideClick]="true" [(visible)]="historyPopupVisible">
+  <ng-container *dxTemplate="let data of 'content'">
+    <div class="card card-default h-100">
+      <div class="card-body h-100">
+        <div class="row h-100">
+          <div class="col-md-12 h-100">
+            <div *ngIf="historyLoadingIndicator" class="ParentLodingdiv">
+              <dx-load-indicator class="block center" id="large-indicator" height="40" width="40"></dx-load-indicator>
+            </div>
+
+            <ng-container *ngIf="!historyLoadingIndicator">
+              <dx-data-grid class="h-100" [dataSource]="HistoryData" [showBorders]="true" [showColumnLines]="true"
+                [showRowLines]="true" [rowAlternationEnabled]="false" [allowColumnResizing]="true"
+                [allowColumnReordering]="true" [hoverStateEnabled]="true" columnResizingMode="widget"
+                [columnMinWidth]="50" [columnAutoWidth]="true" (onExporting)="onExporting($event, 'export')">
+
+                <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+                <dxo-scrolling [useNative]="true"></dxo-scrolling>
+                <dxo-header-filter [visible]="true">
+                  <dxo-search [enabled]="true"></dxo-search>
+                </dxo-header-filter>
+                <dxo-filter-row [visible]="true"></dxo-filter-row>
+                <dxo-paging [enabled]="true" [pageSize]="30"></dxo-paging>
+                <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[20, 30, 40]" [showInfo]="true"
+                  [visible]="true">
+                </dxo-pager>
+                <dxo-group-panel [visible]="true"></dxo-group-panel>
+                <dxo-export [enabled]="true"></dxo-export>
+                <dxo-sorting mode="multiple"></dxo-sorting>
+
+                <dxi-column dataField="CFG_USER_HIS_ID" [caption]="'History ID'">
+                </dxi-column>
+                <dxi-column dataField="CFG_USER_HIS_DATE" [caption]="'History Date (UTC)'" dataType="datetime"
+                  sortOrder="desc">
+                </dxi-column>
+                <dxi-column dataField="MODIFIED_BY_EMAIL" [caption]="'Modified By'">
+                </dxi-column>
+                <dxi-column dataField="MODIFIED_BY_NAME" [caption]="'Modified By Name'">
+                </dxi-column>
+                <dxi-column dataField="MODIFIED_BY_DELNAME" [caption]="'Modified By Delegate'">
+                </dxi-column>
+                <dxi-column dataField="CFG_USER_ID" dataType="number" caption="ID"></dxi-column>
+                <dxi-column dataField="USER_ID" dataType="string" caption="User ID">
+                </dxi-column>
+                <dxi-column dataField="USER_EMAIL" dataType="string" caption="Email">
+                </dxi-column>
+                <dxi-column dataField="USER_FULL_NAME" dataType="string" caption="User Full Name">
+                </dxi-column>
+                <dxi-column dataField="USER_FIRST_NAME" dataType="string" caption="User First Name">
+                </dxi-column>
+                <dxi-column dataField="USER_LAST_NAME" dataType="string" caption="User Last Name">
+                </dxi-column>
+                <dxi-column dataField="USER_COMPANY_CODE" dataType="string" caption="Company">
+                  <dxo-lookup [dataSource]="companyDataSource" displayExpr="COMPANY_NAME" valueExpr="COMPANY_CODE">
+                  </dxo-lookup>
+                </dxi-column>
+                <dxi-column dataField="USER_LOCAL_TITLE" dataType="string" caption="Local Job Title">
+                </dxi-column>
+                <dxi-column dataField="USER_GLOBAL_TITLE" dataType="string" caption="Global Job Title">
+                </dxi-column>
+                <dxi-column dataField="GLOBAL_JOB_TITLE_CODE" dataType="string" caption="Global Job Title Code">
+                </dxi-column>
+                <dxi-column dataField="USER_GLOBAL_DIV" dataType="string" caption="Global Division">
+                </dxi-column>
+                <dxi-column dataField="USER_DEPT_CODE" dataType="string" caption="Department Code">
+                </dxi-column>
+                <dxi-column dataField="USER_DEPT_NAME" dataType="string" caption="Department Name">
+                </dxi-column>
+                <dxi-column dataField="USER_DEPT" dataType="string" caption="Department">
+                </dxi-column>
+                <dxi-column dataField="DEFAULT_LANGUAGE" dataType="string" caption="Default Language">
+                  <dxo-lookup [dataSource]="languageDataSource" displayExpr="PARAM_VALUE" valueExpr="PARAM_KEY">
+                  </dxo-lookup>
+                </dxi-column>
+                <dxi-column dataField="DEFAULT_TIMEZONE" dataType="string" caption="Default Timezone">
+                  <dxo-lookup [dataSource]="timezoneDataSource" displayExpr="PARAM_VALUE" valueExpr="PARAM_KEY">
+                  </dxo-lookup>
+                </dxi-column>
+                <dxi-column dataField="DEFAULT_DISP_DATE_FORMAT" dataType="string" caption="Default Date Format">
+                  <dxo-lookup [dataSource]="dateDataSource" displayExpr="PARAM_VALUE" valueExpr="PARAM_KEY">
+                  </dxo-lookup>
+                </dxi-column>
+                <dxi-column dataField="DEFAULT_DISP_TIME_FORMAT" dataType="string" caption="Default Time Format">
+                  <dxo-lookup [dataSource]="timeDataSource" displayExpr="PARAM_VALUE" valueExpr="PARAM_KEY">
+                  </dxo-lookup>
+                </dxi-column>
+                <dxi-column dataField="DEFAULT_DISP_DATETIME_FORMAT" dataType="string"
+                  caption="Default Date Time Format">
+                  <dxo-lookup [dataSource]="datetimeDataSource" displayExpr="PARAM_VALUE" valueExpr="PARAM_KEY">
+                  </dxo-lookup>
+                </dxi-column>
+                <dxi-column dataField="ACTIVE" dataType="string" caption="Active">
+                  <dxo-lookup [dataSource]="booleanDataSource" displayExpr="Value" valueExpr="Key">
+                  </dxo-lookup>
+                </dxi-column>
+              </dx-data-grid>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</dx-popup>
+
+<dx-popup height="90%" width="90%" [(visible)]="massInsertPopupVisible" (onHidden)="onMassInsertPopupHidden()">
+  <div *dxTemplate="let data of 'content'">
+    <div>
+      <p>This thing will get information from GAD "adwin.renesas.com".</p>
+      <dx-form [(formData)]="massInsertFormData" labelLocation="top" [showColonAfterLabel]="false"
+        style="width: 40rem;">
+        <dxi-item itemType="group">
+          <dxi-item dataField="emails" editorType="dxTextArea" [editorOptions]="{ height: 160 }">
+            <dxo-label text="For Mutiple Records - Enter in New Line"></dxo-label>
+          </dxi-item>
+        </dxi-item>
+        <dxi-item itemType="button" [buttonOptions]="massInsertButtonOptions"></dxi-item>
+      </dx-form>
+      <dx-data-grid class="mt-2" [dataSource]="massInsertDataSource" [showBorders]="true" [showColumnLines]="true"
+        [showRowLines]="true" [rowAlternationEnabled]="true" [allowColumnResizing]="true" [allowColumnReordering]="true"
+        [hoverStateEnabled]="true" columnResizingMode="widget" [repaintChangesOnly]="true" [columnMinWidth]="50"
+        [columnAutoWidth]="true">
+        <dxi-column dataField="Email"></dxi-column>
+        <dxi-column dataField="Ok"></dxi-column>
+        <dxi-column dataField="Message"></dxi-column>
+      </dx-data-grid>
+      <dx-button class="my-2" text="Insert Users" type="success" (onClick)="massInsertUser()"></dx-button>
+    </div>
+  </div>
+</dx-popup>
+
+<!-- Main content -->
+<div class="content">
+  <app-no-view-permission *ngIf="!pagePermission.view"></app-no-view-permission>
+
+  <div *ngIf="pagePermission.view" class="container-fluid">
+    <div class="card card-body">
+      <dx-data-grid [dataSource]="dataSource" [remoteOperations]="true" [showBorders]="true" [showColumnLines]="true"
+        [showRowLines]="true" [rowAlternationEnabled]="true" [allowColumnResizing]="true" [allowColumnReordering]="true"
+        [hoverStateEnabled]="true" columnResizingMode="widget" [repaintChangesOnly]="true" [columnMinWidth]="50"
+        [columnAutoWidth]="true" (onInitNewRow)="onInitNewRow($event)" (onRowUpdating)="postGridRow($event, 'edit')"
+        (onRowInserted)="postedGridRow($event, 'create')" (onRowUpdated)="postedGridRow($event, 'edit')"
+        (onRowRemoved)="postedGridRow($event, 'delete')" (onExporting)="onExporting($event, 'export')">
+
+        <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+        <dxo-scrolling [useNative]="true"></dxo-scrolling>
+        <dxo-header-filter [visible]="true">
+          <dxo-search [enabled]="true"></dxo-search>
+        </dxo-header-filter>
+        <dxo-filter-row [visible]="true"></dxo-filter-row>
+        <dxo-paging [enabled]="true" [pageSize]="30"></dxo-paging>
+        <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[20, 30, 40]" [showInfo]="true" [visible]="true">
+        </dxo-pager>
+        <dxo-group-panel [visible]="true"></dxo-group-panel>
+        <dxo-export [enabled]="true"></dxo-export>
+        <dxo-sorting mode="multiple"></dxo-sorting>
+        <dxo-editing mode="popup" refreshMode="full" [allowAdding]="pagePermission.create"
+          [allowUpdating]="pagePermission.edit" [allowDeleting]="pagePermission.delete">
+          <dxo-popup [onHidden]="onEditingHidden"></dxo-popup>
+        </dxo-editing>
+        <dxo-toolbar>
+          <dxi-item name="groupPanel" locateInMenu="auto"></dxi-item>
+          <dxi-item locateInMenu="right">
+            <dx-button text="Refresh user detail" (onClick)="refreshUserDetail()">
+            </dx-button>
+          </dxi-item>
+          <dxi-item locateInMenu="right">
+            <dx-button text="Mass Insert" (onClick)="massInsertPopupVisible = true">
+            </dx-button>
+          </dxi-item>
+          <dxi-item name="addRowButton"></dxi-item>
+          <dxi-item name="exportButton"></dxi-item>
+        </dxo-toolbar>
+
+        <dxi-column dataField="CFG_USER_ID" dataType="number" [allowEditing]="false" caption="ID" sortOrder="asc"
+          [fixed]="true"></dxi-column>
+        <dxi-column dataField="USER_ID" dataType="string" caption="User ID" [editorOptions]="{ maxLength: 20 }"
+          [fixed]="true">
+          <dxi-validation-rule type="required"></dxi-validation-rule>
+        </dxi-column>
+        <dxi-column dataField="USER_EMAIL" dataType="string" caption="Email" [editorOptions]="{ maxLength: 100 }"
+          [fixed]="true">
+          <dxi-validation-rule type="required"></dxi-validation-rule>
+        </dxi-column>
+        <dxi-column dataField="USER_FULL_NAME" dataType="string" caption="User Full Name"
+          [editorOptions]="{ maxLength: 100 }">
+          <dxi-validation-rule type="required"></dxi-validation-rule>
+        </dxi-column>
+        <dxi-column dataField="USER_FIRST_NAME" dataType="string" caption="User First Name"
+          [editorOptions]="{ maxLength: 100 }">
+          <dxi-validation-rule type="required"></dxi-validation-rule>
+        </dxi-column>
+        <dxi-column dataField="USER_LAST_NAME" dataType="string" caption="User Last Name"
+          [editorOptions]="{ maxLength: 100 }">
+          <dxi-validation-rule type="required"></dxi-validation-rule>
+        </dxi-column>
+        <dxi-column dataField="USER_COMPANY_CODE" dataType="string" caption="Company">
+          <dxi-validation-rule type="required"></dxi-validation-rule>
+          <dxo-lookup [dataSource]="companyDataSource" displayExpr="COMPANY_NAME" valueExpr="COMPANY_CODE">
+          </dxo-lookup>
+        </dxi-column>
+        <dxi-column dataField="USER_LOCAL_TITLE" dataType="string" caption="Local Job Title"
+          [editorOptions]="{ maxLength: 1000 }">
+        </dxi-column>
+        <dxi-column dataField="USER_GLOBAL_TITLE" dataType="string" caption="Global Job Title"
+          [editorOptions]="{ maxLength: 1000 }">
+        </dxi-column>
+        <dxi-column dataField="GLOBAL_JOB_TITLE_CODE" dataType="string" caption="Global Job Title Code"
+          [editorOptions]="{ maxLength: 100 }">
+        </dxi-column>
+        <dxi-column dataField="USER_GLOBAL_DIV" dataType="string" caption="Global Division"
+          [editorOptions]="{ maxLength: 100 }">
+        </dxi-column>
+        <dxi-column dataField="USER_DEPT_CODE" dataType="string" caption="Department Code"
+          [editorOptions]="{ maxLength: 100 }">
+        </dxi-column>
+        <dxi-column dataField="USER_DEPT_NAME" dataType="string" caption="Department Name"
+          [editorOptions]="{ maxLength: 100 }">
+        </dxi-column>
+        <dxi-column dataField="USER_DEPT" dataType="string" caption="Department" [editorOptions]="{ maxLength: 100 }">
+        </dxi-column>
+        <dxi-column dataField="DEFAULT_LANGUAGE" dataType="string" caption="Default Language">
+          <dxo-lookup [dataSource]="languageDataSource" displayExpr="PARAM_VALUE" valueExpr="PARAM_KEY">
+          </dxo-lookup>
+        </dxi-column>
+        <dxi-column dataField="DEFAULT_TIMEZONE" dataType="string" caption="Default Timezone">
+          <dxo-lookup [dataSource]="timezoneDataSource" displayExpr="PARAM_VALUE" valueExpr="PARAM_KEY">
+          </dxo-lookup>
+        </dxi-column>
+        <dxi-column dataField="DEFAULT_DISP_DATE_FORMAT" dataType="string" caption="Default Date Format">
+          <dxo-lookup [dataSource]="dateDataSource" displayExpr="PARAM_VALUE" valueExpr="PARAM_KEY">
+          </dxo-lookup>
+        </dxi-column>
+        <dxi-column dataField="DEFAULT_DISP_TIME_FORMAT" dataType="string" caption="Default Time Format">
+          <dxo-lookup [dataSource]="timeDataSource" displayExpr="PARAM_VALUE" valueExpr="PARAM_KEY">
+          </dxo-lookup>
+        </dxi-column>
+        <dxi-column dataField="DEFAULT_DISP_DATETIME_FORMAT" dataType="string" caption="Default Date Time Format">
+          <dxo-lookup [dataSource]="datetimeDataSource" displayExpr="PARAM_VALUE" valueExpr="PARAM_KEY">
+          </dxo-lookup>
+        </dxi-column>
+        <dxi-column dataField="saUserGroupId" dataType="string" caption="User Group" fixed="true" fixedPosition="right"
+          width="250" cellTemplate="userGroupTemplate" editCellTemplate="userGroupEditTemplate" [allowFiltering]="false"
+          [allowSorting]="false">
+          <dxi-validation-rule type="required"></dxi-validation-rule>
+        </dxi-column>
+        <div *dxTemplate="let cellInfo of 'userGroupTemplate'">
+          <ng-container *ngFor="let id of cellInfo.data.saUserGroupId; last as isLast">
+            {{getUserGroupDisplay(id)}}
+            <ng-container *ngIf="!isLast">,</ng-container>
+          </ng-container>
+        </div>
+        <div *dxTemplate="let cellInfo of 'userGroupEditTemplate'">
+          <dx-tag-box [dataSource]="userGroupDataSource" [value]="cellInfo.value" valueExpr="CFG_USER_GROUP_ID_STRING"
+            [displayExpr]="getEditUserGroupDisplay" [searchEnabled]="true"
+            (onValueChanged)="onUserGroupValueChange($event.value, cellInfo)">
+          </dx-tag-box>
+        </div>
+        <dxi-column dataField="ACTIVE" dataType="string" caption="Active">
+          <dxi-validation-rule type="required"></dxi-validation-rule>
+          <dxo-lookup [dataSource]="booleanDataSource" displayExpr="Value" valueExpr="Key">
+          </dxo-lookup>
+        </dxi-column>
+
+        <dxi-column type="buttons" fixed="true" fixedPosition="right">
+          <dxi-button name="edit"></dxi-button>
+          <dxi-button name="delete"></dxi-button>
+          <dxi-button hint="Show History" text="History" [onClick]="historyIconClick"></dxi-button>
+        </dxi-column>
+      </dx-data-grid>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,74 @@
+<app-page-title [PageTitle]="PageTitle"></app-page-title>
+
+<section class="content">
+  <div class="container-fluid">
+    <div class="card">
+      <div class="card-body">
+        <app-filter-criteria [show]="showCriteria" [columns]="columnsConfig" [fieldsDropdown]="criteriaFieldsDropdown"
+          [useActiveRecords]="false" (onCriteriaRetrieved)="onCriteriaRetrieved($event)">
+        </app-filter-criteria>
+        <div class="pb-2"></div>
+        <dx-data-grid *ngIf="showDataGrid" #dataGrid [dataSource]="dataSource" [remoteOperations]="true"
+          [showBorders]="true" [showColumnLines]="true" [showRowLines]="true" [rowAlternationEnabled]="true"
+          [allowColumnResizing]="true" [allowColumnReordering]="true" [columnMinWidth]="50" [columnAutoWidth]="true"
+          [hoverStateEnabled]="true" columnResizingMode="widget" [columns]="columnsConfig" [filterSyncEnabled]="true"
+          [(filterValue)]="dataGridFilterExp" (onExporting)="onExporting($event, PageTitle)">
+
+          <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+          <dxo-scrolling [useNative]="true"></dxo-scrolling>
+          <dxo-header-filter [visible]="true">
+            <dxo-search [enabled]="true"></dxo-search>
+          </dxo-header-filter>
+          <dxo-filter-row [visible]="true"></dxo-filter-row>
+          <dxo-paging [enabled]="true" [pageSize]="20"></dxo-paging>
+          <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[20, 30, 40]" [showInfo]="true" [visible]="true">
+          </dxo-pager>
+          <dxo-group-panel [visible]="true" [allowColumnDragging]="false"></dxo-group-panel>
+          <dxo-export [enabled]="true"></dxo-export>
+          <dxo-sorting mode="multiple"></dxo-sorting>
+          <dxo-column-chooser [enabled]="true" mode="select">
+            <dxo-selection [allowSelectAll]="true"></dxo-selection>
+            <dxo-search [enabled]="true"></dxo-search>
+            <dxo-position my="right top" at="right bottom" of=".dx-datagrid-column-chooser-button"></dxo-position>
+          </dxo-column-chooser>
+          <dxo-filter-panel [visible]="true"></dxo-filter-panel>
+          <dxo-toolbar>
+            <dxi-item locateInMenu="auto" location="left">
+              <dx-button text="Toggle Criteria" type="success" (onClick)="this.showCriteria = !this.showCriteria">
+              </dx-button>
+            </dxi-item>
+            <dxi-item locateInMenu="auto" location="left">
+              <div *dxTemplate>
+                <dx-select-box [items]="opnStatuses" [(value)]="opnStatusSelection"
+                  (onValueChanged)="onOpnStatusFilter($event)" [width]="300"></dx-select-box>
+              </div>
+            </dxi-item>
+            <dxi-item name="exportButton"></dxi-item>
+            <dxi-item name="columnChooserButton"></dxi-item>
+          </dxo-toolbar>
+
+          <div *dxTemplate="let cell of 'opnCellTemplate'">
+            <ng-container [ngSwitch]="cell.data.status">
+              <a *ngSwitchCase="'Fiesta Delivered'" class="d-block" [href]="encodeFppLink(cell.data.opn)"
+              <ng-container *ngSwitchDefault>{{cell.value}}</ng-container>
+            </ng-container>
+          </div>
+          <div *dxTemplate="let cell of 'statusCellTemplate'">
+            <ng-container [ngSwitch]="cell.data.status">
+              <a *ngSwitchCase="'Agile Blacklisted'" class="d-block" [href]="encodeAgileBlacklistLink(cell.data.opn)"
+                target="_blank">{{cell.value}}</a>
+              <a *ngSwitchCase="'Fiesta Blacklisted'" class="d-block" [href]="encodePlmBlacklistLink(cell.data.opn)"
+                target="_blank">{{cell.value}}</a>
+              <a *ngSwitchCase="'Fiesta Blacklisted (Delivered older version)'" class="d-block"
+                [href]="encodePlmBlacklistLink(cell.data.opn)" target="_blank">{{ cell.value }}</a>
+              <a *ngSwitchCase="'User Buyoff'" class="d-block" [href]="encodeUserBuyoffLink(cell.data.opn)"
+                target="_blank">{{cell.value}}</a>
+              <ng-container *ngSwitchDefault>{{cell.value}}</ng-container>
+            </ng-container>
+          </div>
+
+        </dx-data-grid>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,13 @@
+// patch adminlte layout bug, app-main-wrapper & app-main.
+// when using layout-fixed-complete, and when screen reach sidebar breakpoint,
+// footer will break because following styles are not applied.
+.app-main-wrapper {
+  max-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.app-main {
+  flex: 1 1 auto;
+}

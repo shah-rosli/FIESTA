@@ -1,0 +1,22 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./out-tsc/app",
+    "types": []
+  },
+  "files": [
+    "src/main.ts"
+  ],
+  "include": [
+    "src/**/*.d.ts"
+  ],
+  "exclude": [
+    "src/test.ts",
+    "src/environments/environment.dev.ts",
+    "src/environments/environment.qa.ts",
+    "src/environments/environment.qa2.ts",
+    "src/environments/environment.qa3.ts",
+    "src/environments/environment.prod.ts",
+    "src/app/service/base/httpcancel.service.ts",
+  ]
+}

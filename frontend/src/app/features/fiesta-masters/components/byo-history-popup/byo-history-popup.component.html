@@ -1,0 +1,34 @@
+<dx-popup height="90%" width="90%" [showTitle]="true" title="Audit Trail" [dragEnabled]="true"
+  [hideOnOutsideClick]="true" [(visible)]="visible" (onHidden)="onHidden()">
+  <ng-container *dxTemplate="let data of 'content'">
+    <div class="card">
+      <div class="card-body">
+        <div *ngIf="loading">
+          <dx-load-indicator class="block center" id="large-indicator" height="40" width="40"></dx-load-indicator>
+        </div>
+
+        <ng-container *ngIf="!loading">
+          <dx-data-grid class="h-100" [dataSource]="dataSource" [columns]="columns" [showBorders]="true"
+            [showColumnLines]="true" [showRowLines]="true" [rowAlternationEnabled]="false" [allowColumnResizing]="true"
+            [allowColumnReordering]="true" [hoverStateEnabled]="true" columnResizingMode="widget" [columnMinWidth]="50"
+            [columnAutoWidth]="true" (onExporting)="onExporting($event, 'export')">
+
+            <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+            <dxo-scrolling [useNative]="true"></dxo-scrolling>
+            <dxo-header-filter [visible]="true">
+              <dxo-search [enabled]="true"></dxo-search>
+            </dxo-header-filter>
+            <dxo-filter-row [visible]="true"></dxo-filter-row>
+            <dxo-paging [enabled]="true" [pageSize]="30"></dxo-paging>
+            <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[20, 30, 40]" [showInfo]="true"
+              [visible]="true">
+            </dxo-pager>
+            <dxo-group-panel [visible]="true"></dxo-group-panel>
+            <dxo-export [enabled]="true"></dxo-export>
+            <dxo-sorting mode="multiple"></dxo-sorting>
+          </dx-data-grid>
+        </ng-container>
+      </div>
+    </div>
+  </ng-container>
+</dx-popup>

@@ -1,0 +1,69 @@
+<dx-data-grid #tableCfgDataGrid [dataSource]="tableCfgDataSource" [showBorders]="true" [showColumnLines]="true"
+  [showRowLines]="true" [rowAlternationEnabled]="true" [allowColumnResizing]="true" [allowColumnReordering]="true"
+  [hoverStateEnabled]="true" columnResizingMode="widget" [repaintChangesOnly]="true" [columnMinWidth]="50"
+  [columnAutoWidth]="true" (onSelectionChanged)="onSelectionChanged($event)" (onContentReady)="selectFirstRow($event)"
+  (onRowInserting)="postGridRow($event, 'create')" (onRowUpdating)="postGridRow($event, 'edit')"
+  (onRowRemoving)="postGridRow($event, 'delete')" (onRowInserted)="postedGridRow($event, 'create')"
+  (onRowUpdated)="postedGridRow($event, 'edit')" (onRowRemoved)="postedGridRow($event, 'delete')"
+  (onExporting)="onExporting($event, 'export')">
+
+  <dxo-column-fixing [enabled]="true"></dxo-column-fixing>
+  <dxo-scrolling [useNative]="true"></dxo-scrolling>
+  <dxo-header-filter [visible]="true">
+    <dxo-search [enabled]="true"></dxo-search>
+  </dxo-header-filter>
+  <dxo-filter-row [visible]="true"></dxo-filter-row>
+  <dxo-paging [enabled]="true" [pageSize]="20"></dxo-paging>
+  <dxo-pager [showPageSizeSelector]="true" [allowedPageSizes]="[20, 30, 40]" [showInfo]="true" [visible]="true">
+  </dxo-pager>
+  <dxo-group-panel [visible]="true"></dxo-group-panel>
+  <dxo-export [enabled]="true"></dxo-export>
+  <dxo-sorting mode="multiple"></dxo-sorting>
+  <dxo-column-chooser [enabled]="true" mode="select">
+    <dxo-selection [allowSelectAll]="true"></dxo-selection>
+    <dxo-search [enabled]="true"></dxo-search>
+    <dxo-position my="right top" at="right bottom" of=".dx-datagrid-column-chooser-button"></dxo-position>
+  </dxo-column-chooser>
+  <dxo-editing mode="popup" [allowAdding]="pagePermission.create" [allowUpdating]="pagePermission.edit"
+    [allowDeleting]="pagePermission.delete">
+  </dxo-editing>
+  <dxo-selection mode="single"></dxo-selection>
+
+  <dxi-column dataField="CFG_SYS_TABLE_CONFIG_ID" caption="Table ID" [allowEditing]="false" [visible]="false">
+  </dxi-column>
+  <dxi-column dataField="CFG_SYS_TABLE_NAME" caption="Table Name">
+  </dxi-column>
+  <dxi-column dataField="CFG_SYS_TABLE_GROUP_NAME" caption="Table Group" sortIndex="1" sortOrder="asc">
+  </dxi-column>
+  <dxi-column dataField="ACTIVE" caption="Active" sortIndex="0" sortOrder="desc">
+    <dxo-lookup [dataSource]="booleanDataSource" displayExpr="Value" valueExpr="Key">
+    </dxo-lookup>
+  </dxi-column>
+  <dxi-column dataField="CFG_SYS_TABLE_DESC" caption="Table Desc" [visible]="false">
+  </dxi-column>
+  <dxi-column dataField="CFG_SYS_TABLE_SP_EXPORT_NAME" caption="Table SP Export Name" [visible]="false">
+  </dxi-column>
+  <dxi-column dataField="CFG_SYS_TABLE_SORT_INDEX" caption="Table Sort Index" sortIndex="2" sortOrder="asc"
+    [visible]="false">
+    <dxi-validation-rule type="numeric" message="Numeric value only"></dxi-validation-rule>
+  </dxi-column>
+  <dxi-column dataField="CFG_SYS_COLUMN_CONFIGs" caption="COLUMN_CONFIGs" [allowEditing]="false" [visible]="false">
+  </dxi-column>
+  <dxi-column dataField="CFG_SYS_TABLE_EXTRACT_FILENAME" caption="TABLE_EXTRACT_FILENAME" [allowEditing]="false"
+    [visible]="false">
+  </dxi-column>
+  <dxi-column dataField="CFG_SYS_TABLE_EXTRACT_DATETIME" caption="TABLE_EXTRACT_DATETIME" [allowEditing]="false"
+    [visible]="false">
+  </dxi-column>
+  <dxi-column dataField="CFG_SYS_TABLE_EXTRACT_IN_PROGRESS" caption="TABLE_EXTRACT_IN_PROGRESS" [allowEditing]="false"
+    [visible]="false">
+  </dxi-column>
+  <dxi-column dataField="CFG_SYS_TABLE_EXTRACT_START_TIME" caption="TABLE_EXTRACT_START_TIME" [allowEditing]="false"
+    [visible]="false">
+  </dxi-column>
+
+  <dxi-column type="buttons" fixed="true" fixedPosition="right">
+    <dxi-button name="edit"></dxi-button>
+    <dxi-button name="delete"></dxi-button>
+  </dxi-column>
+</dx-data-grid>

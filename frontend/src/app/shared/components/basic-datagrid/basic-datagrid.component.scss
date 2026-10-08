@@ -1,0 +1,5 @@
+:host ::ng-deep .disabled-selection .dx-checkbox-icon {
+  cursor: not-allowed;
+  pointer-events: none;
+  opacity: 0.01;
+}

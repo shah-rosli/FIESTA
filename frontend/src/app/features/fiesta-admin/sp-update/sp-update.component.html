@@ -1,0 +1,43 @@
+<app-page-title [PageTitle]="PageTitle"></app-page-title>
+
+<section class="content">
+  <app-no-view-permission *ngIf="!pagePermission.view"></app-no-view-permission>
+
+  <div *ngIf="pagePermission.view" class="container-fluid">
+    <div class="card">
+      <div class="card-body">
+        <form (submit)="onFormSubmit($event)">
+          <dx-form [formData]="formData" labelLocation="top">
+            <dxi-item itemType="group">
+              <dxi-item itemType="group" [colCount]="3">
+                <dxi-item dataField="partNumber" type [label]="{text: 'Part number'}">
+                  <dxi-validation-rule type="required"></dxi-validation-rule>
+                </dxi-item>
+                <dxi-item [label]="{text: 'Part Type'}">
+                  <div *dxTemplate>
+                    <dx-select-box [items]="partTypeEditorOptions.items" [searchEnabled]="true"
+                      [(value)]="formData.partType">
+                    </dx-select-box>
+                  </div>
+                </dxi-item>
+                <dxi-item [label]="{text: 'Table Name'}">
+                  <div *dxTemplate>
+                    <dx-select-box [items]="tableNameEditorOptions.items" [searchEnabled]="true"
+                      [(value)]="formData.tableName">
+                    </dx-select-box>
+                  </div>
+                </dxi-item>
+              </dxi-item>
+            </dxi-item>
+            <dxi-item itemType="group" [colCount]="6">
+              <dxi-item itemType="button" horizontalAlignment="left" [buttonOptions]="buttonOptions">
+              </dxi-item>
+            </dxi-item>
+          </dx-form>
+        </form>
+        <dx-text-area class="mt-2" minHeight="200" [value]="apiResponse?.status" [autoResizeEnabled]="true"
+          [readOnly]="true"></dx-text-area>
+      </div>
+    </div>
+  </div>
+</section>
