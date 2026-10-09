@@ -43,4 +43,6 @@ public partial class MV_OPN_LIST
     public string? failureReason { get; set; }
 
     public string? status { get; set; }
+
+    public string? sentFromSystem { get; set; }
 }
